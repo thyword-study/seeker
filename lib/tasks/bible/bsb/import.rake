@@ -20,6 +20,21 @@ namespace :bible do
       # Save bible data into database
       bible = Bible.find_or_create_by!(name: bible_name, code: bible_abbreviation, statement: bible_statement, rights_holder_name: bible_rights_holder_name, rights_holder_url: bible_rights_holder_url)
       Rails.logger.info "Loaded Bible: [#{bible.code}] #{bible.name}"
+
+      # Read books' metadata
+      metadata_content.xpath("/DBLMetadata/publications/publication/structure/content").each.with_index(1) do |book_info, book_number|
+        # Extract bible data
+        book_code = book_info["role"]
+        book_name = book_info["name"]
+        book_title = metadata_content.at_xpath("/DBLMetadata/names/name[@id=\"#{book_name}\"]/long").content
+        book_slug = book_title.parameterize
+        book_testament = "OT" if Book::NUMBERS_OT.include? book_number
+        book_testament = "NT" if Book::NUMBERS_NT.include? book_number
+
+        # Save book data into database
+        book = Book.find_or_create_by!(bible: bible, title: book_title, number: book_number, code: book_code, slug: book_slug, testament: book_testament)
+        Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title}"
+      end
     end
   end
 end

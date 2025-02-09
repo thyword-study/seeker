@@ -47,4 +47,12 @@ class Book < ApplicationRecord
   validates :slug, presence: true
   validates :testament, presence: true, inclusion: { in: %w[OT NT] }
   validates :title, presence: true
+
+  # Constants
+  NUMBERS_OT = (1..39)
+  NUMBERS_NT = (40..66)
+
+  # Scopes
+  scope :old_testament, -> { where(testament: "OT") }
+  scope :new_testament, -> { where(testament: "NT") }
 end
