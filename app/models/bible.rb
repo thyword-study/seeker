@@ -21,6 +21,9 @@
 #     * **`code`**
 #
 class Bible < ApplicationRecord
+  # Associations
+  has_many :books, dependent: :restrict_with_exception
+
   # Validations
   validates :code, presence: true, length: { is: 3 }, uniqueness: true
   validates :name, presence: true
