@@ -1,44 +1,43 @@
 # ## Schema Information
 #
-# Table name: `books`
+# Table name: `chapters`
 #
 # ### Columns
 #
 # Name              | Type               | Attributes
 # ----------------- | ------------------ | ---------------------------
 # **`id`**          | `bigint`           | `not null, primary key`
-# **`code`**        | `string(3)`        | `not null`
 # **`number`**      | `integer`          | `not null`
-# **`slug`**        | `string`           | `not null`
-# **`testament`**   | `string`           | `not null`
-# **`title`**       | `string`           | `not null`
 # **`created_at`**  | `datetime`         | `not null`
 # **`updated_at`**  | `datetime`         | `not null`
 # **`bible_id`**    | `bigint`           | `not null`
+# **`book_id`**     | `bigint`           | `not null`
 #
 # ### Indexes
 #
-# * `index_books_on_bible_id`:
+# * `index_chapters_on_bible_id`:
 #     * **`bible_id`**
-# * `index_books_on_bible_id_and_code` (_unique_):
+# * `index_chapters_on_bible_id_and_book_id_and_number` (_unique_):
 #     * **`bible_id`**
-#     * **`code`**
+#     * **`book_id`**
+#     * **`number`**
+# * `index_chapters_on_book_id`:
+#     * **`book_id`**
 #
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`bible_id => bibles.id`**
+# * `fk_rails_...` (_ON DELETE => restrict_):
+#     * **`book_id => books.id`**
 #
-class Book < ApplicationRecord
+class Chapter < ApplicationRecord
   # Associations
   belongs_to :bible
-  has_many :chapters, dependent: :restrict_with_exception
+  belongs_to :book
 
   # Validations
   validates :bible, presence: true
-  validates :code, presence: true, length: { is: 3 }, uniqueness: true
+  validates :book, presence: true
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
-  validates :slug, presence: true
-  validates :testament, presence: true, inclusion: { in: %w[OT NT] }
-  validates :title, presence: true
 end
