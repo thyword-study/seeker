@@ -32,4 +32,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Miscellanous
+  get "search", to: "search#index"
 end
