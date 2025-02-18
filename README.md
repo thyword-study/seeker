@@ -77,6 +77,24 @@ $ bundle exec rubocop
 $ bundle exec rubocop app/ spec/ lib/something.rb
 ```
 
+### Specs
+
+Use the _rspec_ command to run your specs:
+
+```console
+# Run all specs
+$ bundle exec rspec spec
+
+# Run only specs in a folder
+$ bundle exec rspec spec/models
+
+# Run only specs for a specific file
+$ bundle exec rspec spec/controllers/example_controller_spec.rb
+
+# Run only specs for a specific example in a file
+$ bundle exec rspec spec/controllers/example_controller_spec.rb:11
+```
+
 ## Running
 
 ### Local: Development
