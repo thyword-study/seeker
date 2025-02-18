@@ -12,6 +12,9 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  # Articles
+  resources :articles, param: :slug, only: [ :index, :show ]
+
   # Bible (Reading)
   resources :bibles, param: :code, only: [ :show ] do
     resources :books, param: :slug, only: [ :index, :show ] do
