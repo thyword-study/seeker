@@ -20,4 +20,13 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Bible (Commentary)
+  namespace :commentary do
+    resources :books, param: :slug, only: [ :index, :show ] do
+      resources :chapters, param: :number, only: [ :index, :show ] do
+        resources :verses, param: :numbers, only: [ :index, :show ]
+      end
+    end
+  end
 end
