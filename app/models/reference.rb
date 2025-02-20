@@ -1,28 +1,30 @@
 # ## Schema Information
 #
-# Table name: `headings`
+# Table name: `references`
 #
 # ### Columns
 #
 # Name              | Type               | Attributes
 # ----------------- | ------------------ | ---------------------------
 # **`id`**          | `bigint`           | `not null, primary key`
-# **`level`**       | `integer`          | `not null`
-# **`title`**       | `string`           | `not null`
+# **`target`**      | `string`           | `not null`
 # **`created_at`**  | `datetime`         | `not null`
 # **`updated_at`**  | `datetime`         | `not null`
 # **`bible_id`**    | `bigint`           | `not null`
 # **`book_id`**     | `bigint`           | `not null`
 # **`chapter_id`**  | `bigint`           | `not null`
+# **`heading_id`**  | `bigint`           |
 #
 # ### Indexes
 #
-# * `index_headings_on_bible_id`:
+# * `index_references_on_bible_id`:
 #     * **`bible_id`**
-# * `index_headings_on_book_id`:
+# * `index_references_on_book_id`:
 #     * **`book_id`**
-# * `index_headings_on_chapter_id`:
+# * `index_references_on_chapter_id`:
 #     * **`chapter_id`**
+# * `index_references_on_heading_id`:
+#     * **`heading_id`**
 #
 # ### Foreign Keys
 #
@@ -32,20 +34,19 @@
 #     * **`book_id => books.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`chapter_id => chapters.id`**
+# * `fk_rails_...` (_ON DELETE => restrict_):
+#     * **`heading_id => headings.id`**
 #
-class Heading < ApplicationRecord
+class Reference < ApplicationRecord
   # Associations
   belongs_to :bible
   belongs_to :book
   belongs_to :chapter
-  has_many :fragments, dependent: :restrict_with_exception
-  has_many :references, dependent: :restrict_with_exception
-  has_many :segments, dependent: :restrict_with_exception
+  belongs_to :heading, optional: true
 
   # Validations
   validates :bible, presence: true
   validates :book, presence: true
   validates :chapter, presence: true
-  validates :level, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validates :title, presence: true
+  validates :target, presence: true
 end

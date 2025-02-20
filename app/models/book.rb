@@ -36,6 +36,7 @@ class Book < ApplicationRecord
   has_many :footnotes, dependent: :restrict_with_exception
   has_many :fragments, dependent: :restrict_with_exception
   has_many :headings, dependent: :restrict_with_exception
+  has_many :references, dependent: :restrict_with_exception
   has_many :segments, dependent: :restrict_with_exception
   has_many :verses, dependent: :restrict_with_exception
 
