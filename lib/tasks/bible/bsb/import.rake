@@ -83,6 +83,9 @@ namespace :bible do
                   fragment_kind = "text"
                 when "ref"
                   fragment_kind = "reference"
+                  reference_target = fragment_node["loc"]
+                  reference = Reference.create!(bible: bible, book: book, chapter: chapter, heading: heading, target: reference_target)
+                  Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Reference #{reference.id}"
                 when "note"
                   fragment_kind = "note"
                   footnote_text = fragment_node.children.select { |note_child_node| note_child_node.node_name == "char" && note_child_node["style"] == "ft" }.first.text.strip
