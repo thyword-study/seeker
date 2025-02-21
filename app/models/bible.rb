@@ -37,4 +37,26 @@ class Bible < ApplicationRecord
   validates :rights_holder_name, presence: true
   validates :rights_holder_url, presence: true, url: true
   validates :statement, presence: true
+
+  # Parses a Bible reference string into its components.
+  #
+  # @param reference [String] The Bible reference in the format "BOOK CHAPTER:VERSES" (e.g., "JHN 3:16-18").
+  #
+  # @return [Hash, nil] A hash with keys :book, :chapter, and :verses if parsing succeeds, otherwise nil.
+  #
+  # @example
+  #   Bible.parse_reference("ROM 5:12,15-17")
+  #   #=> { book: "ROM", chapter: 5, verses: [12, [15, 17]] }
+  def self.parse_reference(reference)
+    match = reference.match(/(?<book>\w{3}) (?<chapter>\d+):(?<verses>[\d\-:,]+)/)
+    return nil unless match
+
+    book = match[:book]
+    chapter = match[:chapter].to_i
+    verses = match[:verses].split(",").map do |range|
+      range.include?("-") ? range.split("-").map(&:to_i) : range.to_i
+    end
+
+    { book: book, chapter: chapter, verses: verses }
+  end
 end
