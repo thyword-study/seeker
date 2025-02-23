@@ -48,6 +48,9 @@ gem "annotaterb", "~> 4.14"
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
 
+# Library for validating urls in Rails.
+gem "validate_url", "~> 1.0", ">= 1.0.15"
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ], require: "debug/prelude"

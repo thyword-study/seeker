@@ -203,6 +203,7 @@ GEM
     psych (5.2.3)
       date
       stringio
+    public_suffix (6.0.1)
     puma (6.6.0)
       nio4r (~> 2.0)
     raabro (1.4.0)
@@ -340,6 +341,9 @@ GEM
     unicode-emoji (4.0.4)
     uri (1.0.2)
     useragent (0.16.11)
+    validate_url (1.0.15)
+      activemodel (>= 3.0.0)
+      public_suffix
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -387,6 +391,7 @@ DEPENDENCIES
   thruster
   turbo-rails
   tzinfo-data
+  validate_url (~> 1.0, >= 1.0.15)
   web-console
 
 BUNDLED WITH
