@@ -40,6 +40,10 @@ gem "thruster", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# Annotates Rails/ActiveRecord Models, routes, fixtures, and others based on the
+# database schema.
+gem "annotaterb", "~> 4.14"
+
 # Easiest way to manage multi-environment settings in any ruby project or
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
