@@ -7,6 +7,7 @@
 # Credential files
 /config/master.key
 
+# Settings files
 config/settings.local.yml
 config/settings/*.local.yml
 config/environments/*.local.yml
