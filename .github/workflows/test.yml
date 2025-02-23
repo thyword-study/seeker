@@ -51,3 +51,15 @@ jobs:
         run: bundle exec rails db:seed
       - name: Run application tests
         run: bundle exec rspec spec
+
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Lint Ruby for consistent style
+        run: bundle exec rubocop -f github
