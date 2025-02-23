@@ -1,4 +1,4 @@
-# Thy Word
+# Scribe
 
 ## Dependencies
 
@@ -53,9 +53,9 @@ for more details.
 Assuming you have a root user (with no password) ... first create the tables in
 the database by running `rails db:create`. This will create 2 databases:
 
-* `thy_word_development` - used when running the app in development mode (ideal
+* `scribe_development` - used when running the app in development mode (ideal
   for testing locally).
-* `thy_word_test` - used by the app when running the test suites.
+* `scribe_test` - used by the app when running the test suites.
 
 Then run the migrations by running `rails db:schema:load db:migrate` to create
 the database structure i.e. columns, indices in the table for you. You may also
