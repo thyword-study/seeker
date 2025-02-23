@@ -1,4 +1,4 @@
-name: "thy_word"
+name: "scribe"
 
 services:
   rails-app:
