@@ -6,15 +6,15 @@
 :command:
 :debug: false
 :exclude_controllers: true
-:exclude_factories: false
-:exclude_fixtures: false
+:exclude_factories: true
+:exclude_fixtures: true
 :exclude_helpers: true
 :exclude_scaffolds: true
-:exclude_serializers: false
+:exclude_serializers: true
 :exclude_sti_subclasses: false
-:exclude_tests: false
+:exclude_tests: true
 :force: false
-:format_markdown: false
+:format_markdown: true
 :format_rdoc: false
 :format_yard: false
 :frozen: false
@@ -44,7 +44,7 @@
 :show_indexes: true
 :simple_indexes: false
 :skip_on_db_migrate: false
-:sort: false
+:sort: true
 :target_action: :do_annotations
 :timestamp: false
 :trace: false
