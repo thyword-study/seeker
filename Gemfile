@@ -55,6 +55,12 @@ group :development, :test do
   # Static analysis for security vulnerabilities [https://brakemanscanner.org/]
   gem "brakeman", require: false
 
+  # Provides integration between factory_bot and rails 5.0 or newer.
+  gem "factory_bot_rails", "~> 6.2"
+
+  # Easily generates fake data: names, addresses, phone numbers, etc.
+  gem "faker", "~> 3.5", ">= 3.5.1"
+
   # rspec-rails integrates the Rails testing helpers into RSpec.
   gem "rspec-rails", "~> 7.1", ">= 7.1.1"
 
@@ -65,4 +71,10 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+end
+
+group :test do
+  # Strategies for cleaning databases using ActiveRecord. Can be used to ensure
+  # a clean state for testing.
+  gem "database_cleaner-active_record", "~> 2.1"
 end

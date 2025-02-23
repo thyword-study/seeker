@@ -1,0 +1,89 @@
+name: test
+
+on:
+  pull_request:
+    branches:
+      - '*'
+  push:
+    branches:
+      - main
+
+jobs:
+  brakeman:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Scan for Rails security vulnerabilities
+        run: bundle exec brakeman --no-pager
+
+  importmap-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Scan for JavaScript security vulnerabilities
+        run: bin/importmap audit
+
+  rspec:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17.4-alpine
+        env:
+          POSTGRES_DB: scribe_test
+          POSTGRES_PASSWORD: sekret
+          POSTGRES_USER: scribe
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd=pg_isready
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+      redis:
+        image: redis:7.4-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+    env:
+      DB_PASSWORD: sekret
+      DB_USERNAME: scribe
+      RAILS_ENV: test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Set up database
+        run: bundle exec rails db:create db:migrate
+      - name: Seed the database
+        run: bundle exec rails db:seed
+      - name: Run application tests
+        run: bundle exec rspec spec
+
+  rubocop:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Lint Ruby for consistent style
+        run: bundle exec rubocop -f github
