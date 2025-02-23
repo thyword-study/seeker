@@ -58,6 +58,9 @@ group :development, :test do
   # Provides integration between factory_bot and rails 5.0 or newer.
   gem "factory_bot_rails", "~> 6.2"
 
+  # Easily generates fake data: names, addresses, phone numbers, etc.
+  gem "faker", "~> 3.5", ">= 3.5.1"
+
   # rspec-rails integrates the Rails testing helpers into RSpec.
   gem "rspec-rails", "~> 7.1", ">= 7.1.1"
 
