@@ -21,6 +21,18 @@ jobs:
       - name: Scan for Rails security vulnerabilities
         run: bundle exec brakeman --no-pager
 
+  importmap-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Scan for JavaScript security vulnerabilities
+        run: bin/importmap audit
+
   rspec:
     runs-on: ubuntu-latest
     services:
