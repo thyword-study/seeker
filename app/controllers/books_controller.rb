@@ -1,6 +1,9 @@
 class BooksController < ApplicationController
   def index
-    render html: ""
+    bible_code = params[:bible_code].to_s.strip.upcase
+
+    @bible = Bible.find_by! code: bible_code
+    @books = @bible.books.order(number: :asc)
   end
 
   def show

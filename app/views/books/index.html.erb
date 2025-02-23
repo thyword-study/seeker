@@ -1,0 +1,25 @@
+<h1>Books</h1>
+
+<h2>Old Testament</h2>
+
+<ol>
+  <% @books.old_testament.each do |book| %> 
+    <li>
+      <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug) %>
+    </li>
+  <% end %>
+</ol>
+
+<h2>New Testament</h2>
+
+<ol>
+  <% @books.new_testament.each do |book| %> 
+    <li>
+      <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug) %>
+    </li>
+  <% end %>
+</ol>
+
+<hr>
+
+<p><%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %></p>
