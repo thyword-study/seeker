@@ -1,0 +1,15 @@
+<h1><%= @book.title %></h1>
+
+<h2>Chapters</h2>
+
+<ul>
+  <% @chapters.each do |chapter| %> 
+    <li>
+      <%= link_to "Chapter #{chapter.number}", bible_book_chapter_path(bible_code: @bible.code.downcase, book_slug: @book.slug, number: chapter.number) %>
+    </li>
+  <% end %>
+</ul>
+
+<hr>
+
+<p><%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %></p>
