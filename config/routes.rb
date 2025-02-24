@@ -12,11 +12,14 @@ Rails.application.routes.draw do
   # Defines the root path route ("/")
   # root "posts#index"
 
+  # Home
+  root to: "pages#home"
+
   # Articles
   resources :articles, param: :slug, only: [ :index, :show ]
 
   # Bible (Reading)
-  resources :bibles, param: :code, only: [ :show ] do
+  resources :bibles, param: :code, only: [ :show ], constraints: { code: /[a-z]+/ } do
     resources :books, param: :slug, only: [ :index, :show ] do
       resources :chapters, param: :number, only: [ :index, :show ] do
         resources :verses, param: :numbers, only: [ :index, :show ]

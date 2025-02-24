@@ -71,8 +71,6 @@ jobs:
           bundler-cache: true
       - name: Set up database
         run: bundle exec rails db:create db:migrate
-      - name: Seed the database
-        run: bundle exec rails db:seed
       - name: Run application tests
         run: bundle exec rspec spec
 
