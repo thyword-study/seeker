@@ -38,9 +38,9 @@ class Heading < ApplicationRecord
   belongs_to :bible
   belongs_to :book
   belongs_to :chapter
-  has_many :fragments, dependent: :restrict_with_exception
-  has_many :references, dependent: :restrict_with_exception
-  has_many :segments, dependent: :restrict_with_exception
+  has_many :fragments, dependent: :restrict_with_error
+  has_many :references, dependent: :restrict_with_error
+  has_many :segments, dependent: :restrict_with_error
 
   # Validations
   validates :bible, presence: true

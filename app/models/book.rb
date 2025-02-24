@@ -32,13 +32,13 @@
 class Book < ApplicationRecord
   # Associations
   belongs_to :bible
-  has_many :chapters, dependent: :restrict_with_exception
-  has_many :footnotes, dependent: :restrict_with_exception
-  has_many :fragments, dependent: :restrict_with_exception
-  has_many :headings, dependent: :restrict_with_exception
-  has_many :references, dependent: :restrict_with_exception
-  has_many :segments, dependent: :restrict_with_exception
-  has_many :verses, dependent: :restrict_with_exception
+  has_many :chapters, dependent: :restrict_with_error
+  has_many :footnotes, dependent: :restrict_with_error
+  has_many :fragments, dependent: :restrict_with_error
+  has_many :headings, dependent: :restrict_with_error
+  has_many :references, dependent: :restrict_with_error
+  has_many :segments, dependent: :restrict_with_error
+  has_many :verses, dependent: :restrict_with_error
 
   # Validations
   validates :bible, presence: true
