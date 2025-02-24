@@ -8,8 +8,13 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-Rails.logger = Logger.new(STDOUT)
-Rails.logger.level = Logger::INFO
+
+# Configure logging for debugging
+previous_logger = nil
+if ENV["DEBUG"]
+  previous_logger = Rails.logger
+  Rails.logger = Logger.new(STDOUT)
+end
 
 # Read bible metadata
 bible_folder = File.join(Rails.root, "db", "data", "bibles", "BSB")
@@ -25,8 +30,8 @@ bible_rights_holder_name = metadata_content.at_xpath("/DBLMetadata/agencies/righ
 bible_rights_holder_url = metadata_content.at_xpath("/DBLMetadata/agencies/rightsHolder/url").content
 
 # Save bible data into database
-bible = Bible.find_or_create_by!(name: bible_name, code: bible_abbreviation, statement: bible_statement, rights_holder_name: bible_rights_holder_name, rights_holder_url: bible_rights_holder_url)
-Rails.logger.info "Loaded Bible: [#{bible.code}] #{bible.name}"
+bible = Bible.create!(name: bible_name, code: bible_abbreviation, statement: bible_statement, rights_holder_name: bible_rights_holder_name, rights_holder_url: bible_rights_holder_url)
+puts "Seeded Bible: [#{bible.code}] #{bible.name}"
 
 # Read books' metadata and contents
 metadata_content.xpath("/DBLMetadata/publications/publication/structure/content").each.with_index(1) do |book_info, book_number|
@@ -39,8 +44,8 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
   book_testament = "NT" if Book::NUMBERS_NT.include? book_number
 
   # Save book data into database
-  book = Book.find_or_create_by!(bible: bible, title: book_title, number: book_number, code: book_code, slug: book_slug, testament: book_testament)
-  Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title}"
+  book = Book.create!(bible: bible, title: book_title, number: book_number, code: book_code, slug: book_slug, testament: book_testament)
+  puts "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title}"
 
   # Read book contents
   book_relative_file_path = book_info["src"]
@@ -62,7 +67,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
       if segment_node.key?("sid")
         chapter_number = segment_node["number"].to_i
         chapter = Chapter.create!(bible: bible, book: book, number: chapter_number)
-        Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number}"
+        Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number}"
       elsif segment_node.key?("eid")
         chapter = nil
       end
@@ -75,11 +80,11 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
       if section_header_styles.key? segment_style.to_sym
         heading_level = section_header_styles[segment_style.to_sym]
         heading = Heading.create!(bible: bible, book: book, chapter: chapter, level: heading_level, title: segment_node.text)
-        Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
+        Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
       segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, style: segment_style)
-      Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
+      Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
 
       segment_node.children.each do |fragment_node|
         fragment_text = fragment_node.text.strip
@@ -94,19 +99,19 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
             fragment_kind = "reference"
             reference_target = fragment_node["loc"]
             reference = Reference.create!(bible: bible, book: book, chapter: chapter, heading: heading, target: reference_target)
-            Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Reference #{reference.id}"
+            Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Reference #{reference.id}"
           when "note"
             fragment_kind = "note"
             footnote_text = fragment_node.children.select { |note_child_node| note_child_node.node_name == "char" && note_child_node["style"] == "ft" }.first.text.strip
             footnote = Footnote.create!(bible: bible, book: book, chapter: chapter, verse: verse, content: footnote_text)
             fragment_text = "#{footnote.id}"
-            Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number} Footnote #{footnote.id}"
+            Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number} Footnote #{footnote.id}"
           when "verse"
             if fragment_node.key?("sid")
               show_verse = true
               verse_number = fragment_node["number"].to_i
               verse = Verse.create!(bible: bible, book: book, chapter: chapter, number: verse_number)
-              Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number}"
+              Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number}"
             elsif fragment_node.key?("eid")
               verse = nil
             end
@@ -121,8 +126,11 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
 
         fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text)
         show_verse = false if fragment.show_verse
-        Rails.logger.info "Loaded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id} Fragment #{fragment.id} (#{fragment.content})"
+        Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id} Fragment #{fragment.id} (#{fragment.content})"
       end
     end
   end
 end
+
+# Restore previous logger
+Rails.logger = previous_logger if ENV["DEBUG"]
