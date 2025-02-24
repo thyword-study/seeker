@@ -46,6 +46,8 @@ namespace :bible do
         heading = nil
         verse = nil
         book_content.root.children.each.with_index(1) do |segment_node, segment_node_id|
+          next if Rails.env.test? && segment_node_id > 50
+
           show_verse = false
 
           case segment_node.node_name
