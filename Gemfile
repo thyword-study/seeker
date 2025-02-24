@@ -48,6 +48,9 @@ gem "annotaterb", "~> 4.14"
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
 
+# Integrate Tailwind CSS with the asset pipeline in Rails.
+gem "tailwindcss-rails", "~> 4.1"
+
 # A self-contained `tailwindcss` executable, wrapped up in a ruby gem. That's
 # it. Nothing else.
 gem "tailwindcss-ruby", "~> 4.0", ">= 4.0.8"
