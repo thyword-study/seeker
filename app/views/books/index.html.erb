@@ -1,25 +1,29 @@
-<h1>Books</h1>
+<% content_for :title do %>
+  <%= "#{@bible.code} | #{Settings.app.name}" %>
+<% end %>
 
-<h2>Old Testament</h2>
+<main class="text-center">
+  <h1 class="text-4xl font-semibold text-pretty text-gray-900 sm:text-5xl">Books</h1>
 
-<ol>
-  <% @books.old_testament.each do |book| %> 
-    <li>
-      <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug) %>
-    </li>
-  <% end %>
-</ol>
+  <section class="mt-12">
+    <h2 class="text-3xl font-semibold text-pretty text-gray-900">Old Testament</h2>
+    <ul class="mt-6 list-none">
+      <% @books.old_testament.each do |book| %> 
+        <li class="mt-2 text-xl">
+          <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
 
-<h2>New Testament</h2>
-
-<ol>
-  <% @books.new_testament.each do |book| %> 
-    <li>
-      <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug) %>
-    </li>
-  <% end %>
-</ol>
-
-<hr>
-
-<p><%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %></p>
+  <section class="mt-12">
+    <h2 class="text-3xl font-semibold text-pretty text-gray-900">New Testament</h2>
+    <ul class="mt-6 list-none">
+      <% @books.new_testament.each do |book| %> 
+        <li class="mt-2 text-xl">
+          <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>
