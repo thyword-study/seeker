@@ -1,95 +1,221 @@
-<h1><%= @book.title %></h1>
-
-<h2><%= "Chapter #{@chapter.number}" %></h2>
-
-<% @segments.each do |segment| %>
-  <% case segment.usx_style -%>
-  <% when "b" %>
-  <% when "q1", "q2", "q3", "q4" %>
-    <% indent_level = segment.usx_style[/\d+/].to_i %>
-    <% indent_pixels = indent_level * 15 %>
-
-    <%= tag.p style: "text-indent: #{indent_pixels}px;" do %>
-      <% segment.fragments.each do |fragment| %>
-        <% case fragment.kind -%>
-        <% when "note" %>
-          <sup>[<%= @footnotes_mapping[fragment.content.to_i] %>]</sup>
-        <% when "reference" %>
-          <%= link_to fragment.content, "#" %>
-        <% else %>
-          <%= tag.sup fragment&.verse.number if fragment.show_verse %> <%= fragment.content %>
-        <% end %>
-      <% end %>
-    <% end %>
-  <% when "r" %>
-    <p>
-      <% segment.fragments.each do |fragment| %>
-        <% case fragment.kind -%>
-        <% when "note" %>
-          <sup>[<%= @footnotes_mapping[fragment.content.to_i] %>]</sup>
-        <% when "reference" %>
-          <%= link_to fragment.content, "#" %>
-        <% else %>
-          <span><%= fragment.content %></span>
-        <% end %>
-      <% end %>
-    </p>
-  <% when "s1" %>
-    <% fragment = segment.fragments[0] %>
-    <h3><%= fragment.content %></h3>
-  <% when "s2" %>
-    <% fragment = segment.fragments[0] %>
-    <h4><%= fragment.content %></h4>
-  <% when "s3" %>
-    <% fragment = segment.fragments[0] %>
-    <h5><%= fragment.content %></h5>
-  <% when "s4" %>
-    <% fragment = segment.fragments[0] %>
-    <h6><%= fragment.content %></h6>
-  <% when "m" %>
-    <p>
-      <% segment.fragments.each do |fragment| %>
-        <% case fragment.kind -%>
-        <% when "note" %>
-          <sup>[<%= @footnotes_mapping[fragment.content.to_i] %>]</sup>
-        <% when "reference" %>
-          <%= link_to fragment.content, "#" %>
-        <% else %>
-          <%= tag.sup fragment&.verse.number if fragment.show_verse %> <%= fragment.content %>
-        <% end %>
-      <% end %>
-    </p>
-  <% when "pmo" %>
-    <p>
-      <% segment.fragments.each do |fragment| %>
-        <% case fragment.kind -%>
-        <% when "note" %>
-          <sup>[<%= @footnotes_mapping[fragment.content.to_i] %>]</sup>
-        <% when "reference" %>
-          <%= link_to fragment.content, "#" %>
-        <% else %>
-          <%= tag.sup fragment&.verse.number if fragment.show_verse %> <%= fragment.content %>
-        <% end %>
-      <% end %>
-    </p>
-  <% else %>
-    <p>
-      [<%= segment.usx_style %>] <%= segment%> - <%= segment.fragments.size %>
-    </p>
-  <% end %>
+<% content_for :title do %>
+  <%= "#{@book.title} #{@chapter.number} | #{@bible.code} | #{Settings.app.name}" %>
 <% end %>
 
-<hr>
+<nav class="mb-8 flex">
+  <ol role="list" class="flex items-center space-x-4">
+    <li>
+      <div>
+        <%= link_to root_path, class: "text-gray-400 hover:text-gray-500" do %>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6">
+            <path d="M11.25 4.533A9.707 9.707 0 0 0 6 3a9.735 9.735 0 0 0-3.25.555.75.75 0 0 0-.5.707v14.25a.75.75 0 0 0 1 .707A8.237 8.237 0 0 1 6 18.75c1.995 0 3.823.707 5.25 1.886V4.533ZM12.75 20.636A8.214 8.214 0 0 1 18 18.75c.966 0 1.89.166 2.75.47a.75.75 0 0 0 1-.708V4.262a.75.75 0 0 0-.5-.707A9.735 9.735 0 0 0 18 3a9.707 9.707 0 0 0-5.25 1.533v16.103Z" />
+          </svg>
+          <span class="sr-only">Home</span>
+        <% end %>
+      </div>
+    </li>
+    <li>
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
+          <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+        </svg>
+        <%= link_to @bible.code, bible_books_path(bible_code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+      </div>
+    </li>
+    <li>
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
+          <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+        </svg>
+        <%= link_to "Chapters", bible_book_chapters_url(bible_code: @bible.code.downcase, book_slug: @book.slug), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+      </div>
+    </li>
+  </ol>
+</nav>
 
-<section id="footnotes">
-  <h2>Footnotes</h2>
-  <ul>
-    <% @footnotes.each do |footnote| %>
-      <li id="fn1">[<%= @footnotes_mapping[footnote.id] %>] <%= footnote.content %> <a href="#ref1">&#x2191;</a></li>
+<main>
+  <%= link_to  bible_book_path(bible_code: @bible.code.downcase, slug: @book.slug), class: "text-blue-600 hover:text-blue-800" do %>
+    <h1 class="text-4xl font-semibold text-pretty sm:text-5xl"><%= @book.title %></h1>
+  <% end %>
+
+  <section class="my-6" id="chapter">
+    <h2 class="text-3xl font-semibold text-pretty text-gray-900"><%= "Chapter #{@chapter.number}" %></h2>
+
+    <% @segments.each do |segment| %>
+      <%# "[#{segment.usx_style}]" unless segment.usx_style == "b" %>
+
+      <% case segment.usx_style -%>
+      <% when "b" %>
+        <%# Poetry - Stanza Break (Blank Line) %>
+
+      <% when "d" %>
+        <%# Label - Descriptive Title - Hebrew Subtitle %>
+        <%= tag.div class: "mt-3 mb-3 text-center italic" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "li1" %>
+        <%# List Entry - Level 1 %>
+        <%= tag.p class: "mt-3 pl-12 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "li2" %>
+        <%# List Entry - Level 2 %>
+        <%= tag.p class: "mt-3 pl-21 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "m" %>
+        <%# Paragraph - Margin - No First Line Indent %>
+        <%= tag.p class: "mt-3 pl-3 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "mr" %>
+        <%# Heading - Major Section Range References %>
+        <%= tag.div class: "mt-3 mb-3 italic font-semibold" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <% next if ["(", ")"].include? fragment.content %>
+
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "ms" %>
+        <%# Heading - Major Section Level 1 %>
+        <% heading_title = segment.fragments.order(segment_part: :asc)[0].content %>
+        <%= tag.h3 heading_title, class: "mt-6 mb-3 text-xl font-semibold text-pretty text-gray-900 uppercase", id: heading_title.parameterize %>
+
+      <% when "pc" %>
+        <%# Paragraph - Centered (for Inscription) %>
+        <%= tag.p class: "mt-1 text-center uppercase" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "pmo" %>
+        <%# Paragraph - Embedded Text Opening %>
+        <%= tag.p class: "mt-3 pl-9 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "q1" %>
+        <%# Poetry - Indent Level 1 %>
+        <%= tag.p class: "mt-1 pl-12 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "q2" %>
+        <%# Poetry - Indent Level 2 %>
+        <%= tag.p class: "mt-1 pl-21 -indent-3" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "qa" %>
+        <%# Poetry - Acrostic Heading/Marker %>
+        <% heading_title = segment.fragments.order(segment_part: :asc)[0].content %>
+        <%= tag.div class: "mt-6 mb-3" do %>
+          <div class="relative">
+            <div class="absolute inset-0 flex items-center" aria-hidden="true">
+              <div class="w-full border-t border-gray-300"></div>
+            </div>
+            <div class="relative flex justify-start">
+              <span class="bg-white pr-3 text-base font-semibold text-gray-900"><%= heading_title %></span>
+            </div>
+          </div>  
+        <% end %>
+
+      <% when "qr" %>
+        <%# Poetry - Right Aligned %>
+        <%= tag.p class: "mt-3 text-right italic" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "r" %>
+        <%# Heading - Parallel References %>
+        <%= tag.div class: "mt-3 mb-3 italic font-semibold" do %>
+          <% segment.fragments.order(segment_part: :asc).each do |fragment| %>
+            <% next if ["(", ")"].include? fragment.content %>
+
+            <%= render partial: "fragment", locals: { fragment: fragment }  %>
+          <% end %>
+        <% end %>
+
+      <% when "s1" %>
+        <%# Heading - Section Level 1 %>
+        <% heading_title = segment.fragments.order(segment_part: :asc)[0].content %>
+        <%= tag.h3 heading_title, class: "mt-6 mb-3 text-xl font-semibold text-pretty text-gray-900", id: heading_title.parameterize %>
+
+      <% when "s2" %>
+        <%# Heading - Section Level 2 %>
+        <% heading_title = segment.fragments.order(segment_part: :asc)[0].content %>
+        <%= tag.h4 heading_title, class: "mt-6 mb-3 text-base font-semibold text-pretty text-gray-900", id: heading_title.parameterize %>
+
+      <% else %>
+        <%# ??? %>
+        <span>[<%= segment.usx_style %>] <%= segment%> - <%= segment.fragments.order(segment_part: :asc).size %></span>
+
+      <% end -%>
     <% end %>
-  </ul>
-</section>
+  </section>
 
-<hr>
+  <% if @footnotes.any? %>
+  <div class="relative">
+    <div class="absolute inset-0 flex items-center" aria-hidden="true">
+      <div class="w-full border-t border-gray-300"></div>
+    </div>
 
-<p><%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %></p>
+    <div class="relative flex justify-center">
+      <span class="bg-white px-2 text-sm text-gray-500">Footnotes</span>
+    </div>
+  </div>
+
+  <section class="mt-6 mb-8" id="footnotes">
+    <ul class="list-none">
+      <% @footnotes.each do |footnote| %>
+        <% footnote_letter = @footnotes_mapping[footnote.id][:letter] %>
+        <% footnote_ref_link = @footnotes_mapping[footnote.id][:ref_link] %>
+        <% footnote_ref_target = @footnotes_mapping[footnote.id][:ref_target] %>
+        <% footnote_verse = @footnotes_mapping[footnote.id][:verse] %>
+
+        <%= tag.li id: footnote_ref_target, class: "mt-1" do %>
+          <%= link_to  "##{footnote_ref_link}" do %>
+            <%= tag.span class: "text-blue-600 font-semibold" do %>↑<% end %>
+            <% if footnote_verse.present? %>
+              <%= tag.span class: "text-xs/6 text-orange-700 font-semibold" do %><%= footnote_verse %><% end %>
+            <% end %>
+            <%= tag.span class: "text-xs/6 text-blue-600 font-semibold" do %><%= footnote_letter %><% end %>
+            <%= tag.span class: "text-sm/6" do %><%= footnote.content %><% end %>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  </section>
+  <% end %>
+
+  <hr class="my-6 border-gray-300">
+
+  <section class="my-6" id="copyright">
+    <p class="text-center text-xs/6 text-gray-600">
+      <%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %>
+    </p>
+  </section>
+</main>
