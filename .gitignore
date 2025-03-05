@@ -7,6 +7,9 @@
 # Credential files
 /config/master.key
 
+# JavaScript files
+/node_modules
+
 # Settings files
 config/settings.local.yml
 config/settings/*.local.yml
