@@ -118,7 +118,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.bigint "book_id", null: false
     t.bigint "chapter_id", null: false
     t.bigint "heading_id", null: false
-    t.string "style", null: false
+    t.string "usx_style", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bible_id"], name: "index_segments_on_bible_id"

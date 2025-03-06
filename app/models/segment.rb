@@ -7,7 +7,7 @@
 # Name              | Type               | Attributes
 # ----------------- | ------------------ | ---------------------------
 # **`id`**          | `bigint`           | `not null, primary key`
-# **`style`**       | `string`           | `not null`
+# **`usx_style`**   | `string`           | `not null`
 # **`created_at`**  | `datetime`         | `not null`
 # **`updated_at`**  | `datetime`         | `not null`
 # **`bible_id`**    | `bigint`           | `not null`
@@ -50,7 +50,7 @@ class Segment < ApplicationRecord
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
-  validates :style, presence: true
+  validates :usx_style, presence: true
 
   # Constants
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
