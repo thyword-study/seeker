@@ -73,11 +73,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.boolean "show_verse", null: false
     t.string "kind", null: false
     t.text "content", null: false
+    t.string "fragmentable_type"
+    t.bigint "fragmentable_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["bible_id"], name: "index_fragments_on_bible_id"
     t.index ["book_id"], name: "index_fragments_on_book_id"
     t.index ["chapter_id"], name: "index_fragments_on_chapter_id"
+    t.index ["fragmentable_type", "fragmentable_id"], name: "index_fragments_on_fragmentable"
     t.index ["heading_id"], name: "index_fragments_on_heading_id"
     t.index ["segment_id"], name: "index_fragments_on_segment_id"
     t.index ["verse_id"], name: "index_fragments_on_verse_id"
