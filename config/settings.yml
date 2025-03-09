@@ -1,4 +1,7 @@
 ---
+app:
+  name: Scribe
+
 bible:
   defaults:
     translation: BSB
