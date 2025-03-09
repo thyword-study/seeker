@@ -43,6 +43,7 @@ class Footnote < ApplicationRecord
   belongs_to :book
   belongs_to :chapter
   belongs_to :verse, optional: true
+  has_many :fragments, as: :fragmentable
 
   # Validations
   validates :bible, presence: true

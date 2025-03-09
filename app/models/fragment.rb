@@ -4,20 +4,22 @@
 #
 # ### Columns
 #
-# Name              | Type               | Attributes
-# ----------------- | ------------------ | ---------------------------
-# **`id`**          | `bigint`           | `not null, primary key`
-# **`content`**     | `text`             | `not null`
-# **`kind`**        | `string`           | `not null`
-# **`show_verse`**  | `boolean`          | `not null`
-# **`created_at`**  | `datetime`         | `not null`
-# **`updated_at`**  | `datetime`         | `not null`
-# **`bible_id`**    | `bigint`           | `not null`
-# **`book_id`**     | `bigint`           | `not null`
-# **`chapter_id`**  | `bigint`           | `not null`
-# **`heading_id`**  | `bigint`           | `not null`
-# **`segment_id`**  | `bigint`           | `not null`
-# **`verse_id`**    | `bigint`           |
+# Name                     | Type               | Attributes
+# ------------------------ | ------------------ | ---------------------------
+# **`id`**                 | `bigint`           | `not null, primary key`
+# **`content`**            | `text`             | `not null`
+# **`fragmentable_type`**  | `string`           |
+# **`kind`**               | `string`           | `not null`
+# **`show_verse`**         | `boolean`          | `not null`
+# **`created_at`**         | `datetime`         | `not null`
+# **`updated_at`**         | `datetime`         | `not null`
+# **`bible_id`**           | `bigint`           | `not null`
+# **`book_id`**            | `bigint`           | `not null`
+# **`chapter_id`**         | `bigint`           | `not null`
+# **`fragmentable_id`**    | `bigint`           |
+# **`heading_id`**         | `bigint`           | `not null`
+# **`segment_id`**         | `bigint`           | `not null`
+# **`verse_id`**           | `bigint`           |
 #
 # ### Indexes
 #
@@ -27,6 +29,9 @@
 #     * **`book_id`**
 # * `index_fragments_on_chapter_id`:
 #     * **`chapter_id`**
+# * `index_fragments_on_fragmentable`:
+#     * **`fragmentable_type`**
+#     * **`fragmentable_id`**
 # * `index_fragments_on_heading_id`:
 #     * **`heading_id`**
 # * `index_fragments_on_segment_id`:
@@ -54,6 +59,7 @@ class Fragment < ApplicationRecord
   belongs_to :bible
   belongs_to :book
   belongs_to :chapter
+  belongs_to :fragmentable, polymorphic: true, optional: true
   belongs_to :heading
   belongs_to :segment
   belongs_to :verse, optional: true

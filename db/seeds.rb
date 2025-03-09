@@ -83,12 +83,13 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
-      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, style: segment_style)
+      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_style: segment_style)
       Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
 
       segment_node.children.each do |fragment_node|
         fragment_text = fragment_node.text.strip
         fragment_kind = nil
+        fragmentable = nil
 
         case fragment_node.node_type
         when Nokogiri::XML::Node::ELEMENT_NODE
@@ -99,11 +100,13 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
             fragment_kind = "reference"
             reference_target = fragment_node["loc"]
             reference = Reference.create!(bible: bible, book: book, chapter: chapter, heading: heading, target: reference_target)
+            fragmentable = reference
             Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Reference #{reference.id}"
           when "note"
             fragment_kind = "note"
             footnote_text = fragment_node.children.select { |note_child_node| note_child_node.node_name == "char" && note_child_node["style"] == "ft" }.first.text.strip
             footnote = Footnote.create!(bible: bible, book: book, chapter: chapter, verse: verse, content: footnote_text)
+            fragmentable = footnote
             fragment_text = "#{footnote.id}"
             Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number} Footnote #{footnote.id}"
           when "verse"
@@ -124,7 +127,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
 
         next if fragment_text.empty?
 
-        fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text)
+        fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text, fragmentable: fragmentable)
         show_verse = false if fragment.show_verse
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id} Fragment #{fragment.id} (#{fragment.content})"
       end
