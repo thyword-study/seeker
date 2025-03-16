@@ -36,6 +36,10 @@ plugin :tmp_restart
 # Run the Solid Queue supervisor inside of Puma for single-server deployments
 plugin :solid_queue if ENV["SOLID_QUEUE_IN_PUMA"]
 
+# Run Tailwind in "watch" mode, so changes are automatically reflected in the
+# generated CSS output. Refer to tailwindcss-rails gem.
+plugin :tailwindcss if ENV.fetch("RAILS_ENV", "development") == "development"
+
 # Specify the PID file. Defaults to tmp/pids/server.pid in development.
 # In other environments, only set the PID file if requested.
 pidfile ENV["PIDFILE"] if ENV["PIDFILE"]
