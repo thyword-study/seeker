@@ -4,16 +4,17 @@
 #
 # ### Columns
 #
-# Name              | Type               | Attributes
-# ----------------- | ------------------ | ---------------------------
-# **`id`**          | `bigint`           | `not null, primary key`
-# **`usx_style`**   | `string`           | `not null`
-# **`created_at`**  | `datetime`         | `not null`
-# **`updated_at`**  | `datetime`         | `not null`
-# **`bible_id`**    | `bigint`           | `not null`
-# **`book_id`**     | `bigint`           | `not null`
-# **`chapter_id`**  | `bigint`           | `not null`
-# **`heading_id`**  | `bigint`           | `not null`
+# Name               | Type               | Attributes
+# ------------------ | ------------------ | ---------------------------
+# **`id`**           | `bigint`           | `not null, primary key`
+# **`usx_style`**    | `string`           | `not null`
+# **`created_at`**   | `datetime`         | `not null`
+# **`updated_at`**   | `datetime`         | `not null`
+# **`bible_id`**     | `bigint`           | `not null`
+# **`book_id`**      | `bigint`           | `not null`
+# **`chapter_id`**   | `bigint`           | `not null`
+# **`heading_id`**   | `bigint`           | `not null`
+# **`usx_node_id`**  | `integer`          | `not null`
 #
 # ### Indexes
 #
@@ -50,6 +51,7 @@ class Segment < ApplicationRecord
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
+  validates :usx_node_id, presence: true
   validates :usx_style, presence: true
 
   # Constants
