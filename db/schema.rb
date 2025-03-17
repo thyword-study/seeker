@@ -73,6 +73,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.boolean "show_verse", null: false
     t.string "kind", null: false
     t.text "content", null: false
+    t.integer "segment_part", null: false
     t.string "fragmentable_type"
     t.bigint "fragmentable_id"
     t.datetime "created_at", null: false
