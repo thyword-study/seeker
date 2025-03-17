@@ -8,7 +8,6 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-
 # Configure logging for debugging
 previous_logger = nil
 if ENV["DEBUG"]
@@ -76,10 +75,16 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
 
       next if Segment::HEADER_STYLES_INTRODUCTORY.include? segment_style
 
-      section_header_styles = Segment::HEADER_STYLES_SECTIONS_MAJOR.merge(Segment::HEADER_STYLES_SECTIONS_MINOR)
-      if section_header_styles.key? segment_style.to_sym
-        heading_level = section_header_styles[segment_style.to_sym]
-        heading = Heading.create!(bible: bible, book: book, chapter: chapter, level: heading_level, title: segment_node.text)
+      if Segment::HEADER_STYLES_SECTIONS_MAJOR.key?(segment_style.to_sym) || Segment::HEADER_STYLES_SECTIONS_MINOR.key?(segment_style.to_sym)
+        if Segment::HEADER_STYLES_SECTIONS_MAJOR.key? segment_style.to_sym
+          heading_kind = 'major'
+          heading_level = Segment::HEADER_STYLES_SECTIONS_MAJOR[segment_style.to_sym]
+        elsif Segment::HEADER_STYLES_SECTIONS_MINOR.key? segment_style.to_sym
+          heading_kind = 'minor'
+          heading_level = Segment::HEADER_STYLES_SECTIONS_MINOR[segment_style.to_sym]
+        end
+
+        heading = Heading.create!(bible: bible, book: book, chapter: chapter, kind: heading_kind, level: heading_level, title: segment_node.text)
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
