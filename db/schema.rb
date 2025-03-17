@@ -73,6 +73,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.boolean "show_verse", null: false
     t.string "kind", null: false
     t.text "content", null: false
+    t.integer "segment_part", null: false
     t.string "fragmentable_type"
     t.bigint "fragmentable_id"
     t.datetime "created_at", null: false
@@ -90,6 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.bigint "bible_id", null: false
     t.bigint "book_id", null: false
     t.bigint "chapter_id", null: false
+    t.string "kind", null: false
     t.integer "level", null: false
     t.string "title", null: false
     t.datetime "created_at", null: false
@@ -118,6 +120,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.bigint "book_id", null: false
     t.bigint "chapter_id", null: false
     t.bigint "heading_id", null: false
+    t.integer "usx_node_id", null: false
     t.string "usx_style", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

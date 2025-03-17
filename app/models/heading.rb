@@ -7,6 +7,7 @@
 # Name              | Type               | Attributes
 # ----------------- | ------------------ | ---------------------------
 # **`id`**          | `bigint`           | `not null, primary key`
+# **`kind`**        | `string`           | `not null`
 # **`level`**       | `integer`          | `not null`
 # **`title`**       | `string`           | `not null`
 # **`created_at`**  | `datetime`         | `not null`
@@ -46,6 +47,10 @@ class Heading < ApplicationRecord
   validates :bible, presence: true
   validates :book, presence: true
   validates :chapter, presence: true
+  validates :kind, presence: true
   validates :level, presence: true, numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :title, presence: true
+
+  # Enums
+  enum :kind, { major: "major", minor: "minor" }
 end
