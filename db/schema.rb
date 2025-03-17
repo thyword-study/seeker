@@ -90,6 +90,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_19_210537) do
     t.bigint "bible_id", null: false
     t.bigint "book_id", null: false
     t.bigint "chapter_id", null: false
+    t.string "kind", null: false
     t.integer "level", null: false
     t.string "title", null: false
     t.datetime "created_at", null: false

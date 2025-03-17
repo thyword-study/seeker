@@ -4,6 +4,7 @@ class CreateHeadings < ActiveRecord::Migration[8.0]
       t.references :bible, null: false, foreign_key: { on_delete: :restrict }
       t.references :book, null: false, foreign_key: { on_delete: :restrict }
       t.references :chapter, null: false, foreign_key: { on_delete: :restrict }
+      t.string :kind, null: false
       t.integer :level, null: false
       t.string :title, null: false
 
