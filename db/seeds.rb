@@ -88,7 +88,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
-      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_style: segment_style)
+      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_node_id: segment_node_id, usx_style: segment_style)
       Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
 
       segment_node.children.each do |fragment_node|
