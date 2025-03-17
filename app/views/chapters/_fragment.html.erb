@@ -1,0 +1,16 @@
+<% case fragment.kind -%>
+<% when "note" %>
+  <% footnote_letter = @footnotes_mapping[fragment.content.to_i][:letter] %>
+  <% footnote_ref_link = @footnotes_mapping[fragment.content.to_i][:ref_link] %>
+  <% footnote_ref_target = @footnotes_mapping[fragment.content.to_i][:ref_target] %>
+
+  <%= link_to "##{footnote_ref_target}", class: "font-semibold text-blue-600 hover:text-blue-800", id: footnote_ref_link do %>
+  <sup>[<%= footnote_letter %>]</sup>
+  <% end %>
+<% when "reference" %>
+  <% reference_link = reference_path(target: fragment.fragmentable.target) %>
+  <%= link_to fragment.content, reference_link, class: "text-blue-600 hover:text-blue-800" %>
+<% else %>
+  <%= tag.sup fragment.verse.number, class: "font-semibold", id: "v#{fragment.verse.number}" if fragment.verse.present? && fragment.show_verse %>
+  <span><%= fragment.content %></span>
+<% end %>

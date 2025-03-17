@@ -50,4 +50,24 @@ class Footnote < ApplicationRecord
   validates :book, presence: true
   validates :chapter, presence: true
   validates :content, presence: true
+
+  # Converts an integer to its corresponding alphabetical representation,
+  # following a sequential pattern where 1 → "a", 26 → "z", 27 → "aa", etc.
+  #
+  # This method is useful for generating footnote markers from verses, ensuring
+  # that footnotes are labeled alphabetically in a consistent manner.
+  #
+  # @param n [Integer] The footnote index (1-based).
+  # @return [String] The corresponding alphabetical letter.
+  def self.integer_to_letter(number)
+    letter = ""
+
+    while number > 0
+      number -= 1 # Shift index to make 'a' start at 1 instead of 0
+      letter.prepend((97 + (number % 26)).chr)  # Convert remainder to a letter
+      number /= 26
+    end
+
+    letter
+  end
 end
