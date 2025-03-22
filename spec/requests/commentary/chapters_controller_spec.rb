@@ -18,7 +18,11 @@ module Commentary
 
     describe 'GET #show' do
       it 'returns the correct response' do
-        get commentary_book_chapter_path book_slug: 'genesis', number: "1"
+        bible = FactoryBot.create(:bible_bsb)
+        book = FactoryBot.create(:book, bible: bible)
+        chapter = FactoryBot.create(:chapter, bible: bible, book: book, number: 1)
+
+        get commentary_book_chapter_path book_slug: book.slug, number: chapter.number
 
         aggregate_failures do
           expect(response).to have_http_status(:ok)
