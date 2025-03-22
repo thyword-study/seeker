@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "#{@book.title} | #{@bible.code} | #{Settings.app.name}" %>
+  <%= "Read #{@book.title} | #{@bible.code} | #{Settings.app.name}" %>
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">
@@ -13,7 +13,7 @@
 </nav>
 
 <main class="text-center">
-  <h1 class="text-4xl font-semibold text-pretty text-gray-900 sm:text-5xl"><%= @book.title %></h1>
+  <h1 class="text-4xl font-semibold text-pretty text-gray-900 sm:text-5xl">Read <%= @book.title %></h1>
 
   <% if @book.headings.major.where(level: 0).any? %>
   <section class="mt-12">
