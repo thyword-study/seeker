@@ -1,0 +1,40 @@
+<% content_for :title do %>
+  <%= "Study Books | #{@bible.code} | #{Settings.app.name}" %>
+<% end %>
+
+<nav class="mb-4 flex justify-center items-center">
+  <%= link_to root_path, class: "text-gray-400 hover:text-gray-500 flex flex-col items-center" do %>
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 18.75 7.5-7.5 7.5 7.5" />
+      <path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 7.5-7.5 7.5 7.5" />
+    </svg>
+    <span>Home</span>
+  <% end %>
+</nav>
+
+<main class="text-center">
+  <h1 class="text-4xl font-semibold text-pretty text-gray-900 sm:text-5xl">Study Books</h1>
+  <p class="mt-2 text-base/8 font-semibold">(Commentary)</p>
+
+  <section class="mt-12">
+    <h2 class="text-3xl font-semibold text-pretty text-gray-900">Old Testament</h2>
+    <ul class="mt-6 list-none">
+      <% @books.old_testament.each do |book| %> 
+        <li class="mt-2 text-xl">
+          <%= link_to book.title, commentary_book_path(slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+
+  <section class="mt-12">
+    <h2 class="text-3xl font-semibold text-pretty text-gray-900">New Testament</h2>
+    <ul class="mt-6 list-none">
+      <% @books.new_testament.each do |book| %> 
+        <li class="mt-2 text-xl">
+          <%= link_to book.title, commentary_book_path(slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+        </li>
+      <% end %>
+    </ul>
+  </section>
+</main>

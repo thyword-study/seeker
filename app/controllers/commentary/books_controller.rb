@@ -1,7 +1,8 @@
 module Commentary
   class BooksController < ApplicationController
     def index
-      render html: ""
+      @bible = Bible.find_by! code: Settings.bible.defaults.translation
+      @books = @bible.books.order(number: :asc)
     end
 
     def show

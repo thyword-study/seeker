@@ -4,6 +4,8 @@ module Commentary
   RSpec.describe BooksController, type: :request do
     describe 'GET #index' do
       it 'returns the correct response' do
+        FactoryBot.create(:bible_bsb)
+
         get commentary_books_path
 
         aggregate_failures do
