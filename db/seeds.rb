@@ -119,6 +119,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
               show_verse = true
               verse_number = fragment_node["number"].to_i
               verse = Verse.create!(bible: bible, book: book, chapter: chapter, number: verse_number)
+              segment.verses << verse
               Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number}"
             elsif fragment_node.key?("eid")
               verse = nil
