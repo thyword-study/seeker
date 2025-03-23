@@ -45,13 +45,15 @@ class Segment < ApplicationRecord
   belongs_to :chapter
   belongs_to :heading
   has_many :fragments, dependent: :restrict_with_error
+  has_many :segment_verse_associations, dependent: :destroy
+  has_many :verses, through: :segment_verse_associations
 
   # Validations
   validates :bible, presence: true
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
-  validates :usx_node_id, presence: true
+  validates :usx_node_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :usx_style, presence: true
 
   # Constants

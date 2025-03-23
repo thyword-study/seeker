@@ -44,6 +44,8 @@ class Verse < ApplicationRecord
   belongs_to :chapter
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error
+  has_many :segment_verse_associations, dependent: :destroy
+  has_many :segments, through: :segment_verse_associations
 
   # Validations
   validates :bible, presence: true
