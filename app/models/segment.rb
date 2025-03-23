@@ -53,7 +53,7 @@ class Segment < ApplicationRecord
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
-  validates :usx_node_id, presence: true
+  validates :usx_node_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :usx_style, presence: true
 
   # Constants
