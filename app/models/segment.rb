@@ -59,7 +59,6 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
-  CONTENT_STYLES = [ :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qa, :qr ]
   GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2 ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
@@ -104,7 +103,7 @@ class Segment < ApplicationRecord
     # * `qa` - Poetry - Acrostic Heading/Marker
     # * `qr` - Poetry - Right Aligned
     segments.chunk_while do |previous_segment, next_segment|
-      if CONTENT_STYLES.include? next_segment.usx_style.to_sym
+      if GROUPABLE_STYLES.include? next_segment.usx_style.to_sym
         # If we have groupable styles following each other group them into the
         # same section.
         groupable = GROUPABLE_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
