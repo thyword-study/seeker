@@ -44,7 +44,7 @@
     <% @sectioned_segments.each_with_index do |section_segments, section_index| %>
       <%= tag.div id: "section-#{section_index}" do %>
       <% section_segments.each do |segment| %>
-      <%# "[#{segment.usx_style}]" unless segment.usx_style == "b" %>
+      <%# "[#{segment.usx_style}, #{segment.verses.ids}]" unless segment.usx_style == "b" %>
 
       <% case segment.usx_style -%>
       <% when "b" %>
