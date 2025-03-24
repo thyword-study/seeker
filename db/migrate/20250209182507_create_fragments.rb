@@ -10,7 +10,7 @@ class CreateFragments < ActiveRecord::Migration[8.0]
       t.boolean :show_verse, null: false
       t.string :kind, null: false
       t.text :content, null: false
-      t.integer :segment_part, null: false
+      t.integer :position, null: false
       t.belongs_to :fragmentable, polymorphic: true, null: true
 
       t.timestamps
