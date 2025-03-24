@@ -32,6 +32,6 @@ class SegmentVerseAssociation < ApplicationRecord
   belongs_to :verse
 
   # Validations
-  validates :segment_id, presence: true
-  validates :verse_id, presence: true
+  validates :segment, presence: true
+  validates :verse, presence: true
 end
