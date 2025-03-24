@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_211317) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -115,6 +115,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211317) do
     t.index ["heading_id"], name: "index_references_on_heading_id"
   end
 
+  create_table "section_segment_associations", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.bigint "segment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id"], name: "index_section_segment_associations_on_section_id"
+    t.index ["segment_id"], name: "index_section_segment_associations_on_segment_id"
+  end
+
   create_table "sections", force: :cascade do |t|
     t.bigint "bible_id", null: false
     t.bigint "book_id", null: false
@@ -186,6 +195,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211317) do
   add_foreign_key "references", "books", on_delete: :restrict
   add_foreign_key "references", "chapters", on_delete: :restrict
   add_foreign_key "references", "headings", on_delete: :restrict
+  add_foreign_key "section_segment_associations", "sections", on_delete: :cascade
+  add_foreign_key "section_segment_associations", "segments", on_delete: :cascade
   add_foreign_key "sections", "bibles", on_delete: :restrict
   add_foreign_key "sections", "books", on_delete: :restrict
   add_foreign_key "sections", "chapters", on_delete: :restrict
