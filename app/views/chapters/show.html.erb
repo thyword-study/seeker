@@ -41,7 +41,9 @@
   <section class="my-6" id="chapter">
     <h2 class="text-3xl font-semibold text-pretty text-gray-900"><%= "Chapter #{@chapter.number}" %></h2>
 
-    <% @segments.each do |segment| %>
+    <% @sectioned_segments.each_with_index do |section_segments, section_index| %>
+      <%= tag.div id: "section-#{section_index}" do %>
+      <% section_segments.each do |segment| %>
       <%# "[#{segment.usx_style}]" unless segment.usx_style == "b" %>
 
       <% case segment.usx_style -%>
@@ -174,6 +176,8 @@
         <span>[<%= segment.usx_style %>] <%= segment%> - <%= segment.fragments.order(segment_part: :asc).size %></span>
 
       <% end -%>
+      <% end %>
+      <% end %>
     <% end %>
   </section>
 
