@@ -59,7 +59,7 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
-  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2 ]
+  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2, :qr ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
@@ -112,7 +112,7 @@ class Segment < ApplicationRecord
         # following each other it makes sense to stylistically group them
         # following based on their levels.
         groupable_list = [ "li1", "li2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "li2"
-        groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "q2"
+        groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && [ "q2", "qr" ].include?(next_segment.usx_style)
 
         # It makes sense to keep inscriptions in the same section as they
         # contextually related.
