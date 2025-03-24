@@ -139,6 +139,23 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
       end
     end
   end
+
+  # Chunk the segments into sections
+  chapters = Chapter.where(bible: bible, book: book).order(number: :asc)
+  chapters.each do |chapter|
+    segments = Segment.where(bible: bible, book: book, chapter: chapter).where.not(usx_style: "b").order(usx_position: :asc)
+
+    segment_chunks = Segment.group_in_sections(segments)
+    segment_chunks.each.with_index(1) do |chunk_segments, chunk_position|
+      headings = chunk_segments.map { |segment| segment.heading }.uniq
+      raise RuntimeError, "Multiple heading not expected!" if headings.size != 1
+
+      heading = headings.first
+      section = Section.create!(bible: bible, book: book, chapter: chapter, heading: heading, position: chunk_position)
+      section.segments = chunk_segments
+      Rails.logger.info "Sectioned Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Header ##{heading.id} Section #{section.id} Segments #{section.segments.ids.join(",")}"
+    end
+  end
 end
 
 # Restore previous logger

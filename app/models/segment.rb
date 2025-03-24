@@ -45,6 +45,8 @@ class Segment < ApplicationRecord
   belongs_to :chapter
   belongs_to :heading
   has_many :fragments, dependent: :restrict_with_error
+  has_many :section_segment_associations, dependent: :destroy
+  has_many :sections, through: :section_segment_associations
   has_many :segment_verse_associations, dependent: :destroy
   has_many :verses, through: :segment_verse_associations
 
@@ -57,8 +59,7 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
-  CONTENT_STYLES = [ :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qa, :qr ]
-  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2 ]
+  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2, :qr ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
@@ -102,7 +103,7 @@ class Segment < ApplicationRecord
     # * `qa` - Poetry - Acrostic Heading/Marker
     # * `qr` - Poetry - Right Aligned
     segments.chunk_while do |previous_segment, next_segment|
-      if CONTENT_STYLES.include? next_segment.usx_style.to_sym
+      if GROUPABLE_STYLES.include? next_segment.usx_style.to_sym
         # If we have groupable styles following each other group them into the
         # same section.
         groupable = GROUPABLE_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
@@ -111,7 +112,7 @@ class Segment < ApplicationRecord
         # following each other it makes sense to stylistically group them
         # following based on their levels.
         groupable_list = [ "li1", "li2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "li2"
-        groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "q2"
+        groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && [ "q2", "qr" ].include?(next_segment.usx_style)
 
         # It makes sense to keep inscriptions in the same section as they
         # contextually related.
