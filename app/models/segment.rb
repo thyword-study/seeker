@@ -4,17 +4,17 @@
 #
 # ### Columns
 #
-# Name               | Type               | Attributes
-# ------------------ | ------------------ | ---------------------------
-# **`id`**           | `bigint`           | `not null, primary key`
-# **`usx_style`**    | `string`           | `not null`
-# **`created_at`**   | `datetime`         | `not null`
-# **`updated_at`**   | `datetime`         | `not null`
-# **`bible_id`**     | `bigint`           | `not null`
-# **`book_id`**      | `bigint`           | `not null`
-# **`chapter_id`**   | `bigint`           | `not null`
-# **`heading_id`**   | `bigint`           | `not null`
-# **`usx_node_id`**  | `integer`          | `not null`
+# Name                | Type               | Attributes
+# ------------------- | ------------------ | ---------------------------
+# **`id`**            | `bigint`           | `not null, primary key`
+# **`usx_position`**  | `integer`          | `not null`
+# **`usx_style`**     | `string`           | `not null`
+# **`created_at`**    | `datetime`         | `not null`
+# **`updated_at`**    | `datetime`         | `not null`
+# **`bible_id`**      | `bigint`           | `not null`
+# **`book_id`**       | `bigint`           | `not null`
+# **`chapter_id`**    | `bigint`           | `not null`
+# **`heading_id`**    | `bigint`           | `not null`
 #
 # ### Indexes
 #
@@ -53,7 +53,7 @@ class Segment < ApplicationRecord
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
-  validates :usx_node_id, presence: true, numericality: { only_integer: true, greater_than: 0 }
+  validates :usx_position, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :usx_style, presence: true
 
   # Constants
@@ -83,7 +83,7 @@ class Segment < ApplicationRecord
   # @return [Array<Array<Segment>>] an array of arrays, where each inner array
   # represents a grouped section of segments.
   #
-  # @example segments = Segment.where(bible: @bible, book: @book, chapter: @chapter) .where.not(usx_style: "b") .order(usx_node_id: :asc)
+  # @example segments = Segment.where(bible: @bible, book: @book, chapter: @chapter) .where.not(usx_style: "b") .order(usx_position: :asc)
   #                     sectioned_segments = Segment.group_in_sections(segments)
   #
   def self.group_in_sections(segments)

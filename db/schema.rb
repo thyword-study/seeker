@@ -129,7 +129,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_090004) do
     t.bigint "book_id", null: false
     t.bigint "chapter_id", null: false
     t.bigint "heading_id", null: false
-    t.integer "usx_node_id", null: false
+    t.integer "usx_position", null: false
     t.string "usx_style", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
