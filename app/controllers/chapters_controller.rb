@@ -16,7 +16,7 @@ class ChaptersController < ApplicationController
     @bible = Bible.find_by! code: bible_code
     @book = Book.find_by! bible: @bible, slug: book_slug
     @chapter = Chapter.find_by! bible: @bible, book: @book, number: chapter_number
-    @segments = Segment.where(bible: @bible, book: @book, chapter: @chapter).order(usx_node_id: :asc)
+    @segments = Segment.where(bible: @bible, book: @book, chapter: @chapter).where.not(usx_style: "b").order(usx_node_id: :asc)
 
     @footnotes_mapping = {}
     @footnotes = Footnote.where(bible: @bible, book: @book, chapter: @chapter).order(created_at: :asc)
