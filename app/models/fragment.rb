@@ -10,7 +10,7 @@
 # **`content`**            | `text`             | `not null`
 # **`fragmentable_type`**  | `string`           |
 # **`kind`**               | `string`           | `not null`
-# **`segment_part`**       | `integer`          | `not null`
+# **`position`**           | `integer`          | `not null`
 # **`show_verse`**         | `boolean`          | `not null`
 # **`created_at`**         | `datetime`         | `not null`
 # **`updated_at`**         | `datetime`         | `not null`
@@ -72,7 +72,7 @@ class Fragment < ApplicationRecord
   validates :content, presence: true
   validates :heading, presence: true
   validates :kind, presence: true
-  validates :segment_part, presence: true
+  validates :position, presence: true
   validates :segment, presence: true
   validates :show_verse, inclusion: { in: [ true, false ] }
 
