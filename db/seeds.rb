@@ -56,8 +56,8 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
   chapter = nil
   heading = nil
   verse = nil
-  book_content.root.children.each.with_index(1) do |segment_node, segment_node_id|
-    next if Rails.env.test? && segment_node_id > 50
+  book_content.root.children.each.with_index(1) do |segment_node, segment_position|
+    next if Rails.env.test? && segment_position > 50
 
     show_verse = false
 
@@ -88,10 +88,10 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
-      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_position: segment_node_id, usx_style: segment_style)
+      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_position: segment_position, usx_style: segment_style)
       Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
 
-      segment_node.children.each.with_index(1) do |fragment_node, fragment_number|
+      segment_node.children.each.with_index(1) do |fragment_node, fragment_position|
         fragment_text = fragment_node.text.strip
         fragment_kind = nil
         fragmentable = nil
@@ -133,7 +133,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
 
         next if fragment_text.empty?
 
-        fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text, position: fragment_number, fragmentable: fragmentable)
+        fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text, position: fragment_position, fragmentable: fragmentable)
         show_verse = false if fragment.show_verse
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id} Fragment #{fragment.id} (#{fragment.content})"
       end
