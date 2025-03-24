@@ -57,7 +57,70 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
+  CONTENT_STYLES = [ :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qa, :qr ]
+  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2 ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
+
+  # Groups a collection of segments into logically coherent sections for further
+  # processing.
+  #
+  # This method takes an enumerable collection of Segment records and groups
+  # them based on their USX styles. Only segments with content styles are
+  # processed. Within this grouping, specific groupable styles are further
+  # aggregated based on:
+  #
+  # - **List Styles:** Consecutive segments with `li1` and `li2` styles are
+  #   grouped together, where `li2` follows `li1` indicating a sub-list.
+  # - **Poetry Styles:** Segments with `q1` followed by `q2` are grouped
+  #   together to maintain poetic structure.
+  # - **Inscriptions:** Consecutive `pc` (centered paragraph) segments are
+  #   grouped to keep related inscriptions together.
+  #
+  # @param segments [Enumerable<Segment>] a collection of Segment objects.
+  #
+  # @return [Array<Array<Segment>>] an array of arrays, where each inner array
+  # represents a grouped section of segments.
+  #
+  # @example segments = Segment.where(bible: @bible, book: @book, chapter: @chapter) .where.not(usx_style: "b") .order(usx_node_id: :asc)
+  #                     sectioned_segments = Segment.group_in_sections(segments)
+  #
+  def self.group_in_sections(segments)
+    # Now process all segments that belong to the chatper to generate a
+    # logically grouped structure that makes it easier for further processing.
+    # Excluding the styles above, these are the contextual styles that hold the
+    # actual content:
+    #
+    # * `li1` - List Entry - Level 1
+    # * `li2` - List Entry - Level 2
+    # * `m` - Paragraph - Margin - No First Line Indent
+    # * `pc` - Paragraph - Centered (for Inscription)
+    # * `pmo` - Paragraph - Embedded Text Opening
+    # * `q1` - Poetry - Indent Level 1
+    # * `q2` - Poetry - Indent Level 2
+    # * `qa` - Poetry - Acrostic Heading/Marker
+    # * `qr` - Poetry - Right Aligned
+    segments.chunk_while do |previous_segment, next_segment|
+      if CONTENT_STYLES.include? next_segment.usx_style.to_sym
+        # If we have groupable styles following each other group them into the
+        # same section.
+        groupable = GROUPABLE_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
+
+        # For groupable styles such as list and poetry styles, if they are
+        # following each other it makes sense to stylistically group them
+        # following based on their levels.
+        groupable_list = [ "li1", "li2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "li2"
+        groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "q2"
+
+        # It makes sense to keep inscriptions in the same section as they
+        # contextually related.
+        groupable_inscriptions = previous_segment.usx_style == "pc" && next_segment.usx_style == "pc"
+
+        (groupable && groupable_list) || (groupable && groupable_poetry) || (groupable && groupable_inscriptions)
+      else
+        false
+      end
+    end
+  end
 end
