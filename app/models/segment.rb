@@ -45,6 +45,8 @@ class Segment < ApplicationRecord
   belongs_to :chapter
   belongs_to :heading
   has_many :fragments, dependent: :restrict_with_error
+  has_many :section_segment_associations, dependent: :destroy
+  has_many :sections, through: :section_segment_associations
   has_many :segment_verse_associations, dependent: :destroy
   has_many :verses, through: :segment_verse_associations
 

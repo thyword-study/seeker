@@ -43,6 +43,8 @@ class Section < ApplicationRecord
   belongs_to :book
   belongs_to :chapter
   belongs_to :heading
+  has_many :section_segment_associations, dependent: :destroy
+  has_many :segments, through: :section_segment_associations
 
   # Validations
   validates :bible, presence: true
