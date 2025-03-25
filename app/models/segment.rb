@@ -103,11 +103,7 @@ class Segment < ApplicationRecord
     # * `qa` - Poetry - Acrostic Heading/Marker
     # * `qr` - Poetry - Right Aligned
     segments.chunk_while do |previous_segment, next_segment|
-      if GROUPABLE_STYLES.include? next_segment.usx_style.to_sym
-        # If we have groupable styles following each other group them into the
-        # same section.
-        groupable = GROUPABLE_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
-
+      if GROUPABLE_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
         # For groupable styles such as list and poetry styles, if they are
         # following each other it makes sense to stylistically group them
         # following based on their levels.
@@ -118,7 +114,9 @@ class Segment < ApplicationRecord
         # contextually related.
         groupable_inscriptions = previous_segment.usx_style == "pc" && next_segment.usx_style == "pc"
 
-        (groupable && groupable_list) || (groupable && groupable_poetry) || (groupable && groupable_inscriptions)
+        # If we have groupable styles following each other group them into the
+        # same section.
+        groupable_list || groupable_poetry || groupable_inscriptions
       else
         false
       end
