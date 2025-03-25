@@ -7,7 +7,7 @@
 
   <% when "d" %>
     <%# Label - Descriptive Title - Hebrew Subtitle %>
-    <%= tag.div class: "mt-3 mb-3 text-center italic" do %>
+    <%= tag.div class: "mb-3 text-center italic" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -15,7 +15,7 @@
 
   <% when "li1" %>
     <%# List Entry - Level 1 %>
-    <%= tag.p class: "mt-3 pl-12 -indent-3" do %>
+    <%= tag.p class: "pl-12 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -23,7 +23,7 @@
 
   <% when "li2" %>
     <%# List Entry - Level 2 %>
-    <%= tag.p class: "mt-3 pl-21 -indent-3" do %>
+    <%= tag.p class: "pl-21 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -31,7 +31,7 @@
 
   <% when "m" %>
     <%# Paragraph - Margin - No First Line Indent %>
-    <%= tag.p class: "mt-3 pl-3 -indent-3" do %>
+    <%= tag.p class: "pl-3 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -54,7 +54,7 @@
 
   <% when "pc" %>
     <%# Paragraph - Centered (for Inscription) %>
-    <%= tag.p class: "mt-1 text-center uppercase" do %>
+    <%= tag.p class: "text-center uppercase" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -62,7 +62,7 @@
 
   <% when "pmo" %>
     <%# Paragraph - Embedded Text Opening %>
-    <%= tag.p class: "mt-3 pl-9 -indent-3" do %>
+    <%= tag.p class: "pl-9 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -70,7 +70,7 @@
 
   <% when "q1" %>
     <%# Poetry - Indent Level 1 %>
-    <%= tag.p class: "mt-1 pl-12 -indent-3" do %>
+    <%= tag.p class: "pl-12 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -78,7 +78,7 @@
 
   <% when "q2" %>
     <%# Poetry - Indent Level 2 %>
-    <%= tag.p class: "mt-1 pl-21 -indent-3" do %>
+    <%= tag.p class: "pl-21 -indent-3" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
@@ -100,7 +100,7 @@
 
   <% when "qr" %>
     <%# Poetry - Right Aligned %>
-    <%= tag.p class: "mt-3 text-right italic" do %>
+    <%= tag.p class: "text-right italic" do %>
       <% segment.fragments.order(position: :asc).each do |fragment| %>
         <%= render partial: "fragment", locals: { fragment: fragment }  %>
       <% end %>
