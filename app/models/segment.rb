@@ -63,6 +63,7 @@ class Segment < ApplicationRecord
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
+  PARAGRAPH_STYLES = [ :m, :pmo ]
 
   # Groups a collection of segments into logically coherent sections for further
   # processing.
@@ -117,6 +118,12 @@ class Segment < ApplicationRecord
         # If we have groupable styles following each other group them into the
         # same section.
         groupable_list || groupable_poetry || groupable_inscriptions
+      elsif PARAGRAPH_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
+        # Hanging paragraph segments without versese should be grouped with the
+        # following segment for a bit more context. Quite rare and so this
+        # should be considered special handling e.g. in Matthew 1 we have a
+        # "Next: (m)" section that is now handled by this.
+        !previous_segment.verses.exists?
       else
         false
       end
