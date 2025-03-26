@@ -48,6 +48,9 @@ gem "annotaterb", "~> 4.14"
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
 
+# Use the OpenAI API with Ruby!
+gem "ruby-openai", "~> 8.0"
+
 # Integrate Tailwind CSS with the asset pipeline in Rails.
 gem "tailwindcss-rails", "~> 4.2"
 
