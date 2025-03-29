@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_013742) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_29_015205) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_013742) do
     t.index ["bible_id", "book_id", "number"], name: "index_chapters_on_bible_id_and_book_id_and_number", unique: true
     t.index ["bible_id"], name: "index_chapters_on_bible_id"
     t.index ["book_id"], name: "index_chapters_on_book_id"
+  end
+
+  create_table "exposition_alternative_interpretations", force: :cascade do |t|
+    t.bigint "exposition_content_id", null: false
+    t.string "title", null: false
+    t.string "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_705a740ad5"
   end
 
   create_table "exposition_contents", force: :cascade do |t|
@@ -198,6 +207,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_013742) do
   add_foreign_key "books", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "books", on_delete: :restrict
+  add_foreign_key "exposition_alternative_interpretations", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_contents", "sections", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict

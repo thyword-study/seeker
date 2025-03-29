@@ -42,6 +42,7 @@
 class Exposition::Content < ApplicationRecord
   # Associations
   belongs_to :section
+  has_many :exposition_alternative_interpretations, dependent: :destroy
 
   # Validations
   validates :context, presence: true
