@@ -45,7 +45,7 @@ class Section < ApplicationRecord
   belongs_to :heading
   has_many :section_segment_associations, dependent: :destroy
   has_many :segments, through: :section_segment_associations
-  has_one :exposition_content, dependent: :restrict_with_error
+  has_one :exposition_content, dependent: :restrict_with_error, class_name: "Exposition::Content"
 
   # Validations
   validates :bible, presence: true
