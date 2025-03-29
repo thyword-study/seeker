@@ -59,7 +59,7 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
-  GROUPABLE_STYLES = [ :li1, :li2, :pc, :q1, :q2, :qr ]
+  GROUPABLE_STYLES = [ :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qr ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
@@ -111,19 +111,22 @@ class Segment < ApplicationRecord
         groupable_list = [ "li1", "li2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "li2"
         groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && [ "q2", "qr" ].include?(next_segment.usx_style)
 
-        # It makes sense to keep inscriptions in the same section as they
-        # contextually related.
-        groupable_inscriptions = previous_segment.usx_style == "pc" && next_segment.usx_style == "pc"
+        # For groupable paragraph styles, there's we group based on the type of
+        # the paragraph but also handle the handing edge-case.
+        #
+        # On handing paragraphs, segments without verses should be grouped with
+        # the following segment for a bit more context. Quite rare and so this
+        # should be considered special handling e.g. in Matthew 1 we have a
+        # "Next: (m)" section that is now handled by this.
+        groupable_paragraphs_m = (previous_segment.usx_style == "m" && previous_segment.verses.exists?) && (next_segment.usx_style == "m" && !next_segment.verses.exists?)
+        groupable_paragraphs_pc = previous_segment.usx_style == "pc" && next_segment.usx_style == "pc"
+        groupable_paragraphs_pmo = (previous_segment.usx_style == "pmo" && previous_segment.verses.exists?) && (next_segment.usx_style == "pmo" && !next_segment.verses.exists?)
+        groupable_paragraphs_hanging = PARAGRAPH_STYLES.include?(previous_segment.usx_style.to_sym) && !previous_segment.verses.exists?
+        groupable_paragraphs = groupable_paragraphs_m || groupable_paragraphs_pc || groupable_paragraphs_pmo || groupable_paragraphs_hanging
 
         # If we have groupable styles following each other group them into the
         # same section.
-        groupable_list || groupable_poetry || groupable_inscriptions
-      elsif PARAGRAPH_STYLES.include?(previous_segment.usx_style.to_sym) && GROUPABLE_STYLES.include?(next_segment.usx_style.to_sym)
-        # Hanging paragraph segments without versese should be grouped with the
-        # following segment for a bit more context. Quite rare and so this
-        # should be considered special handling e.g. in Matthew 1 we have a
-        # "Next: (m)" section that is now handled by this.
-        !previous_segment.verses.exists?
+        groupable_list || groupable_poetry || groupable_paragraphs
       else
         false
       end
