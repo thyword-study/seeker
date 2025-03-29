@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe PagesController, type: :request do
   describe 'GET #home' do
     it 'returns the correct response' do
+      FactoryBot.create(:bible_bsb)
+
       get root_path
 
       aggregate_failures do
