@@ -45,6 +45,7 @@ class Exposition::Content < ApplicationRecord
   has_many :exposition_alternative_interpretations, dependent: :destroy
   has_many :exposition_analyses, dependent: :destroy
   has_many :exposition_cross_references, dependent: :destroy
+  has_many :exposition_insights, dependent: :destroy
 
   # Validations
   validates :context, presence: true

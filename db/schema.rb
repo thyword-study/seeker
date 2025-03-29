@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_020938) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_29_021421) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -95,6 +95,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_020938) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "index_exposition_cross_references_on_exposition_content_id"
+  end
+
+  create_table "exposition_insights", force: :cascade do |t|
+    t.bigint "exposition_content_id", null: false
+    t.string "kind", null: false
+    t.string "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exposition_content_id"], name: "index_exposition_insights_on_exposition_content_id"
   end
 
   create_table "footnotes", force: :cascade do |t|
@@ -230,6 +239,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_020938) do
   add_foreign_key "exposition_analyses", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_contents", "sections", on_delete: :restrict
   add_foreign_key "exposition_cross_references", "exposition_contents", on_delete: :cascade
+  add_foreign_key "exposition_insights", "exposition_contents", on_delete: :cascade
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict
   add_foreign_key "footnotes", "chapters", on_delete: :restrict
