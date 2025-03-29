@@ -47,4 +47,47 @@ class Chapter < ApplicationRecord
   validates :bible, presence: true
   validates :book, presence: true
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
+
+  # Groups the segments of the chapter into sections.
+  #
+  # This method organizes the chapter's segments into logical sections using
+  # `Segment.group_in_sections`. If sections already exist, it raises an error
+  # unless `regroup` is enabled, in which case it deletes existing sections
+  # before regrouping.
+  #
+  # @param regroup [Boolean] whether to delete and recreate sections if they already exist.
+  # @raise [RuntimeError] if sections exist and `regroup` is false.
+  # @raise [RuntimeError] if multiple distinct headings are found in a single section.
+  #
+  # @return [NilClass]
+  #
+  # @example Group segments into sections for a chapter
+  #   chapter.group_segments_in_sections
+  #
+  # @example Regroup segments into sections after modifications
+  #   chapter.group_segments_in_sections(regroup: true)
+  def group_segments_in_sections!(regroup: false)
+    if sections.any?
+      raise RuntimeError, "Sections found and regrouping not enabled" unless regroup
+
+      sections.destroy_all
+      Rails.logger.info "Deleting all #{book.title} ##{number} sections to prepare for regrouping"
+    end
+
+    chapter_segments = segments.where(bible: bible, book: book).where.not(usx_style: "b").order(usx_position: :asc)
+    segment_chunks = Segment.group_in_sections(chapter_segments)
+
+    segment_chunks.each.with_index(1) do |chunk_segments, chunk_position|
+      chunk_headings = chunk_segments.map { |segment| segment.heading }.uniq
+      raise RuntimeError, "Multiple headings not expected!" if chunk_headings.size != 1
+
+      heading = chunk_headings.first
+      section = Section.create!(bible: bible, book: book, chapter: self, heading: heading, position: chunk_position)
+      section.segments = chunk_segments
+      Rails.logger.info "Created #{book.title} ##{number} Section #{section.id} Segments #{section.segments.ids.join(",")}"
+    end
+    Rails.logger.info "Sectioned #{book.title} ##{number}"
+
+    nil
+  end
 end
