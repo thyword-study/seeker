@@ -33,5 +33,5 @@ class Exposition::Insight < ApplicationRecord
   validates :note, presence: true
 
   # Enums
-  enum :kind, { personal: "personal" }
+  enum :kind, { christ_centered: "christ_centered" }
 end
