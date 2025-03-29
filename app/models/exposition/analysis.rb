@@ -8,8 +8,8 @@
 # ---------------------------- | ------------------ | ---------------------------
 # **`id`**                     | `bigint`           | `not null, primary key`
 # **`note`**                   | `string`           | `not null`
+# **`part`**                   | `string`           | `not null`
 # **`position`**               | `integer`          | `not null`
-# **`section`**                | `string`           | `not null`
 # **`created_at`**             | `datetime`         | `not null`
 # **`updated_at`**             | `datetime`         | `not null`
 # **`exposition_content_id`**  | `bigint`           | `not null`
@@ -31,6 +31,6 @@ class Exposition::Analysis < ApplicationRecord
   # Validations
   validates :exposition_content, presence: true
   validates :note, presence: true
+  validates :part, presence: true
   validates :position, presence: true
-  validates :section, presence: true
 end
