@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_29_013742) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -47,6 +47,26 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
     t.index ["bible_id", "book_id", "number"], name: "index_chapters_on_bible_id_and_book_id_and_number", unique: true
     t.index ["bible_id"], name: "index_chapters_on_bible_id"
     t.index ["book_id"], name: "index_chapters_on_book_id"
+  end
+
+  create_table "exposition_contents", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.text "summary", null: false
+    t.string "context", null: false
+    t.string "highlights", default: [], null: false, array: true
+    t.string "reflections", default: [], null: false, array: true
+    t.string "interpretation_type", null: false
+    t.string "people", default: [], null: false, array: true
+    t.string "places", default: [], null: false, array: true
+    t.string "tags", default: [], null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["highlights"], name: "index_exposition_contents_on_highlights", using: :gin
+    t.index ["people"], name: "index_exposition_contents_on_people", using: :gin
+    t.index ["places"], name: "index_exposition_contents_on_places", using: :gin
+    t.index ["reflections"], name: "index_exposition_contents_on_reflections", using: :gin
+    t.index ["section_id"], name: "index_exposition_contents_on_section_id"
+    t.index ["tags"], name: "index_exposition_contents_on_tags", using: :gin
   end
 
   create_table "footnotes", force: :cascade do |t|
@@ -178,6 +198,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
   add_foreign_key "books", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "books", on_delete: :restrict
+  add_foreign_key "exposition_contents", "sections", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict
   add_foreign_key "footnotes", "chapters", on_delete: :restrict
