@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe BooksController, type: :request do
+RSpec.describe ChaptersController, type: :request do
   describe 'GET #index' do
     it 'returns the correct response' do
       bible = FactoryBot.create(:bible)
