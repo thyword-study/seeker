@@ -138,6 +138,9 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     json (2.10.1)
+    json-schema (5.1.1)
+      addressable (~> 2.8)
+      bigdecimal (~> 3.1)
     kamal (2.5.3)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -399,6 +402,7 @@ DEPENDENCIES
   factory_bot_rails (~> 6.2)
   faker (~> 3.5, >= 3.5.1)
   importmap-rails
+  json-schema (~> 5.1, >= 5.1.1)
   kamal
   pg (~> 1.1)
   propshaft

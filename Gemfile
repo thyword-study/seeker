@@ -88,6 +88,9 @@ group :test do
   # a clean state for testing.
   gem "database_cleaner-active_record", "~> 2.1"
 
+  # Ruby JSON Schema Validator.
+  gem "json-schema", "~> 5.1", ">= 5.1.1"
+
   # Record your test suite's HTTP interactions and replay them during future
   # test runs for fast, deterministic, accurate tests.
   gem "vcr", "~> 6.3", ">= 6.3.1"
