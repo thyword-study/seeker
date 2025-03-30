@@ -63,31 +63,35 @@ class Segment < ApplicationRecord
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }
   HEADER_STYLES_SECTIONS_MINOR = { s: 0, s1: 1, s2: 2, s3: 3, s4: 4 }
-  PARAGRAPH_STYLES = [ :m, :pmo ]
 
-  # Groups a collection of segments into logically coherent sections for further
-  # processing.
+  # Groups a collection of segments into logically coherent sections for
+  # structured processing.
   #
-  # This method takes an enumerable collection of Segment records and groups
-  # them based on their USX styles. Only segments with content styles are
-  # processed. Within this grouping, specific groupable styles are further
-  # aggregated based on:
+  # This method takes an enumerable collection of `Segment` records and
+  # organizes them based on their USX styles. Only segments with recognized
+  # content styles are processed. Within this grouping, specific styles are
+  # further aggregated to maintain logical continuity:
   #
-  # - **List Styles:** Consecutive segments with `li1` and `li2` styles are
-  #   grouped together, where `li2` follows `li1` indicating a sub-list.
-  # - **Poetry Styles:** Segments with `q1` followed by `q2` are grouped
-  #   together to maintain poetic structure.
-  # - **Inscriptions:** Consecutive `pc` (centered paragraph) segments are
-  #   grouped to keep related inscriptions together.
+  # - **List Styles (`li1`, `li2`)**: Consecutive segments are grouped together,
+  #   where `li2` follows `li1` to indicate a sub-list.
+  # - **Poetry Styles (`q1`, `q2`, `qr`)**: Segments are grouped to preserve
+  #   poetic structure.
+  # - **Inscriptions (`pc`)**: Consecutive `pc` segments are grouped to retain
+  #   structured inscriptions.
+  # - **Verse Continuity**: Segments belonging to the same verse are grouped
+  #   together for contextual consistency.
   #
-  # @param segments [Enumerable<Segment>] a collection of Segment objects.
+  # @param segments [Enumerable<Segment>] A collection of `Segment` objects,
+  #   typically pre-filtered and ordered by `usx_position`.
   #
-  # @return [Array<Array<Segment>>] an array of arrays, where each inner array
-  # represents a grouped section of segments.
+  # @return [Array<Array<Segment>>] An array of grouped segment arrays, where
+  #   each inner array represents a cohesive section of related segments.
   #
-  # @example segments = Segment.where(bible: @bible, book: @book, chapter: @chapter) .where.not(usx_style: "b") .order(usx_position: :asc)
-  #                     sectioned_segments = Segment.group_in_sections(segments)
-  #
+  # @example
+  #   segments = Segment.where(bible: @bible, book: @book, chapter: @chapter)
+  #                     .where.not(usx_style: "b")
+  #                     .order(usx_position: :asc)
+  #   sectioned_segments = Segment.group_in_sections(segments)
   def self.group_in_sections(segments)
     # Now process all segments that belong to the chatper to generate a
     # logically grouped structure that makes it easier for further processing.
@@ -111,22 +115,13 @@ class Segment < ApplicationRecord
         groupable_list = [ "li1", "li2" ].include?(previous_segment.usx_style) && next_segment.usx_style == "li2"
         groupable_poetry = [ "q1", "q2" ].include?(previous_segment.usx_style) && [ "q2", "qr" ].include?(next_segment.usx_style)
 
-        # For groupable paragraph styles, there's we group based on the type of
-        # the paragraph but also handle the handing edge-case.
-        #
-        # On handing paragraphs, segments without verses should be grouped with
-        # the following segment for a bit more context. Quite rare and so this
-        # should be considered special handling e.g. in Matthew 1 we have a
-        # "Next: (m)" section that is now handled by this.
-        groupable_paragraphs_m = (previous_segment.usx_style == "m" && previous_segment.verses.exists?) && (next_segment.usx_style == "m" && !next_segment.verses.exists?)
-        groupable_paragraphs_pc = previous_segment.usx_style == "pc" && next_segment.usx_style == "pc"
-        groupable_paragraphs_pmo = (previous_segment.usx_style == "pmo" && previous_segment.verses.exists?) && (next_segment.usx_style == "pmo" && !next_segment.verses.exists?)
-        groupable_paragraphs_hanging = PARAGRAPH_STYLES.include?(previous_segment.usx_style.to_sym) && !previous_segment.verses.exists?
-        groupable_paragraphs = groupable_paragraphs_m || groupable_paragraphs_pc || groupable_paragraphs_pmo || groupable_paragraphs_hanging
+        # For segments within the same verse, group them together because it
+        # just makes sense to.
+        groupable_verses = previous_segment.verses.ids == next_segment.verses.ids
 
         # If we have groupable styles following each other group them into the
         # same section.
-        groupable_list || groupable_poetry || groupable_paragraphs
+        groupable_list || groupable_poetry || groupable_verses
       else
         false
       end
