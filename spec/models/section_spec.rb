@@ -6,6 +6,30 @@ RSpec.describe Section, type: :model do
   let(:chapter) { FactoryBot.create(:chapter, bible: bible, book: book, number: 1) }
   let(:heading) { FactoryBot.create(:heading, bible: bible, book: book, chapter: chapter) }
 
+  describe "#expositable?" do
+    context "when there are no segments with a content style" do
+      it "returns false" do
+        section = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 1)
+
+        expect(section.expositable?).to be false
+      end
+    end
+
+    context "when at least one segment has a content style" do
+      it "returns true" do
+        section = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 1)
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 'h')
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 's1')
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 's2')
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 'm')
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 'pc')
+        section.segments << FactoryBot.create(:segment, bible: bible, book: book, chapter: chapter, heading: heading, usx_style: 'pmo')
+
+        expect(section.expositable?).to be true
+      end
+    end
+  end
+
   describe '#user_prompt' do
     let(:bible) { FactoryBot.create(:bible_bsb) }
     let(:book) { FactoryBot.create(:book, bible: bible, title: "Genesis") }
