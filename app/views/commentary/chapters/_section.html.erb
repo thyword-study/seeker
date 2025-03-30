@@ -1,4 +1,4 @@
-<% section.segments.each do |segment| %>    
+<% section.segments.order(usx_position: :asc).each do |segment| %>    
   <%# "[#{segment.usx_style}, #{segment.verses.ids}]" unless segment.usx_style == "b" %>
 
   <% case segment.usx_style -%>
