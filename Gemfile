@@ -87,4 +87,12 @@ group :test do
   # Strategies for cleaning databases using ActiveRecord. Can be used to ensure
   # a clean state for testing.
   gem "database_cleaner-active_record", "~> 2.1"
+
+  # Record your test suite's HTTP interactions and replay them during future
+  # test runs for fast, deterministic, accurate tests.
+  gem "vcr", "~> 6.3", ">= 6.3.1"
+
+  # WebMock allows stubbing HTTP requests and setting expectations on HTTP
+  # requests.
+  gem "webmock", "~> 3.25", ">= 3.25.1"
 end
