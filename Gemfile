@@ -48,6 +48,9 @@ gem "annotaterb", "~> 4.14"
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
 
+# Use the OpenAI API with Ruby!
+gem "ruby-openai", "~> 8.0"
+
 # Integrate Tailwind CSS with the asset pipeline in Rails.
 gem "tailwindcss-rails", "~> 4.2"
 
@@ -87,6 +90,9 @@ group :test do
   # Strategies for cleaning databases using ActiveRecord. Can be used to ensure
   # a clean state for testing.
   gem "database_cleaner-active_record", "~> 2.1"
+
+  # Ruby JSON Schema Validator.
+  gem "json-schema", "~> 5.1", ">= 5.1.1"
 
   # Record your test suite's HTTP interactions and replay them during future
   # test runs for fast, deterministic, accurate tests.
