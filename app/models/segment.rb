@@ -59,6 +59,7 @@ class Segment < ApplicationRecord
   validates :usx_style, presence: true
 
   # Constants
+  CONTENT_STYLES = [ :d, :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qr ]
   GROUPABLE_STYLES = [ :li1, :li2, :m, :pc, :pmo, :q1, :q2, :qr ]
   HEADER_STYLES_INTRODUCTORY = [ "h", "toc2", "toc1", "mt1" ]
   HEADER_STYLES_SECTIONS_MAJOR = { ms: 0, ms1: 1, ms2: 2, ms3: 3, ms4: 4 }

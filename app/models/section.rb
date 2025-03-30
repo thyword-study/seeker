@@ -54,6 +54,14 @@ class Section < ApplicationRecord
   validates :heading, presence: true
   validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
 
+  # Determines if a section is ready for exposition.
+  #
+  # @return [Boolean] true if any segment's USX style is a content style, false
+  # otherwise.
+  def expositable?
+    segments.where(usx_style: Segment::CONTENT_STYLES.map(&:to_s)).exists?
+  end
+
   # Generates a structured user prompt for generating a commentary.
   #
   # This method constructs a text excerpt from the Berean Standard Bible (BSB),
