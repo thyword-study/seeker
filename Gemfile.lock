@@ -353,6 +353,8 @@ GEM
     validate_url (1.0.15)
       activemodel (>= 3.0.0)
       public_suffix
+    vcr (6.3.1)
+      base64
     web-console (4.2.1)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -403,6 +405,7 @@ DEPENDENCIES
   turbo-rails
   tzinfo-data
   validate_url (~> 1.0, >= 1.0.15)
+  vcr (~> 6.3, >= 6.3.1)
   web-console
 
 BUNDLED WITH
