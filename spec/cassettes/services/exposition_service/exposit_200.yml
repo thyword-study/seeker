@@ -1,0 +1,390 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/responses
+    body:
+      encoding: UTF-8
+      string: '{"input":"\u003cinstructions\u003e\n1. Generate a commentary and work
+        exclusively with the following text excerpt from the Berean Standard Bible
+        (BSB).\n2. When quoting or referring to the text, use the exact wording provided
+        in the text excerpt.\n\u003c/instructions\u003e\n\n\u003ctext\u003e\n1 In
+        the beginning God created the heavens and the earth.\n\nGenesis 1:1 BSB\n\u003c/text\u003e\n","instructions":"You
+        are an AI providing commentary on texts from the Bible.\n","max_output_tokens":10000,"model":"gpt-4o","text":{"format":{"type":"json_schema","name":"scripture_study","schema":{"type":"object","properties":{"text":{"type":"string","description":"The
+        Bible text being commented on, quoted verbatim from the Berean Standard Bible
+        (BSB)."},"context":{"type":"string","description":"Historical, cultural, and
+        linguistic background of the text."},"key_themes":{"type":"array","description":"Main
+        theological themes in the text. Include all relevant themes without limiting
+        to a fixed number—provide as many items as the text richness demands.","items":{"type":"object","properties":{"theme":{"type":"string","description":"A
+        central theme or theological concept present in the text."},"description":{"type":"string","description":"A
+        brief explanation of the theme."}},"required":["theme","description"],"additionalProperties":false}},"highlights":{"type":"array","description":"A
+        list of key highlights from the text that capture its most striking or memorable
+        insights. Each item should be a concise, well-explained blurb that provides
+        a complete and useful explanation of the impact of the text, selecting only
+        the most powerful insights rather than listing every minor detail.","items":{"type":"string"}},"analyses":{"type":"array","description":"An
+        exhaustive, phrase-by-phrase exposition breaking down every phrase in the
+        text. Each item should provide a comprehensive exposition of the text, to
+        ensure that all phrases are addressed. Use as many tokens as necessary for
+        a full response as this is the core of the response. If the passage includes
+        ambiguous or multi-interpretable language, your analysis should note where
+        further study may be beneficial, ensuring that every significant phrase is
+        fully addressed.","items":{"type":"object","properties":{"part":{"type":"string","description":"Part
+        of the text being analysed quoted verbatim."},"note":{"type":"string","description":"Explanatory
+        note or interpretation of the part of text."}},"required":["part","note"],"additionalProperties":false}},"cross_references":{"type":"array","description":"Other
+        Bible passages that relate to or illuminate the current text. List all relevant
+        references to support the commentary.","items":{"type":"object","properties":{"reference":{"type":"string","description":"The
+        reference of the related Bible passage."},"note":{"type":"string","description":"A
+        brief note explaining the connection."}},"required":["reference","note"],"additionalProperties":false}},"alternative_interpretations":{"type":"array","description":"Brief
+        outline of significant alternative or minority interpretations on the text
+        that may be an empty list if there are none. If a minority interpretation
+        is required to be the primary focus, the majority interpretation should appear
+        here. In the case the commentary naturally reflects multiple valid perspectives
+        (blended approach), present the majority (traditional) interpretation in the
+        primary commentary and include additional perspectives here. Where ambiguous
+        language exists, include a note that further study may be warranted.","items":{"type":"object","properties":{"title":{"type":"string","description":"The
+        title of the alternative interpretation."},"note":{"type":"string","description":"A
+        description or explanation of the alternative interpretation."}},"required":["title","note"],"additionalProperties":false}},"personal_applications":{"type":"array","description":"Practical
+        takeaways and personal applications for Christian living derived from the
+        text. Ensure the list is exhaustive and reflects all applicable insights.","items":{"type":"object","properties":{"title":{"type":"string","description":"The
+        title of the application point."},"note":{"type":"string","description":"A
+        description or explanation of the application."}},"required":["title","note"],"additionalProperties":false}},"christ_centered_insights":{"type":"array","description":"Insights
+        explaining how the text connects to Jesus Christ, salvation, and God''s redemptive
+        plan. Provide a varied and comprehensive list of insights.","items":{"type":"string","description":"A
+        single Christ-centered insight from the text."}},"reflections":{"type":"array","description":"Reflective
+        questions or meditation prompts based on the text. Include as many reflective
+        prompts as necessary to encourage deep personal meditation.","items":{"type":"string","description":"A
+        reflective prompt."}},"interpretation_type":{"type":"string","enum":["blended","majority","minority"],"description":"Indicates
+        whether the primary interpretation in the commentary is the majority (traditional)
+        view, a minority (alternative) view or blended (multiple valid interpretations)"},"places":{"type":"array","description":"List
+        of places named in the text. This list can be empty if no places are mentioned.","items":{"type":"string"}},"people":{"type":"array","description":"List
+        of people or characters named in the text. This list can be empty if no names
+        are mentioned.","items":{"type":"string"}},"tags":{"type":"array","description":"A
+        collection of succinct metadata keywords that capture the text''s key theological
+        themes, cultural context, and doctrinal elements. These tags aid in backend
+        filtering and analysis - for example, tags might include ''creation'', ''redemption'',
+        ''covenant'', or ''historical context''.","items":{"type":"string"}},"summary":{"type":"string","description":"A
+        well-written, engaging exposition in Markdown format that seamlessly integrates
+        all the structured data points: text, context, key themes, highlights, analyses,
+        cross-references, alternative interpretations (if available), practical personal
+        applications, Christ-centered insights, and reflections. The text should be
+        written in a friendly, conversational tone that feels warm and approachable,
+        yet remains theologically sound and reflective, having Scripture quotes naturally
+        embedded within the discussion (where it makes sense to). Avoid using additional
+        headings (since the content will be placed within a `div` with its own headings)
+        and instead use clear paragraphs and subtle dividers. Leverage features like
+        **bold** for emphasis, *italics* for clarity, \u003e blockquotes for quotations,
+        and `escaping backticks` as needed. For example, using **bold** to highlight
+        key terms, major themes, or pivotal statements or *italics* to emphasise important
+        concepts or to introduce and explain biblical terms in plain English."}},"required":["text","context","key_themes","highlights","analyses","cross_references","alternative_interpretations","personal_applications","christ_centered_insights","reflections","interpretation_type","places","people","tags","summary"],"additionalProperties":false},"strict":true}},"stream":false,"store":false,"temperature":1.0,"top_p":1.0}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer <TOKEN>
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sun, 30 Mar 2025 12:18:10 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - kingori
+      X-Request-Id:
+      - req_d42637936b4ea466bd275bee5e20444f
+      Openai-Processing-Ms:
+      - '15607'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=jfGFtZwx5hPgpCD4ArzBgeu1Uj_ZDsl0HfDArH.1G.U-1743337090-1.0.1.1-gXf7jJpb.KEMTp_Ae34Fwcckx1Y2xmbceDVkmAtSbmvvQ5NTR1vFN0_1wO7UDjPSKBw9QBjqdn1dTsJ9KVutE_zcKvkiBal1.riiEN2urQg;
+        path=/; expires=Sun, 30-Mar-25 12:48:10 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=DykBtxM3ZVrycEcUTAvVBVjX8cJz6nHyavDvbS1CTQQ-1743337090155-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 92878bea19890704-CPT
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "resp_67e936726c748192b9bbb64dd6f07dd20334de9678c95f2c",
+          "object": "response",
+          "created_at": 1743337074,
+          "status": "completed",
+          "error": null,
+          "incomplete_details": null,
+          "instructions": "You are an AI providing commentary on texts from the Bible.\n",
+          "max_output_tokens": 10000,
+          "model": "gpt-4o-2024-08-06",
+          "output": [
+            {
+              "type": "message",
+              "id": "msg_67e9367352c88192aa27ea4b805015990334de9678c95f2c",
+              "status": "completed",
+              "role": "assistant",
+              "content": [
+                {
+                  "type": "output_text",
+                  "text": "{\"text\":\"In the beginning God created the heavens and the earth.\",\"context\":\"Genesis 1:1 is traditionally attributed to Moses as part of the Torah, serving as the opening line of the Bible. \\\"In the beginning\\\" situates the narrative outside time, introducing God as eternal. The reference to \\\"the heavens and the earth\\\" reflects a Hebrew view of the universe encompassing both the cosmic (heavens) and terrestrial (earth) realms. This text was likely composed during the second millennium BCE and reflects ancient Near Eastern creation narratives, yet it uniquely emphasizes a monotheistic God as the sole Creator.\",\"key_themes\":[{\"theme\":\"Creation\",\"description\":\"The verse introduces God's creative act as the beginning of everything.\"},{\"theme\":\"Monotheism\",\"description\":\"Affirms the belief in one God as the Creator of all things.\"},{\"theme\":\"Sovereignty of God\",\"description\":\"God's power and authority over the universe are established.\"}],\"highlights\":[\"Genesis 1:1 lays the foundation for a biblical worldview with its declaration that God is the Creator of the universe.\"],\"analyses\":[{\"part\":\"In the beginning\",\"note\":\"Denotes the commencement of time and existence, positioning God before time commenced.\"},{\"part\":\"God\",\"note\":\"Introduces the central figure of the Bible, who is depicted as preeminent and eternal.\"},{\"part\":\"created\",\"note\":\"Translates the Hebrew word *'bara'* which is used exclusively for God's creative acts, emphasizing divine power.\"},{\"part\":\"the heavens and the earth\",\"note\":\"A merism, a figure of speech that encompasses everything by mentioning its extremes, here indicating the totality of creation.\"}],\"cross_references\":[{\"reference\":\"John 1:1-3\",\"note\":\"Reflects on the beginning with 'In the beginning was the Word,' identifying Christ with Creation.\"},{\"reference\":\"Hebrews 11:3\",\"note\":\"Emphasizes faith in understanding the world was formed by God's command.\"},{\"reference\":\"Psalm 33:6\",\"note\":\"Describes the heavens created by the word of the Lord.\"}],\"alternative_interpretations\":[],\"personal_applications\":[{\"title\":\"Acknowledging God's Power\",\"note\":\"Recognize and respect the authority and sovereignty of God as Creator in daily life.\"},{\"title\":\"Creation Care\",\"note\":\"Live responsibly, caring for the earth as part of God's creation.\"},{\"title\":\"Spiritual Beginning\",\"note\":\"Consider personal spiritual renewal or 'beginning' with God.\"}],\"christ_centered_insights\":[\"Christ is seen as present with God in creation, as highlighted in John 1:1-3.\",\"Jesus, part of the Triune God, is not only a part of creation but also the means by which all things are created.\"],\"reflections\":[\"What does it mean for you personally that God created the heavens and the earth?\",\"How does understanding God as Creator influence your view of the world?\"],\"interpretation_type\":\"majority\",\"places\":[],\"people\":[],\"tags\":[\"creation\",\"sovereignty of God\",\"monotheism\",\"Genesis 1:1\",\"hebrew worldview\",\"bara\"] ,\"summary\":\"Genesis 1:1, \\\"In the beginning God created the heavens and the earth,\\\" serves as the profound opening to the biblical narrative. This verse sets the stage for understanding the entire Bible by introducing God's supreme authority and creative power. The phrase \\\"In the beginning\\\" implies a start to time itself, highlighting God's eternal nature. The Hebrew term *'bara'* (\\\"created\\\") is used to describe a divine action unique to God, emphasizing the singular power required to create the universe. The mention of \\\"the heavens and the earth\\\" suggests a comprehensive creation, capturing the entirety of the cosmos in one phrase.\\n\\nThis passage firmly establishes monotheism, contrasting with other ancient Near Eastern creation stories where multiple deities participate. Here, God alone is credited with creation, underscoring His sovereignty over all.\\n\\nUnderstanding God's role as the Creator impacts not only theological perspectives but also personal applications. For instance, acknowledging God's creativity might inspire deeper respect and responsibility towards the Creation itself, tying into practices like environmental stewardship.\\n\\nIn terms of Christ-centered insights, John 1:1-3 associates Jesus with the beginning, describing Him as integral to the creative act. Thus, this passage foreshadows the Trinitarian involvement in creation and redemption.\\n\\nReflectively, one might consider what it means to view their own beginnings\u2014whether spiritual or otherwise\u2014in light of God's creative work. One can ponder how God's authority as Creator shapes our daily lives and beliefs. This verse, though succinct, invites believers into a lifelong exploration of God's majesty and their place within His creation.\"}",
+                  "annotations": []
+                }
+              ]
+            }
+          ],
+          "parallel_tool_calls": true,
+          "previous_response_id": null,
+          "reasoning": {
+            "effort": null,
+            "generate_summary": null
+          },
+          "store": false,
+          "temperature": 1.0,
+          "text": {
+            "format": {
+              "type": "json_schema",
+              "description": null,
+              "name": "scripture_study",
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "text": {
+                    "type": "string",
+                    "description": "The Bible text being commented on, quoted verbatim from the Berean Standard Bible (BSB)."
+                  },
+                  "context": {
+                    "type": "string",
+                    "description": "Historical, cultural, and linguistic background of the text."
+                  },
+                  "key_themes": {
+                    "type": "array",
+                    "description": "Main theological themes in the text. Include all relevant themes without limiting to a fixed number\u2014provide as many items as the text richness demands.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "theme": {
+                          "type": "string",
+                          "description": "A central theme or theological concept present in the text."
+                        },
+                        "description": {
+                          "type": "string",
+                          "description": "A brief explanation of the theme."
+                        }
+                      },
+                      "required": [
+                        "theme",
+                        "description"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "highlights": {
+                    "type": "array",
+                    "description": "A list of key highlights from the text that capture its most striking or memorable insights. Each item should be a concise, well-explained blurb that provides a complete and useful explanation of the impact of the text, selecting only the most powerful insights rather than listing every minor detail.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "analyses": {
+                    "type": "array",
+                    "description": "An exhaustive, phrase-by-phrase exposition breaking down every phrase in the text. Each item should provide a comprehensive exposition of the text, to ensure that all phrases are addressed. Use as many tokens as necessary for a full response as this is the core of the response. If the passage includes ambiguous or multi-interpretable language, your analysis should note where further study may be beneficial, ensuring that every significant phrase is fully addressed.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "part": {
+                          "type": "string",
+                          "description": "Part of the text being analysed quoted verbatim."
+                        },
+                        "note": {
+                          "type": "string",
+                          "description": "Explanatory note or interpretation of the part of text."
+                        }
+                      },
+                      "required": [
+                        "part",
+                        "note"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "cross_references": {
+                    "type": "array",
+                    "description": "Other Bible passages that relate to or illuminate the current text. List all relevant references to support the commentary.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "reference": {
+                          "type": "string",
+                          "description": "The reference of the related Bible passage."
+                        },
+                        "note": {
+                          "type": "string",
+                          "description": "A brief note explaining the connection."
+                        }
+                      },
+                      "required": [
+                        "reference",
+                        "note"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "alternative_interpretations": {
+                    "type": "array",
+                    "description": "Brief outline of significant alternative or minority interpretations on the text that may be an empty list if there are none. If a minority interpretation is required to be the primary focus, the majority interpretation should appear here. In the case the commentary naturally reflects multiple valid perspectives (blended approach), present the majority (traditional) interpretation in the primary commentary and include additional perspectives here. Where ambiguous language exists, include a note that further study may be warranted.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the alternative interpretation."
+                        },
+                        "note": {
+                          "type": "string",
+                          "description": "A description or explanation of the alternative interpretation."
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "note"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "personal_applications": {
+                    "type": "array",
+                    "description": "Practical takeaways and personal applications for Christian living derived from the text. Ensure the list is exhaustive and reflects all applicable insights.",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "title": {
+                          "type": "string",
+                          "description": "The title of the application point."
+                        },
+                        "note": {
+                          "type": "string",
+                          "description": "A description or explanation of the application."
+                        }
+                      },
+                      "required": [
+                        "title",
+                        "note"
+                      ],
+                      "additionalProperties": false
+                    }
+                  },
+                  "christ_centered_insights": {
+                    "type": "array",
+                    "description": "Insights explaining how the text connects to Jesus Christ, salvation, and God's redemptive plan. Provide a varied and comprehensive list of insights.",
+                    "items": {
+                      "type": "string",
+                      "description": "A single Christ-centered insight from the text."
+                    }
+                  },
+                  "reflections": {
+                    "type": "array",
+                    "description": "Reflective questions or meditation prompts based on the text. Include as many reflective prompts as necessary to encourage deep personal meditation.",
+                    "items": {
+                      "type": "string",
+                      "description": "A reflective prompt."
+                    }
+                  },
+                  "interpretation_type": {
+                    "type": "string",
+                    "enum": [
+                      "blended",
+                      "majority",
+                      "minority"
+                    ],
+                    "description": "Indicates whether the primary interpretation in the commentary is the majority (traditional) view, a minority (alternative) view or blended (multiple valid interpretations)"
+                  },
+                  "places": {
+                    "type": "array",
+                    "description": "List of places named in the text. This list can be empty if no places are mentioned.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "people": {
+                    "type": "array",
+                    "description": "List of people or characters named in the text. This list can be empty if no names are mentioned.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "tags": {
+                    "type": "array",
+                    "description": "A collection of succinct metadata keywords that capture the text's key theological themes, cultural context, and doctrinal elements. These tags aid in backend filtering and analysis - for example, tags might include 'creation', 'redemption', 'covenant', or 'historical context'.",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "summary": {
+                    "type": "string",
+                    "description": "A well-written, engaging exposition in Markdown format that seamlessly integrates all the structured data points: text, context, key themes, highlights, analyses, cross-references, alternative interpretations (if available), practical personal applications, Christ-centered insights, and reflections. The text should be written in a friendly, conversational tone that feels warm and approachable, yet remains theologically sound and reflective, having Scripture quotes naturally embedded within the discussion (where it makes sense to). Avoid using additional headings (since the content will be placed within a `div` with its own headings) and instead use clear paragraphs and subtle dividers. Leverage features like **bold** for emphasis, *italics* for clarity, > blockquotes for quotations, and `escaping backticks` as needed. For example, using **bold** to highlight key terms, major themes, or pivotal statements or *italics* to emphasise important concepts or to introduce and explain biblical terms in plain English."
+                  }
+                },
+                "required": [
+                  "text",
+                  "context",
+                  "key_themes",
+                  "highlights",
+                  "analyses",
+                  "cross_references",
+                  "alternative_interpretations",
+                  "personal_applications",
+                  "christ_centered_insights",
+                  "reflections",
+                  "interpretation_type",
+                  "places",
+                  "people",
+                  "tags",
+                  "summary"
+                ],
+                "additionalProperties": false
+              },
+              "strict": true
+            }
+          },
+          "tool_choice": "auto",
+          "tools": [],
+          "top_p": 1.0,
+          "truncation": "disabled",
+          "usage": {
+            "input_tokens": 98,
+            "input_tokens_details": {
+              "cached_tokens": 1280
+            },
+            "output_tokens": 959,
+            "output_tokens_details": {
+              "reasoning_tokens": 0
+            },
+            "total_tokens": 1057
+          },
+          "user": null,
+          "metadata": {}
+        }
+  recorded_at: Sun, 30 Mar 2025 12:18:10 GMT
+recorded_with: VCR 6.3.1
