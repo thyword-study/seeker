@@ -52,7 +52,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_alternative_interpretations", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "title", null: false
-    t.string "note", null: false
+    t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_705a740ad5"
@@ -61,7 +61,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_analyses", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "part", null: false
-    t.string "note", null: false
+    t.text "note", null: false
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -71,9 +71,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_contents", force: :cascade do |t|
     t.bigint "section_id", null: false
     t.text "summary", null: false
-    t.string "context", null: false
-    t.string "highlights", default: [], null: false, array: true
-    t.string "reflections", default: [], null: false, array: true
+    t.text "context", null: false
+    t.text "highlights", default: [], null: false, array: true
+    t.text "reflections", default: [], null: false, array: true
     t.string "interpretation_type", null: false
     t.string "people", default: [], null: false, array: true
     t.string "places", default: [], null: false, array: true
@@ -91,7 +91,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_cross_references", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "reference", null: false
-    t.string "note", null: false
+    t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "index_exposition_cross_references_on_exposition_content_id"
@@ -100,7 +100,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_insights", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "kind", null: false
-    t.string "note", null: false
+    t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "index_exposition_insights_on_exposition_content_id"
@@ -109,7 +109,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_key_themes", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "theme", null: false
-    t.string "description", null: false
+    t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "index_exposition_key_themes_on_exposition_content_id"
@@ -118,7 +118,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   create_table "exposition_personal_applications", force: :cascade do |t|
     t.bigint "exposition_content_id", null: false
     t.string "title", null: false
-    t.string "note", null: false
+    t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_b900e2aa68"
