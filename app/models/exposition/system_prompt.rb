@@ -12,6 +12,9 @@
 # **`updated_at`**  | `datetime`         | `not null`
 #
 class Exposition::SystemPrompt < ApplicationRecord
+  # Associations
+  has_many :exposition_user_prompts, dependent: :restrict_with_error
+
   # Validations
   validates :content, presence: true
 end

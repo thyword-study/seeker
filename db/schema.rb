@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_01_011118) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_01_025836) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -128,6 +128,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_011118) do
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "exposition_user_prompts", force: :cascade do |t|
+    t.bigint "exposition_system_prompt_id"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exposition_system_prompt_id"], name: "index_exposition_user_prompts_on_exposition_system_prompt_id"
   end
 
   create_table "footnotes", force: :cascade do |t|
@@ -266,6 +274,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_011118) do
   add_foreign_key "exposition_insights", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_key_themes", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_personal_applications", "exposition_contents", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "exposition_system_prompts", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict
   add_foreign_key "footnotes", "chapters", on_delete: :restrict
