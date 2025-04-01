@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_01_011118) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -122,6 +122,12 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_b900e2aa68"
+  end
+
+  create_table "exposition_system_prompts", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "footnotes", force: :cascade do |t|
