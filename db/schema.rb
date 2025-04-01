@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -80,6 +80,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
     t.string "tags", default: [], null: false, array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "exposition_user_prompt_id", null: false
+    t.index ["exposition_user_prompt_id"], name: "index_exposition_contents_on_exposition_user_prompt_id"
     t.index ["highlights"], name: "index_exposition_contents_on_highlights", using: :gin
     t.index ["people"], name: "index_exposition_contents_on_people", using: :gin
     t.index ["places"], name: "index_exposition_contents_on_places", using: :gin
@@ -122,6 +124,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_b900e2aa68"
+  end
+
+  create_table "exposition_system_prompts", force: :cascade do |t|
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exposition_user_prompts", force: :cascade do |t|
+    t.bigint "exposition_system_prompt_id"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["exposition_system_prompt_id"], name: "index_exposition_user_prompts_on_exposition_system_prompt_id"
   end
 
   create_table "footnotes", force: :cascade do |t|
@@ -255,11 +271,13 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_29_022208) do
   add_foreign_key "chapters", "books", on_delete: :restrict
   add_foreign_key "exposition_alternative_interpretations", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_analyses", "exposition_contents", on_delete: :cascade
+  add_foreign_key "exposition_contents", "exposition_user_prompts", on_delete: :restrict
   add_foreign_key "exposition_contents", "sections", on_delete: :restrict
   add_foreign_key "exposition_cross_references", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_insights", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_key_themes", "exposition_contents", on_delete: :cascade
   add_foreign_key "exposition_personal_applications", "exposition_contents", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "exposition_system_prompts", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict
   add_foreign_key "footnotes", "chapters", on_delete: :restrict
