@@ -7,12 +7,12 @@
 # Name                       | Type               | Attributes
 # -------------------------- | ------------------ | ---------------------------
 # **`id`**                   | `bigint`           | `not null, primary key`
-# **`context`**              | `string`           | `not null`
-# **`highlights`**           | `string`           | `default([]), not null, is an Array`
+# **`context`**              | `text`             | `not null`
+# **`highlights`**           | `text`             | `default([]), not null, is an Array`
 # **`interpretation_type`**  | `string`           | `not null`
 # **`people`**               | `string`           | `default([]), not null, is an Array`
 # **`places`**               | `string`           | `default([]), not null, is an Array`
-# **`reflections`**          | `string`           | `default([]), not null, is an Array`
+# **`reflections`**          | `text`             | `default([]), not null, is an Array`
 # **`summary`**              | `text`             | `not null`
 # **`tags`**                 | `string`           | `default([]), not null, is an Array`
 # **`created_at`**           | `datetime`         | `not null`

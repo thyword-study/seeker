@@ -32,7 +32,7 @@ RSpec.describe ExpositionService do
           expect(response["output"][0]["content"][0]["type"]).to eq("output_text")
           expect(response["status"]).to eq("completed")
 
-          schema = JSON.parse(ExpositionService::JSON_SCHEMA)["schema"]
+          schema = JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)["schema"]
           result = response["output"][0]["content"][0]["text"]
           expect(JSON::Validator.validate(schema, result)).to be true
         end

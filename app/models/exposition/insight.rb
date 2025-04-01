@@ -8,7 +8,7 @@
 # ---------------------------- | ------------------ | ---------------------------
 # **`id`**                     | `bigint`           | `not null, primary key`
 # **`kind`**                   | `string`           | `not null`
-# **`note`**                   | `string`           | `not null`
+# **`note`**                   | `text`             | `not null`
 # **`created_at`**             | `datetime`         | `not null`
 # **`updated_at`**             | `datetime`         | `not null`
 # **`exposition_content_id`**  | `bigint`           | `not null`

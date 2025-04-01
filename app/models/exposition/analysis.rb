@@ -7,7 +7,7 @@
 # Name                         | Type               | Attributes
 # ---------------------------- | ------------------ | ---------------------------
 # **`id`**                     | `bigint`           | `not null, primary key`
-# **`note`**                   | `string`           | `not null`
+# **`note`**                   | `text`             | `not null`
 # **`part`**                   | `string`           | `not null`
 # **`position`**               | `integer`          | `not null`
 # **`created_at`**             | `datetime`         | `not null`
