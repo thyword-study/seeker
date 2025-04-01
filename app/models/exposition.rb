@@ -1,10 +1,9 @@
 module Exposition
-  # JSON_SCHEMA defines the required JSON output format for the exposition
-  # commentary. This schema ensures that the commentary includes Bible text,
-  # context, key themes, highlights, analyses, cross-references, alternative
-  # interpretations, personal applications, Christ-centered insights,
-  # reflections, and a summary.
-  JSON_SCHEMA = <<~JSON
+  # Defines the required JSON output format for the exposition commentary. This
+  # schema ensures that the commentary includes Bible text, context, key themes,
+  # highlights, analyses, cross-references, alternative interpretations,
+  # personal applications, insights, reflections, and a summary.
+  STRUCTURED_OUTPUT_JSON_SCHEMA = <<~JSON
     {
       "type": "json_schema",
       "name": "scripture_study",

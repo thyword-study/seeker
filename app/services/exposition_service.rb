@@ -40,7 +40,7 @@ class ExpositionService
       instructions: system_prompt,
       max_output_tokens: MAX_OUTPUT_TOKENS,
       model: MODEL,
-      text: { format: JSON.parse(Exposition::JSON_SCHEMA) },
+      text: { format: JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA) },
       stream: false,
       store: false,
       temperature: TEMPERATURE,
