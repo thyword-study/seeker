@@ -9,6 +9,9 @@
 #   system_prompt: "Your system instructions here", user_prompt: "Your Bible
 #   text and query here" ) puts response
 class ExpositionService
+  # Endpoint for the responses API
+  ENDPOINT_RESPONSES = "/v1/responses"
+
   # Maximum number of tokens allowed in the output.
   MAX_OUTPUT_TOKENS = 10_000
 
