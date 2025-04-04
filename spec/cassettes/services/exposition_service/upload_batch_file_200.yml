@@ -1,0 +1,85 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/files
+    body:
+      encoding: UTF-8
+      string: "-------------RubyMultipartPost-8766569c680fe9a096a130ba1f0270e0\r\nContent-Disposition:
+        form-data; name=\"file\"; filename=\"exposition-batch20250405-83656-vmf8ks.jsonl\"\r\nContent-Length:
+        372\r\nContent-Type: \r\nContent-Transfer-Encoding: binary\r\n\r\n{\"custom_id\":\"request-1\",\"method\":\"POST\",\"url\":\"/v1/responses\",\"body\":{\"input\":\"Hello
+        world!\",\"instructions\":\"You are a helpful assistant.\",\"model\":\"gpt-4o\",\"max_output_tokens\":10000}}\n{\"custom_id\":\"request-2\",\"method\":\"POST\",\"url\":\"/v1/responses\",\"body\":{\"input\":\"Hello
+        world!\",\"instructions\":\"You are an unhelpful assistant.\",\"model\":\"gpt-4o\",\"max_output_tokens\":10000}}\r\n-------------RubyMultipartPost-8766569c680fe9a096a130ba1f0270e0\r\nContent-Disposition:
+        form-data; name=\"purpose\"\r\n\r\nbatch\r\n-------------RubyMultipartPost-8766569c680fe9a096a130ba1f0270e0--\r\n"
+    headers:
+      Content-Type:
+      - multipart/form-data; boundary=-----------RubyMultipartPost-8766569c680fe9a096a130ba1f0270e0
+      Authorization:
+      - Bearer [REDACTED]
+      Openai-Organization:
+      - org-[REDACTED]
+      Content-Length:
+      - '803'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 05 Apr 2025 03:51:20 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - kingori
+      X-Request-Id:
+      - req_d6d2c4a193ef4de414fab74cdf059f30
+      Openai-Processing-Ms:
+      - '414'
+      Access-Control-Allow-Origin:
+      - "*"
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=e6xXr.R1Z.EXbmxuboVz8iE0xQSokqhjTvsfcCJzznc-1743825080-1.0.1.1-TzXDdqH9AVuau2AFBP8iDTDKhKYrP8WeKmuEiQfga0Aed5cFCjDUPHeD6.pHWOH8Gc9aqPNA9CjkzGh9z69j8RhrkKp4Lwd3_i9ibcY3tYM;
+        path=/; expires=Sat, 05-Apr-25 04:21:20 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=PWhfUMQQqBcdlOqemTtN9HRPQuYm_TcoA7KLg.GxXnI-1743825080540-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 92b6161bbde00700-CPT
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "object": "file",
+          "id": "file-JdhoBwvPwGcb5DVvZTkKwq",
+          "purpose": "batch",
+          "filename": "exposition-batch20250405-83656-vmf8ks.jsonl",
+          "bytes": 372,
+          "created_at": 1743825080,
+          "expires_at": null,
+          "status": "processed",
+          "status_details": null
+        }
+  recorded_at: Sat, 05 Apr 2025 03:51:20 GMT
+recorded_with: VCR 6.3.1

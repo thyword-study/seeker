@@ -5,9 +5,9 @@
 # interpretations, personal applications, Christ-centered insights, reflections
 # and a summary.
 #
-# @example service = ExpositionService.new response = service.exposit(
-#   system_prompt: "Your system instructions here", user_prompt: "Your Bible
-#   text and query here" ) puts response
+# The service also includes a method to upload batch files in JSONL format for
+# processing by the OpenAI API.
+#
 class ExpositionService
   # Endpoint for the responses API
   ENDPOINT_RESPONSES = "/v1/responses"
@@ -59,5 +59,33 @@ class ExpositionService
     end
 
     response
+  end
+
+  # Uploads a JSONL batch file to OpenAI for processing.
+  #
+  # @param request_data [String] Array of hashes to convert to JSONL.
+  # @return [OpenAI::File] The uploaded file object.
+  # @raise [StandardError] If the API call fails, an error is raised.
+  def upload_batch_file(request_data)
+    begin
+      jsonl_data = request_data.map { |rd| rd.to_json }.join("\n")
+      jsonl_file = Tempfile.new([ "exposition-batch", ".jsonl" ])
+      jsonl_file.write(jsonl_data)
+      jsonl_file.rewind
+
+      batch_file = client.files.upload(parameters: { file: jsonl_file.path, purpose: "batch" })
+      Rails.logger.info "Batch file uploaded successfully: #{batch_file["id"]}"
+    rescue StandardError => e
+      Rails.logger.error "Error in ExpositionService#upload_batch_file: #{e.message}"
+
+      raise e
+    ensure
+      if jsonl_file
+        jsonl_file.close
+        jsonl_file.unlink
+      end
+    end
+
+    batch_file
   end
 end

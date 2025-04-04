@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe ExpositionService do
+  let(:service) { ExpositionService.new }
+
   describe "#exposit" do
     context "when the request is valid and successful" do
       it "returns the response" do
-        service = ExpositionService.new
         system_prompt = <<~HEREDOC
           You are an AI providing commentary on texts from the Bible.
         HEREDOC
@@ -21,7 +22,7 @@ RSpec.describe ExpositionService do
           </text>
         HEREDOC
 
-        response = ""
+        response = nil
         VCR.use_cassette('services/exposition_service/exposit_200') do
           response = service.exposit(system_prompt: system_prompt, user_prompt: user_prompt)
         end
@@ -35,6 +36,54 @@ RSpec.describe ExpositionService do
           schema = JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)["schema"]
           result = response["output"][0]["content"][0]["text"]
           expect(JSON::Validator.validate(schema, result)).to be true
+        end
+      end
+    end
+  end
+
+  describe "#upload_batch_file" do
+    context "when the request data is valid" do
+      it "returns a successful response" do
+        request_data = [
+          {
+            custom_id: "request-1",
+            method: "POST",
+            url: ExpositionService::ENDPOINT_RESPONSES,
+            body: {
+              input: "Hello world!",
+              instructions: "You are a helpful assistant.",
+              model: ExpositionService::MODEL,
+              max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
+            }
+          },
+          {
+            custom_id: "request-2",
+            method: "POST",
+            url: ExpositionService::ENDPOINT_RESPONSES,
+            body: {
+              input: "Hello world!",
+              instructions: "You are an unhelpful assistant.",
+              model: ExpositionService::MODEL,
+              max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
+            }
+          }
+        ]
+
+        file = nil
+        VCR.use_cassette('services/exposition_service/upload_batch_file_200') do
+          file = service.upload_batch_file(request_data)
+        end
+
+        aggregate_failures do
+          expect(file["bytes"]).to eq(372)
+          expect(file["created_at"]).to eq(1743825080)
+          expect(file["expires_at"]).to eq(nil)
+          expect(file["filename"]).to eq("exposition-batch20250405-83656-vmf8ks.jsonl")
+          expect(file["id"]).to eq("file-JdhoBwvPwGcb5DVvZTkKwq")
+          expect(file["object"]).to eq("file")
+          expect(file["purpose"]).to eq("batch")
+          expect(file["status_details"]).to eq(nil)
+          expect(file["status"]).to eq("processed")
         end
       end
     end
