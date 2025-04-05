@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_02_193215) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["content_id"], name: "index_exposition_analyses_on_content_id"
+  end
+
+  create_table "exposition_batch_requests", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "status", default: "requested", null: false
+    t.json "data"
+    t.string "input_file_id"
+    t.string "batch_id"
+    t.string "error_file_id"
+    t.string "output_file_id"
+    t.datetime "input_file_uploaded_at"
+    t.datetime "in_progress_at"
+    t.datetime "cancelling_at"
+    t.datetime "expires_at"
+    t.datetime "finalizing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.datetime "cancelled_at"
+    t.datetime "expired_at"
+    t.integer "requested_total_count"
+    t.integer "requested_completed_count"
+    t.integer "requested_failed_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "exposition_contents", force: :cascade do |t|
