@@ -132,83 +132,76 @@ RSpec.describe ExpositionService do
   describe "#retrieve_batch" do
     context "when the batch is complete" do
       it "returns a successful response" do
-        batch_id = "batch_67f0a94dd3f88190aa0851cd92539a09"
+        batch_request = FactoryBot.create(:exposition_batch_request, {
+            batch_id: "batch_67f0a94dd3f88190aa0851cd92539a09",
+            input_file_id: "file-JdhoBwvPwGcb5DVvZTkKwq",
+            input_file_uploaded_at: Time.current,
+            name: "exposition-batch20250405-83656-vmf8ks",
+            status: "in_progress",
+            data: batch_request_data
+          }
+        )
 
-        response = nil
+        updated_batch_request = nil
         VCR.use_cassette('services/exposition_service/retrieve_batch_200_completed') do
-          response = service.retrieve_batch(batch_id)
+          updated_batch_request = service.retrieve_batch(batch_request)
         end
 
         aggregate_failures do
-          expect(response["id"]).to eq("batch_67f0a94dd3f88190aa0851cd92539a09")
-          expect(response["object"]).to eq("batch")
-          expect(response["endpoint"]).to eq(ExpositionService::ENDPOINT_RESPONSES)
-          expect(response["errors"]).to eq(nil)
-          expect(response["input_file_id"]).to eq("file-JdhoBwvPwGcb5DVvZTkKwq")
-          expect(response["completion_window"]).to eq("24h")
-          expect(response["status"]).to eq("completed")
-          expect(response["output_file_id"]).to eq("file-1iUaZhdERigedcLsDt6mA7")
-          expect(response["error_file_id"]).to eq(nil)
-          expect(response["created_at"]).to eq(1743825229)
-          expect(response["in_progress_at"]).to eq(1743825230)
-          expect(response["expires_at"]).to eq(1743911629)
-          expect(response["finalizing_at"]).to eq(1743825241)
-          expect(response["completed_at"]).to eq(1743825241)
-          expect(response["failed_at"]).to eq(nil)
-          expect(response["expired_at"]).to eq(nil)
-          expect(response["cancelling_at"]).to eq(nil)
-          expect(response["cancelled_at"]).to eq(nil)
-          expect(response["request_counts"]["total"]).to eq(2)
-          expect(response["request_counts"]["completed"]).to eq(2)
-          expect(response["request_counts"]["failed"]).to eq(0)
-          expect(response["metadata"]).to eq(nil)
+          expect(updated_batch_request.status).to eq "completed"
+          expect(updated_batch_request.error_file_id).to eq(nil)
+          expect(updated_batch_request.output_file_id).to eq "file-1iUaZhdERigedcLsDt6mA7"
+
+          expect(updated_batch_request.in_progress_at).to eq Time.parse("2025-04-05 03:53:50 UTC")
+          expect(updated_batch_request.cancelling_at).to eq(nil)
+          expect(updated_batch_request.expires_at).to eq Time.parse("2025-04-06 03:53:49 UTC")
+          expect(updated_batch_request.finalizing_at).to eq Time.parse("2025-04-05 03:54:01 UTC")
+          expect(updated_batch_request.completed_at).to eq Time.parse("2025-04-05 03:54:01 UTC")
+          expect(updated_batch_request.failed_at).to eq(nil)
+          expect(updated_batch_request.cancelled_at).to eq(nil)
+          expect(updated_batch_request.expired_at).to eq(nil)
+
+          expect(updated_batch_request.requested_total_count).to eq 2
+          expect(updated_batch_request.requested_completed_count).to eq 2
+          expect(updated_batch_request.requested_failed_count).to eq 0
         end
       end
     end
 
     context "when the batch has errors" do
       it "returns a successful response" do
-        batch_id = "batch_67f01a96aef0819090cccd8b5e42375b"
+        batch_request = FactoryBot.create(:exposition_batch_request, {
+            batch_id: "batch_67f01a96aef0819090cccd8b5e42375b",
+            input_file_id: "file-2xTVLy9JYc7beLuAd2oTgw",
+            input_file_uploaded_at: Time.current,
+            name: "exposition-batch20250405-83656-vmf8ks",
+            status: "in_progress",
+            data: batch_request_data
+          }
+        )
 
-        response = nil
+        updated_batch_request = nil
         VCR.use_cassette('services/exposition_service/retrieve_batch_200_failed') do
-          response = service.retrieve_batch(batch_id)
+          updated_batch_request = service.retrieve_batch(batch_request)
         end
 
         aggregate_failures do
-          expect(response["id"]).to eq("batch_67f01a96aef0819090cccd8b5e42375b")
-          expect(response["object"]).to eq("batch")
-          expect(response["endpoint"]).to eq(ExpositionService::ENDPOINT_RESPONSES)
-          expect(response["errors"]).to be_a(Hash)
-          expect(response["errors"]["object"]).to eq("list")
-          expect(response["errors"]["data"]).to be_an(Array)
-          expect(response["errors"]["data"].size).to eq(2)
-          expect(response["errors"]["data"][0]["code"]).to eq("invalid_url")
-          expect(response["errors"]["data"][0]["message"]).to eq("The URL provided for this request does not match the batch endpoint.")
-          expect(response["errors"]["data"][0]["param"]).to eq("url")
-          expect(response["errors"]["data"][0]["line"]).to eq(1)
-          expect(response["errors"]["data"][1]["code"]).to eq("invalid_url")
-          expect(response["errors"]["data"][1]["message"]).to eq("The URL provided for this request does not match the batch endpoint.")
-          expect(response["errors"]["data"][1]["param"]).to eq("url")
-          expect(response["errors"]["data"][1]["line"]).to eq(2)
-          expect(response["input_file_id"]).to eq("file-2xTVLy9JYc7beLuAd2oTgw")
-          expect(response["completion_window"]).to eq("24h")
-          expect(response["status"]).to eq("failed")
-          expect(response["output_file_id"]).to eq(nil)
-          expect(response["error_file_id"]).to eq(nil)
-          expect(response["created_at"]).to eq(1743788694)
-          expect(response["in_progress_at"]).to eq(nil)
-          expect(response["expires_at"]).to eq(1743875094)
-          expect(response["finalizing_at"]).to eq(nil)
-          expect(response["completed_at"]).to eq(nil)
-          expect(response["failed_at"]).to eq(1743788695)
-          expect(response["expired_at"]).to eq(nil)
-          expect(response["cancelling_at"]).to eq(nil)
-          expect(response["cancelled_at"]).to eq(nil)
-          expect(response["request_counts"]["total"]).to eq(0)
-          expect(response["request_counts"]["completed"]).to eq(0)
-          expect(response["request_counts"]["failed"]).to eq(0)
-          expect(response["metadata"]).to eq(nil)
+          expect(updated_batch_request.status).to eq "failed"
+          expect(updated_batch_request.error_file_id).to eq(nil)
+          expect(updated_batch_request.output_file_id).to eq(nil)
+
+          expect(updated_batch_request.in_progress_at).to eq(nil)
+          expect(updated_batch_request.cancelling_at).to eq(nil)
+          expect(updated_batch_request.expires_at).to eq Time.parse("2025-04-05 17:44:54 UTC")
+          expect(updated_batch_request.finalizing_at).to eq(nil)
+          expect(updated_batch_request.completed_at).to eq(nil)
+          expect(updated_batch_request.failed_at).to eq Time.parse("2025-04-04 17:44:55 UTC")
+          expect(updated_batch_request.cancelled_at).to eq(nil)
+          expect(updated_batch_request.expired_at).to eq(nil)
+
+          expect(updated_batch_request.requested_total_count).to eq 0
+          expect(updated_batch_request.requested_completed_count).to eq 0
+          expect(updated_batch_request.requested_failed_count).to eq 0
         end
       end
     end

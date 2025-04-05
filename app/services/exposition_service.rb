@@ -110,19 +110,41 @@ class ExpositionService
 
   # Retrieves a batch of responses using the provided batch ID.
   #
-  # @param batch_id [String] The ID of the batch to be retrieved.
-  # @return [OpenAI::Batch] The batch object containing the responses.
+  # This method fetches the batch details from the OpenAI API using the batch ID
+  # stored in the given batch request. It updates the batch request record with
+  # the latest status and timestamps from the API response.
+  #
+  # @param batch_request [Exposition::BatchRequest] The batch request containing the batch ID.
+  # @return [Exposition::BatchRequest] The updated batch request with the latest batch details.
   # @raise [StandardError] If the API call fails, an error is raised.
-  def retrieve_batch(batch_id)
+  def retrieve_batch(batch_request)
     begin
-      batch = client.batches.retrieve(id: batch_id)
+      batch = client.batches.retrieve(id: batch_request.batch_id)
     rescue StandardError => e
       Rails.logger.error "Error in ExpositionService#retrieve_batch: #{e.message}"
 
       raise e
     end
 
-    batch
+    batch_request.update!(
+      status: batch["status"],
+      error_file_id: batch["error_file_id"],
+      output_file_id: batch["output_file_id"],
+
+      in_progress_at: batch["in_progress_at"] ? Time.at(batch["in_progress_at"]) : nil,
+      cancelling_at: batch["cancelling_at"] ? Time.at(batch["cancelling_at"]) : nil,
+      expires_at: batch["expires_at"] ? Time.at(batch["expires_at"]) : nil,
+      finalizing_at: batch["finalizing_at"] ? Time.at(batch["finalizing_at"]) : nil,
+      completed_at: batch["completed_at"] ? Time.at(batch["completed_at"]) : nil,
+      failed_at: batch["failed_at"] ? Time.at(batch["failed_at"]) : nil,
+      cancelled_at: batch["cancelled_at"] ? Time.at(batch["cancelled_at"]) : nil,
+      expired_at: batch["expired_at"] ? Time.at(batch["expired_at"]) : nil,
+
+      requested_total_count: batch["request_counts"]["total"],
+      requested_completed_count: batch["request_counts"]["completed"],
+      requested_failed_count: batch["request_counts"]["failed"]
+    )
+    batch_request
   end
 
   # Uploads a JSONL batch file to OpenAI for processing and creates a
