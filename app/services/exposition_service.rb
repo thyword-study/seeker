@@ -1,13 +1,6 @@
-# ExpositionService generates an exposition commentary using the OpenAI API.
-#
-# It leverages a predefined JSON schema to structure the output into components
-# like Bible text, context, key themes, analyses, cross-references, alternative
-# interpretations, personal applications, Christ-centered insights, reflections
-# and a summary.
-#
-# The service also includes a method to upload batch files in JSONL format for
-# processing by the OpenAI API and a method to create a batch of responses.
-#
+# ExpositionService interacts with the OpenAI API to generate structured
+# exposition commentaries, upload batch files in JSONL format, create and
+# retrieve batches of responses, and fetch file content.
 class ExpositionService
   # The time frame within which the batch should be processed.
   BATCH_COMPLETION_WINDOW = "24h"
