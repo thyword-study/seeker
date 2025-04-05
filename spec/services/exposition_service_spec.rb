@@ -2,6 +2,32 @@ require 'rails_helper'
 
 RSpec.describe ExpositionService do
   let(:service) { ExpositionService.new }
+  let(:batch_request_data) do
+    [
+      {
+        custom_id: "request-1",
+        method: "POST",
+        url: ExpositionService::ENDPOINT_RESPONSES,
+        body: {
+          input: "Hello world!",
+          instructions: "You are a helpful assistant.",
+          model: ExpositionService::MODEL,
+          max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
+        }
+      },
+      {
+        custom_id: "request-2",
+        method: "POST",
+        url: ExpositionService::ENDPOINT_RESPONSES,
+        body: {
+          input: "Hello world!",
+          instructions: "You are an unhelpful assistant.",
+          model: ExpositionService::MODEL,
+          max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
+        }
+      }
+    ]
+  end
 
   describe "#batch_file_content" do
     context "when the request is valid and successful" do
@@ -204,46 +230,20 @@ RSpec.describe ExpositionService do
   describe "#upload_batch_file" do
     context "when the request data is valid" do
       it "returns a successful response" do
-        request_data = [
-          {
-            custom_id: "request-1",
-            method: "POST",
-            url: ExpositionService::ENDPOINT_RESPONSES,
-            body: {
-              input: "Hello world!",
-              instructions: "You are a helpful assistant.",
-              model: ExpositionService::MODEL,
-              max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
-            }
-          },
-          {
-            custom_id: "request-2",
-            method: "POST",
-            url: ExpositionService::ENDPOINT_RESPONSES,
-            body: {
-              input: "Hello world!",
-              instructions: "You are an unhelpful assistant.",
-              model: ExpositionService::MODEL,
-              max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS
-            }
+        batch_request = FactoryBot.create(:exposition_batch_request, {
+            name: "exposition-batch",
+            data: batch_request_data
           }
-        ]
+        )
 
-        file = nil
         VCR.use_cassette('services/exposition_service/upload_batch_file_200') do
-          file = service.upload_batch_file(request_data)
+          batch_request = service.upload_batch_file(batch_request)
         end
 
         aggregate_failures do
-          expect(file["bytes"]).to eq(372)
-          expect(file["created_at"]).to eq(1743825080)
-          expect(file["expires_at"]).to eq(nil)
-          expect(file["filename"]).to eq("exposition-batch20250405-83656-vmf8ks.jsonl")
-          expect(file["id"]).to eq("file-JdhoBwvPwGcb5DVvZTkKwq")
-          expect(file["object"]).to eq("file")
-          expect(file["purpose"]).to eq("batch")
-          expect(file["status_details"]).to eq(nil)
-          expect(file["status"]).to eq("processed")
+          expect(batch_request.status).to eq "uploaded"
+          expect(batch_request.input_file_id).to eq "file-JdhoBwvPwGcb5DVvZTkKwq"
+          expect(batch_request.input_file_uploaded_at.utc).to be_within(1.second).of Time.current
         end
       end
     end
