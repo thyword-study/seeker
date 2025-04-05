@@ -27,6 +27,26 @@ class ExpositionService
   # Top-p (nucleus sampling) parameter for the API call.
   TOP_P = 1.0
 
+  # Retrieves the content of a batch file using the provided file ID.
+  #
+  # This method fetches the content of a batch file from the OpenAI API using the
+  # given file ID. The content is returned as a string.
+  #
+  # @param batch_file_id [String] The ID of the batch file to retrieve content for.
+  # @return [String] The content of the batch file.
+  # @raise [StandardError] If the API call fails, an error is raised.
+  def batch_file_content(batch_file_id)
+    begin
+      content = client.files.content(id: batch_file_id)
+    rescue StandardError => e
+      Rails.logger.error "Error in ExpositionService#batch_file_content: #{e.message}"
+
+      raise e
+    end
+
+    content
+  end
+
   # Returns a memoized instance of the OpenAI client.
   #
   # @return [OpenAI::Client] the client instance used for API requests.

@@ -3,6 +3,43 @@ require 'rails_helper'
 RSpec.describe ExpositionService do
   let(:service) { ExpositionService.new }
 
+  describe "#batch_file_content" do
+    context "when the request is valid and successful" do
+      it "returns the response" do
+        output_file_id = "file-AaebNvGyKSdDqXg1Wr5sMn"
+
+        response = nil
+        VCR.use_cassette('services/exposition_service/batch_file_content_200') do
+          response = service.batch_file_content(output_file_id)
+        end
+
+        aggregate_failures do
+          expect(response[0]["id"]).to eq("batch_req_67eee9915c9881908a55275469c8ddb3")
+          expect(response[0]["custom_id"]).to eq("1")
+          expect(response[0]["error"]).to eq(nil)
+          expect(response[0]["response"]["body"]["error"]).to eq(nil)
+          expect(response[0]["response"]["body"]["incomplete_details"]).to eq(nil)
+          expect(response[0]["response"]["body"]["output"][0]["content"][0]["type"]).to eq("output_text")
+          expect(response[0]["response"]["body"]["status"]).to eq("completed")
+
+          expect(response[1]["id"]).to eq("batch_req_67eee9916ddc81908822dd835b8cc76d")
+          expect(response[1]["custom_id"]).to eq("2")
+          expect(response[1]["error"]).to eq(nil)
+          expect(response[1]["response"]["body"]["error"]).to eq(nil)
+          expect(response[1]["response"]["body"]["incomplete_details"]).to eq(nil)
+          expect(response[1]["response"]["body"]["output"][0]["content"][0]["type"]).to eq("output_text")
+          expect(response[1]["response"]["body"]["status"]).to eq("completed")
+
+          schema = JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)["schema"]
+          result_1 = response[0]["response"]["body"]["output"][0]["content"][0]["text"]
+          result_2 = response[1]["response"]["body"]["output"][0]["content"][0]["text"]
+          expect(JSON::Validator.validate(schema, result_1)).to be true
+          expect(JSON::Validator.validate(schema, result_2)).to be true
+        end
+      end
+    end
+  end
+
   describe "#create_batch" do
     context "when the file id is valid" do
       it "returns a successful response" do
