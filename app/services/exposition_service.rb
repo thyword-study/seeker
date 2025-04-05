@@ -91,6 +91,23 @@ class ExpositionService
     response
   end
 
+  # Retrieves a batch of responses using the provided batch ID.
+  #
+  # @param batch_id [String] The ID of the batch to be retrieved.
+  # @return [OpenAI::Batch] The batch object containing the responses.
+  # @raise [StandardError] If the API call fails, an error is raised.
+  def retrieve_batch(batch_id)
+    begin
+      batch = client.batches.retrieve(id: batch_id)
+    rescue StandardError => e
+      Rails.logger.error "Error in ExpositionService#retrieve_batch: #{e.message}"
+
+      raise e
+    end
+
+    batch
+  end
+
   # Uploads a JSONL batch file to OpenAI for processing.
   #
   # @param request_data [String] Array of hashes to convert to JSONL.

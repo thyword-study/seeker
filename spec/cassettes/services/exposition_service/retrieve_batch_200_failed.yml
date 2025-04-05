@@ -1,0 +1,107 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.openai.com/v1/batches/batch_67f01a96aef0819090cccd8b5e42375b
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer [REDACTED]
+      Openai-Organization:
+      - org-[REDACTED]
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 05 Apr 2025 03:58:22 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - kingori
+      X-Request-Id:
+      - req_9aa31cb1c82c59961607d19005a776ab
+      Openai-Processing-Ms:
+      - '21'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=EaP9j9p619WV.mCYfFFjN1RhX8m1FUTl6spy1_.s1bQ-1743825502-1.0.1.1-mlmhZrYExZWnr1RmcTSe0B6UMRDpXqKksRvcdzAnnfHufeIBrqqTlPKS_2V_lT0dPL2oQ7_zXZm3iUHnT_uuQFHsu8.9v_ltFs0lXUly9fM;
+        path=/; expires=Sat, 05-Apr-25 04:28:22 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=6f0uflJY91XkS4zsvu2xB6CGPIDz0j58W3VUPGZ_AqQ-1743825502384-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 92b6206b2ef7070c-CPT
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "batch_67f01a96aef0819090cccd8b5e42375b",
+          "object": "batch",
+          "endpoint": "/v1/responses",
+          "errors": {
+            "object": "list",
+            "data": [
+              {
+                "code": "invalid_url",
+                "message": "The URL provided for this request does not match the batch endpoint.",
+                "param": "url",
+                "line": 1
+              },
+              {
+                "code": "invalid_url",
+                "message": "The URL provided for this request does not match the batch endpoint.",
+                "param": "url",
+                "line": 2
+              }
+            ]
+          },
+          "input_file_id": "file-2xTVLy9JYc7beLuAd2oTgw",
+          "completion_window": "24h",
+          "status": "failed",
+          "output_file_id": null,
+          "error_file_id": null,
+          "created_at": 1743788694,
+          "in_progress_at": null,
+          "expires_at": 1743875094,
+          "finalizing_at": null,
+          "completed_at": null,
+          "failed_at": 1743788695,
+          "expired_at": null,
+          "cancelling_at": null,
+          "cancelled_at": null,
+          "request_counts": {
+            "total": 0,
+            "completed": 0,
+            "failed": 0
+          },
+          "metadata": null
+        }
+  recorded_at: Sat, 05 Apr 2025 03:58:22 GMT
+recorded_with: VCR 6.3.1
