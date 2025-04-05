@@ -47,31 +47,35 @@ class ExpositionService
     @client ||= OpenAI::Client.new
   end
 
-  # Creates a batch of responses using the provided batch file ID.
+  # Creates a batch of responses for the given batch request.
   #
   # This method sends a request to the OpenAI API to create a batch of responses
-  # based on the input file ID. The batch is processed with a completion window
-  # of 24 hours.
-  #
-  # @param batch_file_id [String] The ID of the batch file to be processed.
-  # @return [OpenAI::Response] The response from the OpenAI API.
+  # using the input file associated with the provided batch request. It updates
+  # the batch request record with the batch ID and status returned by the API.
+
+  # @param batch_request [Exposition::BatchRequest] The batch request containing the input file ID.
+  # @return [Exposition::BatchRequest] The updated batch request with batch ID and status.
   # @raise [StandardError] If the API call fails, an error is raised.
-  def create_batch(batch_file_id)
+  def create_batch(batch_request)
     parameters = {
-      input_file_id: batch_file_id,
+      input_file_id: batch_request.input_file_id,
       endpoint: ENDPOINT_RESPONSES,
       completion_window: BATCH_COMPLETION_WINDOW
     }
 
     begin
-      response = client.batches.create(parameters: parameters)
+      batch = client.batches.create(parameters: parameters)
     rescue StandardError => e
       Rails.logger.error "Error in ExpositionService#create_batch: #{e.message}"
 
       raise e
     end
 
-    response
+    batch_request.update!(
+      batch_id: batch["id"],
+      status: batch["status"]
+    )
+    batch_request
   end
 
   # Generates an exposition commentary using the provided system and user prompts.
