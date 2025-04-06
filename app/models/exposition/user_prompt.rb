@@ -7,7 +7,7 @@
 # Name                    | Type               | Attributes
 # ----------------------- | ------------------ | ---------------------------
 # **`id`**                | `bigint`           | `not null, primary key`
-# **`content`**           | `text`             | `not null`
+# **`text`**              | `text`             | `not null`
 # **`created_at`**        | `datetime`         | `not null`
 # **`updated_at`**        | `datetime`         | `not null`
 # **`section_id`**        | `bigint`           | `not null`
@@ -34,7 +34,7 @@ class Exposition::UserPrompt < ApplicationRecord
   has_one :content, dependent: :restrict_with_error
 
   # Validations
-  validates :content, presence: true
   validates :section, presence: true
   validates :system_prompt, presence: true
+  validates :text, presence: true
 end

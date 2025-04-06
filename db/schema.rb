@@ -127,7 +127,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   end
 
   create_table "exposition_system_prompts", force: :cascade do |t|
-    t.text "content", null: false
+    t.text "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -135,7 +135,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   create_table "exposition_user_prompts", force: :cascade do |t|
     t.bigint "system_prompt_id"
     t.bigint "section_id", null: false
-    t.text "content", null: false
+    t.text "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["section_id"], name: "index_exposition_user_prompts_on_section_id"
