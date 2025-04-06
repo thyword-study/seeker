@@ -32,35 +32,66 @@ RSpec.describe ExpositionService do
   describe "#batch_file_content" do
     context "when the request is valid and successful" do
       it "returns the response" do
-        output_file_id = "file-AaebNvGyKSdDqXg1Wr5sMn"
+        bible = FactoryBot.create(:bible_bsb)
+        book = FactoryBot.create(:book, bible: bible, title: "Genesis")
+        chapter = FactoryBot.create(:chapter, bible: bible, book: book, number: 1)
+        heading = FactoryBot.create(:heading, bible: bible, book: book, chapter: chapter)
+        system_prompt = FactoryBot.create :exposition_system_prompt
+        batch_request = FactoryBot.create(:exposition_batch_request, {
+            name: "exposition-batch",
+            data: batch_request_data
+          }
+        )
 
-        response = nil
+        section_1 = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 1)
+        user_prompt_1 = FactoryBot.create :exposition_user_prompt, id: 1, batch_request: batch_request, system_prompt: system_prompt, section: section_1 # custom_id: 1
+
+        section_2 = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 2)
+        user_prompt_2 = FactoryBot.create :exposition_user_prompt, id: 2, batch_request: batch_request, system_prompt: system_prompt, section: section_2 # custom_id: 2
+
+        batch_request = FactoryBot.create(:exposition_batch_request, {
+            input_file_id: "file-JdhoBwvPwGcb5DVvZTkKwq",
+            input_file_uploaded_at: Time.current,
+            name: "exposition-batch20250405-83656-vmf8ks",
+            status: "completed",
+            data: batch_request_data,
+
+            output_file_id: "file-AaebNvGyKSdDqXg1Wr5sMn",
+            in_progress_at: Time.parse("2025-04-05 03:53:50 UTC"),
+            expires_at: Time.parse("2025-04-06 03:53:49 UTC"),
+            finalizing_at: Time.parse("2025-04-05 03:54:01 UTC"),
+            completed_at: Time.parse("2025-04-05 03:54:01 UTC"),
+
+            requested_total_count: 2,
+            requested_completed_count: 2,
+            requested_failed_count: 0
+          }
+        )
+
+        results = []
         VCR.use_cassette('services/exposition_service/batch_file_content_200') do
-          response = service.batch_file_content(output_file_id)
+          results = service.batch_file_content(batch_request)
         end
 
         aggregate_failures do
-          expect(response[0]["id"]).to eq("batch_req_67eee9915c9881908a55275469c8ddb3")
-          expect(response[0]["custom_id"]).to eq("1")
-          expect(response[0]["error"]).to eq(nil)
-          expect(response[0]["response"]["body"]["error"]).to eq(nil)
-          expect(response[0]["response"]["body"]["incomplete_details"]).to eq(nil)
-          expect(response[0]["response"]["body"]["output"][0]["content"][0]["type"]).to eq("output_text")
-          expect(response[0]["response"]["body"]["status"]).to eq("completed")
+          expect(results.size).to eq 2
+          expect(results[0]).to be_a(Exposition::Content)
+          expect(results[0].user_prompt).to eq user_prompt_1
+          expect(results[0].alternative_interpretations.size).to eq 0
+          expect(results[0].analyses.size).to eq 4
+          expect(results[0].cross_references.size).to eq 2
+          expect(results[0].insights.size).to eq 2
+          expect(results[0].key_themes.size).to eq 4
+          expect(results[0].personal_applications.size).to eq 2
 
-          expect(response[1]["id"]).to eq("batch_req_67eee9916ddc81908822dd835b8cc76d")
-          expect(response[1]["custom_id"]).to eq("2")
-          expect(response[1]["error"]).to eq(nil)
-          expect(response[1]["response"]["body"]["error"]).to eq(nil)
-          expect(response[1]["response"]["body"]["incomplete_details"]).to eq(nil)
-          expect(response[1]["response"]["body"]["output"][0]["content"][0]["type"]).to eq("output_text")
-          expect(response[1]["response"]["body"]["status"]).to eq("completed")
-
-          schema = JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)["schema"]
-          result_1 = response[0]["response"]["body"]["output"][0]["content"][0]["text"]
-          result_2 = response[1]["response"]["body"]["output"][0]["content"][0]["text"]
-          expect(JSON::Validator.validate(schema, result_1)).to be true
-          expect(JSON::Validator.validate(schema, result_2)).to be true
+          expect(results[1]).to be_a(Exposition::Content)
+          expect(results[1].user_prompt).to eq user_prompt_2
+          expect(results[1].alternative_interpretations.size).to eq 0
+          expect(results[1].analyses.size).to eq 2
+          expect(results[1].cross_references.size).to eq 1
+          expect(results[1].insights.size).to eq 2
+          expect(results[1].key_themes.size).to eq 2
+          expect(results[1].personal_applications.size).to eq 2
         end
       end
     end

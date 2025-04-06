@@ -20,24 +20,89 @@ class ExpositionService
   # Top-p (nucleus sampling) parameter for the API call.
   TOP_P = 1.0
 
-  # Retrieves the content of a batch file using the provided file ID.
+  # Processes the content of a batch file from the OpenAI API.
   #
-  # This method fetches the content of a batch file from the OpenAI API using the
-  # given file ID. The content is returned as a string.
+  # This method retrieves the content of a batch file using the output_file_id
+  # from the provided batch request. It parses the content and creates
+  # associated database records for exposition content, including alternative
+  # interpretations, analyses, cross-references, Christ-centered insights, key
+  # themes, and personal applications.
   #
-  # @param batch_file_id [String] The ID of the batch file to retrieve content for.
-  # @return [String] The content of the batch file.
-  # @raise [StandardError] If the API call fails, an error is raised.
-  def batch_file_content(batch_file_id)
+  # @param batch_request [Exposition::BatchRequest] The batch request containing the output_file_id.
+  # @return [Array<Exposition::Content>] The created exposition content records.
+  # @raise [StandardError] If an error occurs during the API call or database operations.
+  def batch_file_content(batch_request)
     begin
-      content = client.files.content(id: batch_file_id)
+      contents = client.files.content(id: batch_request.output_file_id)
     rescue StandardError => e
       Rails.logger.error "Error in ExpositionService#batch_file_content: #{e.message}"
 
       raise e
     end
 
-    content
+    ActiveRecord::Base.transaction do
+      contents.map do |content|
+        user_prompt = Exposition::UserPrompt.find(content["custom_id"])
+        exposition = JSON.parse(content["response"]["body"]["output"][0]["content"][0]["text"]).deep_symbolize_keys!
+
+        exposition_content = user_prompt.create_content!(
+          context: exposition[:context],
+          highlights: exposition[:highlights],
+          interpretation_type: exposition[:interpretation_type],
+          people: exposition[:people],
+          places: exposition[:places],
+          reflections: exposition[:reflections],
+          section: user_prompt.section,
+          summary: exposition[:summary],
+          tags: exposition[:tags]
+        )
+
+        exposition[:alternative_interpretations].each do |alternative_interpretation|
+          exposition_content.alternative_interpretations.create!(
+            note: alternative_interpretation[:note],
+            title: alternative_interpretation[:title]
+          )
+        end
+
+        exposition[:analyses].each.with_index(1) do |analysis, position|
+          exposition_content.analyses.create!(
+            note: analysis[:note],
+            part: analysis[:part],
+            position: position
+          )
+        end
+
+        exposition[:cross_references].each do |cross_reference|
+          exposition_content.cross_references.create!(
+            note: cross_reference[:note],
+            reference: cross_reference[:reference]
+          )
+        end
+
+        exposition[:christ_centered_insights].each do |christ_centered_insight|
+          exposition_content.insights.create!(
+            kind: "christ_centered",
+            note: christ_centered_insight
+          )
+        end
+
+        exposition[:key_themes].each do |key_theme|
+          exposition_content.key_themes.create!(
+            description: key_theme[:description],
+            theme: key_theme[:theme]
+          )
+        end
+
+        exposition[:personal_applications].each do |personal_application|
+          exposition_content.personal_applications.create!(
+            note: personal_application[:note],
+            title: personal_application[:title]
+          )
+        end
+
+        exposition_content
+      end
+    end
   end
 
   # Returns a memoized instance of the OpenAI client.
