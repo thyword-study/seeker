@@ -13,7 +13,7 @@
 #
 class Exposition::SystemPrompt < ApplicationRecord
   # Associations
-  has_many :exposition_user_prompts, dependent: :restrict_with_error
+  has_many :user_prompts, dependent: :restrict_with_error
 
   # Validations
   validates :content, presence: true

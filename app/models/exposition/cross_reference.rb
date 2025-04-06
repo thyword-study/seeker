@@ -25,10 +25,10 @@
 #
 class Exposition::CrossReference < ApplicationRecord
   # Associations
-  belongs_to :exposition_content
+  belongs_to :content
 
   # Validations
-  validates :exposition_content, presence: true
+  validates :content, presence: true
   validates :note, presence: true
   validates :reference, presence: true
 end

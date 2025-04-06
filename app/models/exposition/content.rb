@@ -47,13 +47,13 @@
 class Exposition::Content < ApplicationRecord
   # Associations
   belongs_to :section
-  belongs_to :exposition_user_prompt
-  has_many :exposition_alternative_interpretations, dependent: :destroy
-  has_many :exposition_analyses, dependent: :destroy
-  has_many :exposition_cross_references, dependent: :destroy
-  has_many :exposition_insights, dependent: :destroy
-  has_many :exposition_key_themes, dependent: :destroy
-  has_many :exposition_personal_applications, dependent: :destroy
+  belongs_to :user_prompt
+  has_many :alternative_interpretations, dependent: :destroy
+  has_many :analyses, dependent: :destroy
+  has_many :cross_references, dependent: :destroy
+  has_many :insights, dependent: :destroy
+  has_many :key_themes, dependent: :destroy
+  has_many :personal_applications, dependent: :destroy
 
   # Validations
   validates :context, presence: true
@@ -63,6 +63,7 @@ class Exposition::Content < ApplicationRecord
   validates :section, presence: true
   validates :summary, presence: true
   validates :tags, presence: true
+  validates :user_prompt, presence: true
 
   # Enums
   enum :interpretation_type, { majority: "majority", minority:  "minority" }

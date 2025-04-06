@@ -25,10 +25,10 @@
 #
 class Exposition::KeyTheme < ApplicationRecord
   # Associations
-  belongs_to :exposition_content
+  belongs_to :content
 
   # Validations
+  validates :content, presence: true
   validates :description, presence: true
-  validates :exposition_content, presence: true
   validates :theme, presence: true
 end

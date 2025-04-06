@@ -26,10 +26,10 @@
 #
 class Exposition::Analysis < ApplicationRecord
   # Associations
-  belongs_to :exposition_content
+  belongs_to :content
 
   # Validations
-  validates :exposition_content, presence: true
+  validates :content, presence: true
   validates :note, presence: true
   validates :part, presence: true
   validates :position, presence: true
