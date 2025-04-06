@@ -50,22 +50,22 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   end
 
   create_table "exposition_alternative_interpretations", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "title", null: false
     t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_705a740ad5"
+    t.index ["content_id"], name: "index_exposition_alternative_interpretations_on_content_id"
   end
 
   create_table "exposition_analyses", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "part", null: false
     t.text "note", null: false
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "index_exposition_analyses_on_exposition_content_id"
+    t.index ["content_id"], name: "index_exposition_analyses_on_content_id"
   end
 
   create_table "exposition_contents", force: :cascade do |t|
@@ -80,50 +80,50 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
     t.string "tags", default: [], null: false, array: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "exposition_user_prompt_id", null: false
-    t.index ["exposition_user_prompt_id"], name: "index_exposition_contents_on_exposition_user_prompt_id"
+    t.bigint "user_prompt_id", null: false
     t.index ["highlights"], name: "index_exposition_contents_on_highlights", using: :gin
     t.index ["people"], name: "index_exposition_contents_on_people", using: :gin
     t.index ["places"], name: "index_exposition_contents_on_places", using: :gin
     t.index ["reflections"], name: "index_exposition_contents_on_reflections", using: :gin
     t.index ["section_id"], name: "index_exposition_contents_on_section_id"
     t.index ["tags"], name: "index_exposition_contents_on_tags", using: :gin
+    t.index ["user_prompt_id"], name: "index_exposition_contents_on_user_prompt_id"
   end
 
   create_table "exposition_cross_references", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "reference", null: false
     t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "index_exposition_cross_references_on_exposition_content_id"
+    t.index ["content_id"], name: "index_exposition_cross_references_on_content_id"
   end
 
   create_table "exposition_insights", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "kind", null: false
     t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "index_exposition_insights_on_exposition_content_id"
+    t.index ["content_id"], name: "index_exposition_insights_on_content_id"
   end
 
   create_table "exposition_key_themes", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "theme", null: false
     t.text "description", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "index_exposition_key_themes_on_exposition_content_id"
+    t.index ["content_id"], name: "index_exposition_key_themes_on_content_id"
   end
 
   create_table "exposition_personal_applications", force: :cascade do |t|
-    t.bigint "exposition_content_id", null: false
+    t.bigint "content_id", null: false
     t.string "title", null: false
     t.text "note", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_content_id"], name: "idx_on_exposition_content_id_b900e2aa68"
+    t.index ["content_id"], name: "index_exposition_personal_applications_on_content_id"
   end
 
   create_table "exposition_system_prompts", force: :cascade do |t|
@@ -133,11 +133,11 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   end
 
   create_table "exposition_user_prompts", force: :cascade do |t|
-    t.bigint "exposition_system_prompt_id"
+    t.bigint "system_prompt_id"
     t.text "content", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["exposition_system_prompt_id"], name: "index_exposition_user_prompts_on_exposition_system_prompt_id"
+    t.index ["system_prompt_id"], name: "index_exposition_user_prompts_on_system_prompt_id"
   end
 
   create_table "footnotes", force: :cascade do |t|
@@ -269,15 +269,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   add_foreign_key "books", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "bibles", on_delete: :restrict
   add_foreign_key "chapters", "books", on_delete: :restrict
-  add_foreign_key "exposition_alternative_interpretations", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_analyses", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_contents", "exposition_user_prompts", on_delete: :restrict
+  add_foreign_key "exposition_alternative_interpretations", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_analyses", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_contents", "exposition_user_prompts", column: "user_prompt_id", on_delete: :restrict
   add_foreign_key "exposition_contents", "sections", on_delete: :restrict
-  add_foreign_key "exposition_cross_references", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_insights", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_key_themes", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_personal_applications", "exposition_contents", on_delete: :cascade
-  add_foreign_key "exposition_user_prompts", "exposition_system_prompts", on_delete: :restrict
+  add_foreign_key "exposition_cross_references", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_insights", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_key_themes", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_personal_applications", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "exposition_system_prompts", column: "system_prompt_id", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict
   add_foreign_key "footnotes", "books", on_delete: :restrict
   add_foreign_key "footnotes", "chapters", on_delete: :restrict
