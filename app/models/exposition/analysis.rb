@@ -8,7 +8,7 @@
 # ----------------- | ------------------ | ---------------------------
 # **`id`**          | `bigint`           | `not null, primary key`
 # **`note`**        | `text`             | `not null`
-# **`part`**        | `string`           | `not null`
+# **`part`**        | `text`             | `not null`
 # **`position`**    | `integer`          | `not null`
 # **`created_at`**  | `datetime`         | `not null`
 # **`updated_at`**  | `datetime`         | `not null`

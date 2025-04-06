@@ -60,7 +60,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
 
   create_table "exposition_analyses", force: :cascade do |t|
     t.bigint "content_id", null: false
-    t.string "part", null: false
+    t.text "part", null: false
     t.text "note", null: false
     t.integer "position", null: false
     t.datetime "created_at", null: false
