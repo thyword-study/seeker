@@ -56,7 +56,7 @@ gem "tailwindcss-rails", "~> 4.2"
 
 # A self-contained `tailwindcss` executable, wrapped up in a ruby gem. That's
 # it. Nothing else.
-gem "tailwindcss-ruby", "~> 4.0"
+gem "tailwindcss-ruby", "~> 4.1"
 
 # Library for validating urls in Rails.
 gem "validate_url", "~> 1.0", ">= 1.0.15"
