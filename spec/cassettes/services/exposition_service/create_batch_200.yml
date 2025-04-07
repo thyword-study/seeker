@@ -1,0 +1,91 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/batches
+    body:
+      encoding: UTF-8
+      string: '{"input_file_id":"file-JdhoBwvPwGcb5DVvZTkKwq","endpoint":"/v1/responses","completion_window":"24h"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer [REDACTED]
+      Openai-Organization:
+      - org-[REDACTED]
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Sat, 05 Apr 2025 03:53:50 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Openai-Version:
+      - '2020-10-01'
+      Openai-Organization:
+      - kingori
+      X-Request-Id:
+      - req_494419d09acbbf76f418da353fa4b88c
+      Openai-Processing-Ms:
+      - '188'
+      Strict-Transport-Security:
+      - max-age=31536000; includeSubDomains; preload
+      Cf-Cache-Status:
+      - DYNAMIC
+      Set-Cookie:
+      - __cf_bm=d0i9_J0k8AuIRuEKq.55d8Fh2vwBtymgLcCqNAGWluc-1743825230-1.0.1.1-uqbDCOgDPrnA6rCnMU85Rl4JwP34AtHmBKATh3IP3QCwMzQ4Uwv2pb7JxwTOmpl_DPSGBSBbGY.z6vFX4NysmTkFmEmNWzsauCHgL7222FI;
+        path=/; expires=Sat, 05-Apr-25 04:23:50 GMT; domain=.api.openai.com; HttpOnly;
+        Secure; SameSite=None
+      - _cfuvid=ppt.mApJtKbiJssu7MQuGgaAayrPgX85UT_g13K0GXM-1743825230037-0.0.1.1-604800000;
+        path=/; domain=.api.openai.com; HttpOnly; Secure; SameSite=None
+      X-Content-Type-Options:
+      - nosniff
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 92b619c4f8013eb1-CPT
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: ASCII-8BIT
+      string: |-
+        {
+          "id": "batch_67f0a94dd3f88190aa0851cd92539a09",
+          "object": "batch",
+          "endpoint": "/v1/responses",
+          "errors": null,
+          "input_file_id": "file-JdhoBwvPwGcb5DVvZTkKwq",
+          "completion_window": "24h",
+          "status": "validating",
+          "output_file_id": null,
+          "error_file_id": null,
+          "created_at": 1743825229,
+          "in_progress_at": null,
+          "expires_at": 1743911629,
+          "finalizing_at": null,
+          "completed_at": null,
+          "failed_at": null,
+          "expired_at": null,
+          "cancelling_at": null,
+          "cancelled_at": null,
+          "request_counts": {
+            "total": 0,
+            "completed": 0,
+            "failed": 0
+          },
+          "metadata": null
+        }
+  recorded_at: Sat, 05 Apr 2025 03:53:50 GMT
+recorded_with: VCR 6.3.1

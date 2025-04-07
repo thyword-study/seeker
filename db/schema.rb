@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -66,6 +66,30 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["content_id"], name: "index_exposition_analyses_on_content_id"
+  end
+
+  create_table "exposition_batch_requests", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "status", default: "requested", null: false
+    t.json "data"
+    t.string "input_file_id"
+    t.string "batch_id"
+    t.string "error_file_id"
+    t.string "output_file_id"
+    t.datetime "input_file_uploaded_at"
+    t.datetime "in_progress_at"
+    t.datetime "cancelling_at"
+    t.datetime "expires_at"
+    t.datetime "finalizing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.datetime "cancelled_at"
+    t.datetime "expired_at"
+    t.integer "requested_total_count"
+    t.integer "requested_completed_count"
+    t.integer "requested_failed_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "exposition_contents", force: :cascade do |t|
@@ -138,6 +162,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
     t.text "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "batch_request_id", null: false
+    t.index ["batch_request_id"], name: "index_exposition_user_prompts_on_batch_request_id"
     t.index ["section_id"], name: "index_exposition_user_prompts_on_section_id"
     t.index ["system_prompt_id"], name: "index_exposition_user_prompts_on_system_prompt_id"
   end
@@ -279,6 +305,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_01_040656) do
   add_foreign_key "exposition_insights", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_key_themes", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_personal_applications", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "exposition_batch_requests", column: "batch_request_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "exposition_system_prompts", column: "system_prompt_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "sections", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict

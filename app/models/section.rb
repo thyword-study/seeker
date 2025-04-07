@@ -137,4 +137,52 @@ class Section < ApplicationRecord
 
     prompt.join("").strip
   end
+
+  # Prepares and submits a batch of section data for processing by the
+  # ExpositionService.
+  #
+  # This method processes the provided sections, filtering them to include only
+  # those that are expositable. For each valid section, it generates a user
+  # prompt and constructs an HTTP request payload formatted for batch processing
+  # by the ExpositionService. The method then creates a batch request record
+  # with the generated data.
+  #
+  # @param [String] name The name of the batch request.
+  # @param [ActiveRecord::Relation] sections The sections to process, ordered by position.
+  # @param [Exposition::SystemPrompt] system_prompt The system prompt to associate with the user prompts.
+  # @return [Exposition::BatchRequest] The created batch request record containing the request data.
+  def self.batch_request(name, sections, system_prompt)
+    ActiveRecord::Base.transaction do
+      batch_request = Exposition::BatchRequest.create!(
+        name: name,
+        status: "requested"
+      )
+
+      batch_data = sections.order(position: :asc).find_each(batch_size: 100).filter_map do |section|
+        next unless section.expositable?
+
+        user_prompt = system_prompt.user_prompts.create!(batch_request: batch_request, section: section, text: section.user_prompt)
+
+        {
+          custom_id: user_prompt.id.to_s,
+          method: "POST",
+          url: ExpositionService::ENDPOINT_RESPONSES,
+          body: {
+            input: user_prompt.text,
+            instructions: system_prompt.text,
+            max_output_tokens: ExpositionService::MAX_OUTPUT_TOKENS,
+            model: ExpositionService::MODEL,
+            text: { format: JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA) },
+            stream: false,
+            store: false,
+            temperature: ExpositionService::TEMPERATURE,
+            top_p: ExpositionService::TOP_P
+          }
+        }
+      end
+
+      batch_request.update! data: batch_data.to_json
+      batch_request
+    end
+  end
 end
