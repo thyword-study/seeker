@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_02_193215) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -162,6 +162,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_02_193215) do
     t.text "text", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "batch_request_id", null: false
+    t.index ["batch_request_id"], name: "index_exposition_user_prompts_on_batch_request_id"
     t.index ["section_id"], name: "index_exposition_user_prompts_on_section_id"
     t.index ["system_prompt_id"], name: "index_exposition_user_prompts_on_system_prompt_id"
   end
@@ -303,6 +305,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_02_193215) do
   add_foreign_key "exposition_insights", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_key_themes", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_personal_applications", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "exposition_batch_requests", column: "batch_request_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "exposition_system_prompts", column: "system_prompt_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "sections", on_delete: :restrict
   add_foreign_key "footnotes", "bibles", on_delete: :restrict

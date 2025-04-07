@@ -30,6 +30,9 @@
 # **`output_file_id`**             | `string`           |
 #
 class Exposition::BatchRequest < ApplicationRecord
+  # Associations
+  has_many :user_prompts, dependent: :restrict_with_error
+
   # Validations
   validates :name, presence: true
   validates :status, presence: true
