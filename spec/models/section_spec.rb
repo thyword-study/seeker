@@ -143,8 +143,8 @@ RSpec.describe Section, type: :model do
     end
   end
 
-  describe '.batch_request_data' do
-    it 'returns the right data' do
+  describe '.batch_request' do
+    it 'returns a batch request' do
       system_prompt = FactoryBot.create :exposition_system_prompt, text: <<~HEREDOC.strip
         You are an AI providing commentary on texts from the Bible.
       HEREDOC
@@ -163,7 +163,7 @@ RSpec.describe Section, type: :model do
       section_2.segments << segment_2
 
       sections = Section.where(bible: bible, book: book)
-      batch_request = Section.batch_request_data("exposition", sections, system_prompt)
+      batch_request = Section.batch_request("exposition", sections, system_prompt)
       batch_request_data = JSON.parse(batch_request.data)
 
       aggregate_failures do

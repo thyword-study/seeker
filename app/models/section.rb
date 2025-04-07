@@ -151,7 +151,7 @@ class Section < ApplicationRecord
   # @param [ActiveRecord::Relation] sections The sections to process, ordered by position.
   # @param [Exposition::SystemPrompt] system_prompt The system prompt to associate with the user prompts.
   # @return [Exposition::BatchRequest] The created batch request record containing the request data.
-  def self.batch_request_data(name, sections, system_prompt)
+  def self.batch_request(name, sections, system_prompt)
     ActiveRecord::Base.transaction do
       batch_request = Exposition::BatchRequest.create!(
         name: name,
