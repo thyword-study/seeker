@@ -21,7 +21,7 @@
     <ul class="mt-6 list-none">
       <% @books.old_testament.each do |book| %> 
         <li class="mt-2 text-xl">
-          <%= link_to book.title, bible_book_path(bible_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+          <%= link_to book.title, translation_book_path(translation_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
         </li>
       <% end %>
     </ul>
@@ -32,7 +32,7 @@
     <ul class="mt-6 list-none">
       <% @books.new_testament.each do |book| %> 
         <li class="mt-2 text-xl">
-          <%= link_to book.title, bible_book_path(bible_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+          <%= link_to book.title, translation_book_path(translation_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
         </li>
       <% end %>
     </ul>
