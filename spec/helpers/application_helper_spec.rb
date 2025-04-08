@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe ApplicationHelper, type: :helper do
   describe '#reference_path' do
     before(:example) do
-      bsb_bible = FactoryBot.create(:bible_bsb)
-      FactoryBot.create(:book, bible: bsb_bible, code: 'GEN', slug: 'genesis')
+      translation = FactoryBot.create(:translation_bsb)
+      FactoryBot.create(:translation_book, translation: translation, code: 'GEN', slug: 'genesis')
     end
 
     it 'returns the correct path for a single verse reference' do

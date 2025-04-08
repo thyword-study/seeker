@@ -40,13 +40,13 @@
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`section_id => sections.id`**
+#     * **`section_id => bible_sections.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`user_prompt_id => exposition_user_prompts.id`**
 #
 class Exposition::Content < ApplicationRecord
   # Associations
-  belongs_to :section
+  belongs_to :section, class_name: "Bible::Section"
   belongs_to :user_prompt
   has_many :alternative_interpretations, dependent: :destroy
   has_many :analyses, dependent: :destroy

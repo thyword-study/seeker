@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Study #{@book.title} #{@chapter.number} | #{@bible.code} | #{Settings.app.name}" %>
+  <%= "Study #{@book.title} #{@chapter.number} | #{@translation.code} | #{Settings.app.name}" %>
 <% end %>
 
 <nav class="mb-8 flex">
@@ -108,7 +108,7 @@
 
   <section class="my-6" id="copyright">
     <p class="text-center text-xs/6 text-gray-600">
-      <%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %>
+      <%= link_to @translation.rights_holder_name, @translation.rights_holder_url %>. <%= @translation.statement %>
     </p>
   </section>
 </main>

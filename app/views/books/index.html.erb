@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Read Books | #{@bible.code} | #{Settings.app.name}" %>
+  <%= "Read Books | #{@translation.code} | #{Settings.app.name}" %>
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">
@@ -14,14 +14,14 @@
 
 <main class="text-center">
   <h1 class="text-4xl font-semibold text-pretty text-gray-900 sm:text-5xl">Read Books</h1>
-  <p class="mt-2 text-base/8 font-semibold">(<%= @bible.code %> Bible)</p>
+  <p class="mt-2 text-base/8 font-semibold">(<%= @translation.code %> Bible)</p>
 
   <section class="mt-12">
     <h2 class="text-3xl font-semibold text-pretty text-gray-900">Old Testament</h2>
     <ul class="mt-6 list-none">
       <% @books.old_testament.each do |book| %> 
         <li class="mt-2 text-xl">
-          <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+          <%= link_to book.title, bible_book_path(bible_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
         </li>
       <% end %>
     </ul>
@@ -32,7 +32,7 @@
     <ul class="mt-6 list-none">
       <% @books.new_testament.each do |book| %> 
         <li class="mt-2 text-xl">
-          <%= link_to book.title, bible_book_path(bible_code: @bible.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
+          <%= link_to book.title, bible_book_path(bible_code: @translation.code.downcase, slug: book.slug), class: "text-blue-600 hover:text-blue-800" %>
         </li>
       <% end %>
     </ul>

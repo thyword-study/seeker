@@ -29,8 +29,8 @@ bible_rights_holder_name = metadata_content.at_xpath("/DBLMetadata/agencies/righ
 bible_rights_holder_url = metadata_content.at_xpath("/DBLMetadata/agencies/rightsHolder/url").content
 
 # Save bible data into database
-bible = Bible.create!(name: bible_name, code: bible_abbreviation, statement: bible_statement, rights_holder_name: bible_rights_holder_name, rights_holder_url: bible_rights_holder_url)
-puts "Seeded Bible: [#{bible.code}] #{bible.name}"
+translation = Bible::Translation.create!(name: bible_name, code: bible_abbreviation, statement: bible_statement, rights_holder_name: bible_rights_holder_name, rights_holder_url: bible_rights_holder_url)
+puts "Seeded Bible: [#{translation.code}] #{translation.name}"
 
 # Read books' metadata and contents
 metadata_content.xpath("/DBLMetadata/publications/publication/structure/content").each.with_index(1) do |book_info, book_number|
@@ -39,11 +39,11 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
   book_name = book_info["name"]
   book_title = metadata_content.at_xpath("/DBLMetadata/names/name[@id=\"#{book_name}\"]/long").content
   book_slug = book_title.parameterize
-  book_testament = "OT" if Book::NUMBERS_OT.include? book_number
-  book_testament = "NT" if Book::NUMBERS_NT.include? book_number
+  book_testament = "OT" if Bible::Book::NUMBERS_OT.include? book_number
+  book_testament = "NT" if Bible::Book::NUMBERS_NT.include? book_number
 
   # Save book data into database
-  book = Book.create!(bible: bible, title: book_title, number: book_number, code: book_code, slug: book_slug, testament: book_testament)
+  book = Bible::Book.create!(translation: translation, title: book_title, number: book_number, code: book_code, slug: book_slug, testament: book_testament)
   puts "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title}"
 
   # Read book contents
@@ -65,7 +65,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
     when "chapter"
       if segment_node.key?("sid")
         chapter_number = segment_node["number"].to_i
-        chapter = Chapter.create!(bible: bible, book: book, number: chapter_number)
+        chapter = Bible::Chapter.create!(translation: translation, book: book, number: chapter_number)
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number}"
       elsif segment_node.key?("eid")
         chapter = nil
@@ -73,22 +73,22 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
     when "para"
       segment_style = segment_node["style"]
 
-      next if Segment::HEADER_STYLES_INTRODUCTORY.include? segment_style
+      next if Bible::Segment::HEADER_STYLES_INTRODUCTORY.include? segment_style
 
-      if Segment::HEADER_STYLES_SECTIONS_MAJOR.key?(segment_style.to_sym) || Segment::HEADER_STYLES_SECTIONS_MINOR.key?(segment_style.to_sym)
-        if Segment::HEADER_STYLES_SECTIONS_MAJOR.key? segment_style.to_sym
+      if Bible::Segment::HEADER_STYLES_SECTIONS_MAJOR.key?(segment_style.to_sym) || Bible::Segment::HEADER_STYLES_SECTIONS_MINOR.key?(segment_style.to_sym)
+        if Bible::Segment::HEADER_STYLES_SECTIONS_MAJOR.key? segment_style.to_sym
           heading_kind = 'major'
-          heading_level = Segment::HEADER_STYLES_SECTIONS_MAJOR[segment_style.to_sym]
-        elsif Segment::HEADER_STYLES_SECTIONS_MINOR.key? segment_style.to_sym
+          heading_level = Bible::Segment::HEADER_STYLES_SECTIONS_MAJOR[segment_style.to_sym]
+        elsif Bible::Segment::HEADER_STYLES_SECTIONS_MINOR.key? segment_style.to_sym
           heading_kind = 'minor'
-          heading_level = Segment::HEADER_STYLES_SECTIONS_MINOR[segment_style.to_sym]
+          heading_level = Bible::Segment::HEADER_STYLES_SECTIONS_MINOR[segment_style.to_sym]
         end
 
-        heading = Heading.create!(bible: bible, book: book, chapter: chapter, kind: heading_kind, level: heading_level, title: segment_node.text)
+        heading = Bible::Heading.create!(translation: translation, book: book, chapter: chapter, kind: heading_kind, level: heading_level, title: segment_node.text)
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Heading #{heading.level} (#{heading.title})"
       end
 
-      segment = Segment.create!(bible: bible, book: book, chapter: chapter, heading: heading, usx_position: segment_position, usx_style: segment_style)
+      segment = Bible::Segment.create!(translation: translation, book: book, chapter: chapter, heading: heading, usx_position: segment_position, usx_style: segment_style)
       Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id}"
 
       segment_node.children.each.with_index(1) do |fragment_node, fragment_position|
@@ -104,13 +104,13 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
           when "ref"
             fragment_kind = "reference"
             reference_target = fragment_node["loc"]
-            reference = Reference.create!(bible: bible, book: book, chapter: chapter, heading: heading, target: reference_target)
+            reference = Bible::Reference.create!(translation: translation, book: book, chapter: chapter, heading: heading, target: reference_target)
             fragmentable = reference
             Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Reference #{reference.id}"
           when "note"
             fragment_kind = "note"
             footnote_text = fragment_node.children.select { |note_child_node| note_child_node.node_name == "char" && note_child_node["style"] == "ft" }.first.text.strip
-            footnote = Footnote.create!(bible: bible, book: book, chapter: chapter, verse: verse, content: footnote_text)
+            footnote = Bible::Footnote.create!(translation: translation, book: book, chapter: chapter, verse: verse, content: footnote_text)
             fragmentable = footnote
             fragment_text = "#{footnote.id}"
             Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number} Footnote #{footnote.id}"
@@ -118,7 +118,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
             if fragment_node.key?("sid")
               show_verse = true
               verse_number = fragment_node["number"].to_i
-              verse = Verse.create!(bible: bible, book: book, chapter: chapter, number: verse_number)
+              verse = Bible::Verse.create!(translation: translation, book: book, chapter: chapter, number: verse_number)
               Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter.number} Verse #{verse&.number}"
             elsif fragment_node.key?("eid")
               verse = nil
@@ -132,7 +132,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
 
         next if fragment_text.empty?
 
-        fragment = Fragment.create!(bible: bible, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text, position: fragment_position, fragmentable: fragmentable)
+        fragment = Bible::Fragment.create!(translation: translation, book: book, segment: segment, chapter: chapter, heading: heading, verse: verse, kind: fragment_kind, show_verse: show_verse, content: fragment_text, position: fragment_position, fragmentable: fragmentable)
         segment.verses << fragment.verse if fragment.verse.present? && segment.verses.exclude?(fragment.verse)
         show_verse = false if fragment.show_verse
         Rails.logger.info "Seeded Bible Book ##{book.number}: [#{book.code}] #{book.title} Chapter ##{chapter&.number} Segment #{segment.id} Fragment #{fragment.id} (#{fragment.content})"
@@ -141,7 +141,7 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
   end
 
   # Chunk the segments into sections
-  chapters = Chapter.where(bible: bible, book: book).order(number: :asc)
+  chapters = Bible::Chapter.where(translation: translation, book: book).order(number: :asc)
   chapters.each { |chapter| chapter.group_segments_in_sections!(regroup: false) }
 end
 

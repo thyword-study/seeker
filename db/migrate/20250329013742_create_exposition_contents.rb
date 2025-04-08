@@ -1,7 +1,7 @@
 class CreateExpositionContents < ActiveRecord::Migration[8.0]
   def change
     create_table :exposition_contents do |t|
-      t.references :section, null: false, foreign_key: { on_delete: :restrict }
+      t.references :section, null: false, foreign_key: { on_delete: :restrict, to_table: :bible_sections }
       t.text :summary, null: false
       t.text :context, null: false
       t.text :highlights, null: false, array: true, default: []

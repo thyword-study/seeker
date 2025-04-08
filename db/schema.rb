@@ -14,19 +14,8 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
-  create_table "bibles", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "code", limit: 3, null: false
-    t.text "statement", null: false
-    t.string "rights_holder_name", null: false
-    t.string "rights_holder_url", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_bibles_on_code", unique: true
-  end
-
-  create_table "books", force: :cascade do |t|
-    t.bigint "bible_id", null: false
+  create_table "bible_books", force: :cascade do |t|
+    t.bigint "translation_id", null: false
     t.string "title", null: false
     t.integer "number", null: false
     t.string "code", limit: 3, null: false
@@ -34,19 +23,156 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
     t.string "testament", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bible_id", "code"], name: "index_books_on_bible_id_and_code", unique: true
-    t.index ["bible_id"], name: "index_books_on_bible_id"
+    t.index ["translation_id", "code"], name: "index_bible_books_on_translation_id_and_code", unique: true
+    t.index ["translation_id"], name: "index_bible_books_on_translation_id"
   end
 
-  create_table "chapters", force: :cascade do |t|
-    t.bigint "bible_id", null: false
+  create_table "bible_chapters", force: :cascade do |t|
+    t.bigint "translation_id", null: false
     t.bigint "book_id", null: false
     t.integer "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["bible_id", "book_id", "number"], name: "index_chapters_on_bible_id_and_book_id_and_number", unique: true
-    t.index ["bible_id"], name: "index_chapters_on_bible_id"
-    t.index ["book_id"], name: "index_chapters_on_book_id"
+    t.index ["book_id"], name: "index_bible_chapters_on_book_id"
+    t.index ["translation_id", "book_id", "number"], name: "index_bible_chapters_on_translation_id_and_book_id_and_number", unique: true
+    t.index ["translation_id"], name: "index_bible_chapters_on_translation_id"
+  end
+
+  create_table "bible_footnotes", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "verse_id"
+    t.text "content", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_footnotes_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_footnotes_on_chapter_id"
+    t.index ["translation_id"], name: "index_bible_footnotes_on_translation_id"
+    t.index ["verse_id"], name: "index_bible_footnotes_on_verse_id"
+  end
+
+  create_table "bible_fragments", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "heading_id", null: false
+    t.bigint "verse_id"
+    t.bigint "segment_id", null: false
+    t.boolean "show_verse", null: false
+    t.string "kind", null: false
+    t.text "content", null: false
+    t.integer "position", null: false
+    t.string "fragmentable_type"
+    t.bigint "fragmentable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_fragments_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_fragments_on_chapter_id"
+    t.index ["fragmentable_type", "fragmentable_id"], name: "index_bible_fragments_on_fragmentable"
+    t.index ["heading_id"], name: "index_bible_fragments_on_heading_id"
+    t.index ["segment_id"], name: "index_bible_fragments_on_segment_id"
+    t.index ["translation_id"], name: "index_bible_fragments_on_translation_id"
+    t.index ["verse_id"], name: "index_bible_fragments_on_verse_id"
+  end
+
+  create_table "bible_headings", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.string "kind", null: false
+    t.integer "level", null: false
+    t.string "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_headings_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_headings_on_chapter_id"
+    t.index ["translation_id"], name: "index_bible_headings_on_translation_id"
+  end
+
+  create_table "bible_references", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "heading_id"
+    t.string "target", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_references_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_references_on_chapter_id"
+    t.index ["heading_id"], name: "index_bible_references_on_heading_id"
+    t.index ["translation_id"], name: "index_bible_references_on_translation_id"
+  end
+
+  create_table "bible_section_segment_associations", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.bigint "segment_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["section_id"], name: "index_bible_section_segment_associations_on_section_id"
+    t.index ["segment_id"], name: "index_bible_section_segment_associations_on_segment_id"
+  end
+
+  create_table "bible_sections", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "heading_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_sections_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_sections_on_chapter_id"
+    t.index ["heading_id"], name: "index_bible_sections_on_heading_id"
+    t.index ["translation_id"], name: "index_bible_sections_on_translation_id"
+  end
+
+  create_table "bible_segment_verse_associations", force: :cascade do |t|
+    t.bigint "segment_id", null: false
+    t.bigint "verse_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["segment_id"], name: "index_bible_segment_verse_associations_on_segment_id"
+    t.index ["verse_id"], name: "index_bible_segment_verse_associations_on_verse_id"
+  end
+
+  create_table "bible_segments", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "heading_id", null: false
+    t.integer "usx_position", null: false
+    t.string "usx_style", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_segments_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_segments_on_chapter_id"
+    t.index ["heading_id"], name: "index_bible_segments_on_heading_id"
+    t.index ["translation_id"], name: "index_bible_segments_on_translation_id"
+  end
+
+  create_table "bible_translations", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", limit: 3, null: false
+    t.text "statement", null: false
+    t.string "rights_holder_name", null: false
+    t.string "rights_holder_url", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_bible_translations_on_code", unique: true
+  end
+
+  create_table "bible_verses", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.integer "number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_verses_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_verses_on_chapter_id"
+    t.index ["translation_id", "book_id", "chapter_id", "number"], name: "idx_on_translation_id_book_id_chapter_id_number_3c298a7c72", unique: true
+    t.index ["translation_id"], name: "index_bible_verses_on_translation_id"
   end
 
   create_table "exposition_alternative_interpretations", force: :cascade do |t|
@@ -168,176 +294,50 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
     t.index ["system_prompt_id"], name: "index_exposition_user_prompts_on_system_prompt_id"
   end
 
-  create_table "footnotes", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.bigint "verse_id"
-    t.text "content", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_footnotes_on_bible_id"
-    t.index ["book_id"], name: "index_footnotes_on_book_id"
-    t.index ["chapter_id"], name: "index_footnotes_on_chapter_id"
-    t.index ["verse_id"], name: "index_footnotes_on_verse_id"
-  end
-
-  create_table "fragments", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "segment_id", null: false
-    t.bigint "chapter_id", null: false
-    t.bigint "heading_id", null: false
-    t.bigint "verse_id"
-    t.boolean "show_verse", null: false
-    t.string "kind", null: false
-    t.text "content", null: false
-    t.integer "position", null: false
-    t.string "fragmentable_type"
-    t.bigint "fragmentable_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_fragments_on_bible_id"
-    t.index ["book_id"], name: "index_fragments_on_book_id"
-    t.index ["chapter_id"], name: "index_fragments_on_chapter_id"
-    t.index ["fragmentable_type", "fragmentable_id"], name: "index_fragments_on_fragmentable"
-    t.index ["heading_id"], name: "index_fragments_on_heading_id"
-    t.index ["segment_id"], name: "index_fragments_on_segment_id"
-    t.index ["verse_id"], name: "index_fragments_on_verse_id"
-  end
-
-  create_table "headings", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.string "kind", null: false
-    t.integer "level", null: false
-    t.string "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_headings_on_bible_id"
-    t.index ["book_id"], name: "index_headings_on_book_id"
-    t.index ["chapter_id"], name: "index_headings_on_chapter_id"
-  end
-
-  create_table "references", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.bigint "heading_id"
-    t.string "target", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_references_on_bible_id"
-    t.index ["book_id"], name: "index_references_on_book_id"
-    t.index ["chapter_id"], name: "index_references_on_chapter_id"
-    t.index ["heading_id"], name: "index_references_on_heading_id"
-  end
-
-  create_table "section_segment_associations", force: :cascade do |t|
-    t.bigint "section_id", null: false
-    t.bigint "segment_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["section_id"], name: "index_section_segment_associations_on_section_id"
-    t.index ["segment_id"], name: "index_section_segment_associations_on_segment_id"
-  end
-
-  create_table "sections", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.bigint "heading_id", null: false
-    t.integer "position", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_sections_on_bible_id"
-    t.index ["book_id"], name: "index_sections_on_book_id"
-    t.index ["chapter_id"], name: "index_sections_on_chapter_id"
-    t.index ["heading_id"], name: "index_sections_on_heading_id"
-  end
-
-  create_table "segment_verse_associations", force: :cascade do |t|
-    t.bigint "segment_id", null: false
-    t.bigint "verse_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["segment_id"], name: "index_segment_verse_associations_on_segment_id"
-    t.index ["verse_id"], name: "index_segment_verse_associations_on_verse_id"
-  end
-
-  create_table "segments", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.bigint "heading_id", null: false
-    t.integer "usx_position", null: false
-    t.string "usx_style", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id"], name: "index_segments_on_bible_id"
-    t.index ["book_id"], name: "index_segments_on_book_id"
-    t.index ["chapter_id"], name: "index_segments_on_chapter_id"
-    t.index ["heading_id"], name: "index_segments_on_heading_id"
-  end
-
-  create_table "verses", force: :cascade do |t|
-    t.bigint "bible_id", null: false
-    t.bigint "book_id", null: false
-    t.bigint "chapter_id", null: false
-    t.integer "number", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["bible_id", "book_id", "chapter_id", "number"], name: "index_verses_on_bible_id_and_book_id_and_chapter_id_and_number", unique: true
-    t.index ["bible_id"], name: "index_verses_on_bible_id"
-    t.index ["book_id"], name: "index_verses_on_book_id"
-    t.index ["chapter_id"], name: "index_verses_on_chapter_id"
-  end
-
-  add_foreign_key "books", "bibles", on_delete: :restrict
-  add_foreign_key "chapters", "bibles", on_delete: :restrict
-  add_foreign_key "chapters", "books", on_delete: :restrict
+  add_foreign_key "bible_books", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_chapters", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_chapters", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_footnotes", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_footnotes", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_footnotes", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_footnotes", "bible_verses", column: "verse_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_headings", column: "heading_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_segments", column: "segment_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_fragments", "bible_verses", column: "verse_id", on_delete: :restrict
+  add_foreign_key "bible_headings", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_headings", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_headings", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_references", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_references", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_references", "bible_headings", column: "heading_id", on_delete: :restrict
+  add_foreign_key "bible_references", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_section_segment_associations", "bible_sections", column: "section_id", on_delete: :cascade
+  add_foreign_key "bible_section_segment_associations", "bible_segments", column: "segment_id", on_delete: :cascade
+  add_foreign_key "bible_sections", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_headings", column: "heading_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_segment_verse_associations", "bible_segments", column: "segment_id", on_delete: :cascade
+  add_foreign_key "bible_segment_verse_associations", "bible_verses", column: "verse_id", on_delete: :cascade
+  add_foreign_key "bible_segments", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_segments", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_segments", "bible_headings", column: "heading_id", on_delete: :restrict
+  add_foreign_key "bible_segments", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_verses", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_verses", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_verses", "bible_translations", column: "translation_id", on_delete: :restrict
   add_foreign_key "exposition_alternative_interpretations", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_analyses", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_contents", "bible_sections", column: "section_id", on_delete: :restrict
   add_foreign_key "exposition_contents", "exposition_user_prompts", column: "user_prompt_id", on_delete: :restrict
-  add_foreign_key "exposition_contents", "sections", on_delete: :restrict
   add_foreign_key "exposition_cross_references", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_insights", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_key_themes", "exposition_contents", column: "content_id", on_delete: :cascade
   add_foreign_key "exposition_personal_applications", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "bible_sections", column: "section_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "exposition_batch_requests", column: "batch_request_id", on_delete: :restrict
   add_foreign_key "exposition_user_prompts", "exposition_system_prompts", column: "system_prompt_id", on_delete: :restrict
-  add_foreign_key "exposition_user_prompts", "sections", on_delete: :restrict
-  add_foreign_key "footnotes", "bibles", on_delete: :restrict
-  add_foreign_key "footnotes", "books", on_delete: :restrict
-  add_foreign_key "footnotes", "chapters", on_delete: :restrict
-  add_foreign_key "footnotes", "verses", on_delete: :restrict
-  add_foreign_key "fragments", "bibles", on_delete: :restrict
-  add_foreign_key "fragments", "books", on_delete: :restrict
-  add_foreign_key "fragments", "chapters", on_delete: :restrict
-  add_foreign_key "fragments", "headings", on_delete: :restrict
-  add_foreign_key "fragments", "segments", on_delete: :restrict
-  add_foreign_key "fragments", "verses", on_delete: :restrict
-  add_foreign_key "headings", "bibles", on_delete: :restrict
-  add_foreign_key "headings", "books", on_delete: :restrict
-  add_foreign_key "headings", "chapters", on_delete: :restrict
-  add_foreign_key "references", "bibles", on_delete: :restrict
-  add_foreign_key "references", "books", on_delete: :restrict
-  add_foreign_key "references", "chapters", on_delete: :restrict
-  add_foreign_key "references", "headings", on_delete: :restrict
-  add_foreign_key "section_segment_associations", "sections", on_delete: :cascade
-  add_foreign_key "section_segment_associations", "segments", on_delete: :cascade
-  add_foreign_key "sections", "bibles", on_delete: :restrict
-  add_foreign_key "sections", "books", on_delete: :restrict
-  add_foreign_key "sections", "chapters", on_delete: :restrict
-  add_foreign_key "sections", "headings", on_delete: :restrict
-  add_foreign_key "segment_verse_associations", "segments", on_delete: :cascade
-  add_foreign_key "segment_verse_associations", "verses", on_delete: :cascade
-  add_foreign_key "segments", "bibles", on_delete: :restrict
-  add_foreign_key "segments", "books", on_delete: :restrict
-  add_foreign_key "segments", "chapters", on_delete: :restrict
-  add_foreign_key "segments", "headings", on_delete: :restrict
-  add_foreign_key "verses", "bibles", on_delete: :restrict
-  add_foreign_key "verses", "books", on_delete: :restrict
-  add_foreign_key "verses", "chapters", on_delete: :restrict
 end

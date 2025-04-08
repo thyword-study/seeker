@@ -28,14 +28,14 @@
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`batch_request_id => exposition_batch_requests.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`section_id => sections.id`**
+#     * **`section_id => bible_sections.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`system_prompt_id => exposition_system_prompts.id`**
 #
 class Exposition::UserPrompt < ApplicationRecord
   # Associations
   belongs_to :batch_request
-  belongs_to :section
+  belongs_to :section, class_name: "Bible::Section"
   belongs_to :system_prompt
   has_one :content, dependent: :restrict_with_error
 
