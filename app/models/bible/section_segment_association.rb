@@ -1,6 +1,6 @@
 # ## Schema Information
 #
-# Table name: `section_segment_associations`
+# Table name: `bible_section_segment_associations`
 #
 # ### Columns
 #
@@ -14,19 +14,19 @@
 #
 # ### Indexes
 #
-# * `index_section_segment_associations_on_section_id`:
+# * `index_bible_section_segment_associations_on_section_id`:
 #     * **`section_id`**
-# * `index_section_segment_associations_on_segment_id`:
+# * `index_bible_section_segment_associations_on_segment_id`:
 #     * **`segment_id`**
 #
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => cascade_):
-#     * **`section_id => sections.id`**
+#     * **`section_id => bible_sections.id`**
 # * `fk_rails_...` (_ON DELETE => cascade_):
-#     * **`segment_id => segments.id`**
+#     * **`segment_id => bible_segments.id`**
 #
-class SectionSegmentAssociation < ApplicationRecord
+class Bible::SectionSegmentAssociation < ApplicationRecord
   # Associations
   belongs_to :section
   belongs_to :segment
