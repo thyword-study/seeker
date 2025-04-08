@@ -1,6 +1,6 @@
 # ## Schema Information
 #
-# Table name: `segment_verse_associations`
+# Table name: `bible_segment_verse_associations`
 #
 # ### Columns
 #
@@ -14,19 +14,19 @@
 #
 # ### Indexes
 #
-# * `index_segment_verse_associations_on_segment_id`:
+# * `index_bible_segment_verse_associations_on_segment_id`:
 #     * **`segment_id`**
-# * `index_segment_verse_associations_on_verse_id`:
+# * `index_bible_segment_verse_associations_on_verse_id`:
 #     * **`verse_id`**
 #
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => cascade_):
-#     * **`segment_id => segments.id`**
+#     * **`segment_id => bible_segments.id`**
 # * `fk_rails_...` (_ON DELETE => cascade_):
-#     * **`verse_id => verses.id`**
+#     * **`verse_id => bible_verses.id`**
 #
-class SegmentVerseAssociation < ApplicationRecord
+class Bible::SegmentVerseAssociation < ApplicationRecord
   # Associations
   belongs_to :segment
   belongs_to :verse
