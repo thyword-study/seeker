@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe Section, type: :model do
+RSpec.describe Bible::Section, type: :model do
   let(:bible) { FactoryBot.create(:bible_bsb) }
   let(:book) { FactoryBot.create(:book, bible: bible, title: "Genesis") }
   let(:chapter) { FactoryBot.create(:chapter, bible: bible, book: book, number: 1) }
@@ -162,8 +162,8 @@ RSpec.describe Section, type: :model do
       FactoryBot.create(:fragment, bible: bible, book: book, chapter: chapter, heading: heading, segment: segment_2, verse: verse_2, content: "And there was evening, and there was morning—the third day.", position: 1, show_verse: true, kind: "text")
       section_2.segments << segment_2
 
-      sections = Section.where(bible: bible, book: book)
-      batch_request = Section.batch_request("exposition", sections, system_prompt)
+      sections = Bible::Section.where(bible: bible, book: book)
+      batch_request = Bible::Section.batch_request("exposition", sections, system_prompt)
       batch_request_data = JSON.parse(batch_request.data)
 
       aggregate_failures do

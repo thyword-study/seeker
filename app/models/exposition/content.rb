@@ -40,7 +40,7 @@
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`section_id => sections.id`**
+#     * **`section_id => bible_sections.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
 #     * **`user_prompt_id => exposition_user_prompts.id`**
 #

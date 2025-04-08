@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_23_090004) do
+ActiveRecord::Schema[8.0].define(version: 2025_03_24_211317) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -104,6 +104,20 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_090004) do
     t.index ["translation_id"], name: "index_bible_references_on_translation_id"
   end
 
+  create_table "bible_sections", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.bigint "chapter_id", null: false
+    t.bigint "heading_id", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_sections_on_book_id"
+    t.index ["chapter_id"], name: "index_bible_sections_on_chapter_id"
+    t.index ["heading_id"], name: "index_bible_sections_on_heading_id"
+    t.index ["translation_id"], name: "index_bible_sections_on_translation_id"
+  end
+
   create_table "bible_segment_verse_associations", force: :cascade do |t|
     t.bigint "segment_id", null: false
     t.bigint "verse_id", null: false
@@ -172,6 +186,10 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_23_090004) do
   add_foreign_key "bible_references", "bible_chapters", column: "chapter_id", on_delete: :restrict
   add_foreign_key "bible_references", "bible_headings", column: "heading_id", on_delete: :restrict
   add_foreign_key "bible_references", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_chapters", column: "chapter_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_headings", column: "heading_id", on_delete: :restrict
+  add_foreign_key "bible_sections", "bible_translations", column: "translation_id", on_delete: :restrict
   add_foreign_key "bible_segment_verse_associations", "bible_segments", column: "segment_id", on_delete: :cascade
   add_foreign_key "bible_segment_verse_associations", "bible_verses", column: "verse_id", on_delete: :cascade
   add_foreign_key "bible_segments", "bible_books", column: "book_id", on_delete: :restrict
