@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_09_182502) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_09_182503) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -27,6 +27,17 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_09_182502) do
     t.index ["translation_id"], name: "index_bible_books_on_translation_id"
   end
 
+  create_table "bible_chapters", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.bigint "book_id", null: false
+    t.integer "number", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["book_id"], name: "index_bible_chapters_on_book_id"
+    t.index ["translation_id", "book_id", "number"], name: "index_bible_chapters_on_translation_id_and_book_id_and_number", unique: true
+    t.index ["translation_id"], name: "index_bible_chapters_on_translation_id"
+  end
+
   create_table "bible_translations", force: :cascade do |t|
     t.string "name", null: false
     t.string "code", limit: 3, null: false
@@ -39,4 +50,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_09_182502) do
   end
 
   add_foreign_key "bible_books", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "bible_chapters", "bible_books", column: "book_id", on_delete: :restrict
+  add_foreign_key "bible_chapters", "bible_translations", column: "translation_id", on_delete: :restrict
 end
