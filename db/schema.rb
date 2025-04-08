@@ -10,9 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_02_09_182501) do
+ActiveRecord::Schema[8.0].define(version: 2025_02_09_182502) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "bible_books", force: :cascade do |t|
+    t.bigint "translation_id", null: false
+    t.string "title", null: false
+    t.integer "number", null: false
+    t.string "code", limit: 3, null: false
+    t.string "slug", null: false
+    t.string "testament", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["translation_id", "code"], name: "index_bible_books_on_translation_id_and_code", unique: true
+    t.index ["translation_id"], name: "index_bible_books_on_translation_id"
+  end
 
   create_table "bible_translations", force: :cascade do |t|
     t.string "name", null: false
@@ -24,4 +37,6 @@ ActiveRecord::Schema[8.0].define(version: 2025_02_09_182501) do
     t.datetime "updated_at", null: false
     t.index ["code"], name: "index_bible_translations_on_code", unique: true
   end
+
+  add_foreign_key "bible_books", "bible_translations", column: "translation_id", on_delete: :restrict
 end
