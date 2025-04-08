@@ -50,7 +50,7 @@ class Bible::Translation < ApplicationRecord
   # @return [Hash, nil] A hash with keys :book, :chapter, and :verses if parsing succeeds, otherwise nil.
   #
   # @example
-  #   Bible.parse_reference("ROM 5:12,15-17")
+  #   Bible::Translation.parse_reference("ROM 5:12,15-17")
   #   #=> { book: "ROM", chapter: 5, verses: [12, [15, 17]] }
   def self.parse_reference(reference)
     match = reference.match(/(?<book>\w{3}) (?<chapter>\d+)(:(?<verses>[\d\-:,]+))?/)

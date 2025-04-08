@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :footnote do
+  factory :translation_footnote, class: 'Bible::Footnote' do
     content { Faker::Lorem.sentence }
   end
 end

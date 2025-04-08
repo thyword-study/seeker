@@ -74,15 +74,15 @@ class Bible::Chapter < ApplicationRecord
       Rails.logger.info "Deleting all #{book.title} ##{number} sections to prepare for regrouping"
     end
 
-    chapter_segments = segments.where(bible: bible, book: book).where.not(usx_style: "b").order(usx_position: :asc)
-    segment_chunks = Segment.group_in_sections(chapter_segments)
+    chapter_segments = segments.where(translation: translation, book: book).where.not(usx_style: "b").order(usx_position: :asc)
+    segment_chunks = Bible::Segment.group_in_sections(chapter_segments)
 
     segment_chunks.each.with_index(1) do |chunk_segments, chunk_position|
       chunk_headings = chunk_segments.map { |segment| segment.heading }.uniq
       raise RuntimeError, "Multiple headings not expected!" if chunk_headings.size != 1
 
       heading = chunk_headings.first
-      section = Section.create!(bible: bible, book: book, chapter: self, heading: heading, position: chunk_position)
+      section = Bible::Section.create!(translation: translation, book: book, chapter: self, heading: heading, position: chunk_position)
       section.segments = chunk_segments
       Rails.logger.info "Created #{book.title} ##{number} Section #{section.id} Segments #{section.segments.ids.join(",")}"
     end

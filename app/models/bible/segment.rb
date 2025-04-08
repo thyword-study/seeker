@@ -89,7 +89,7 @@ class Bible::Segment < ApplicationRecord
   #   each inner array represents a cohesive section of related segments.
   #
   # @example
-  #   segments = Segment.where(bible: @bible, book: @book, chapter: @chapter)
+  #   segments = Segment.where(translation: @translation, book: @book, chapter: @chapter)
   #                     .where.not(usx_style: "b")
   #                     .order(usx_position: :asc)
   #   sectioned_segments = Segment.group_in_sections(segments)

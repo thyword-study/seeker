@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :fragment do
+  factory :translation_fragment, class: 'Bible::Fragment' do
     content { Faker::Lorem.sentence }
     kind { Fragment.kinds.keys.sample }
     position { Faker::Number.between(from: 1, to: 1000) }

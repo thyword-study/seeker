@@ -3,9 +3,9 @@ require 'rails_helper'
 RSpec.describe BooksController, type: :request do
   describe 'GET #index' do
     it 'returns the correct response' do
-      bible = FactoryBot.create(:bible)
+      translation = FactoryBot.create(:translation)
 
-      get bible_books_path bible_code: bible.code.downcase
+      get bible_books_path bible_code: translation.code.downcase
 
       aggregate_failures do
         expect(response).to have_http_status(:ok)
@@ -16,10 +16,10 @@ RSpec.describe BooksController, type: :request do
 
   describe 'GET #show' do
     it 'returns the correct response' do
-      bible = FactoryBot.create(:bible)
-      book = FactoryBot.create(:book, bible: bible)
+      translation = FactoryBot.create(:translation)
+      book = FactoryBot.create(:translation_book, translation: translation)
 
-      get bible_book_path bible_code: bible.code.downcase, slug: book.slug
+      get bible_book_path bible_code: translation.code.downcase, slug: book.slug
 
       aggregate_failures do
         expect(response).to have_http_status(:temporary_redirect)

@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Read #{@book.title} #{@chapter.number} | #{@bible.code} | #{Settings.app.name}" %>
+  <%= "Read #{@book.title} #{@chapter.number} | #{@translation.code} | #{Settings.app.name}" %>
 <% end %>
 
 <nav class="mb-8 flex">
@@ -19,7 +19,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
           <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
-        <%= link_to @bible.code, bible_path(code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+        <%= link_to @translation.code, bible_path(code: @translation.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
       </div>
     </li>
     <li>
@@ -27,7 +27,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
           <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
-        <%= link_to "Books", bible_books_path(bible_code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+        <%= link_to "Books", bible_books_path(bible_code: @translation.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
       </div>
     </li>
     <li>
@@ -35,14 +35,14 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
           <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
-        <%= link_to "Chapters", bible_book_chapters_path(bible_code: @bible.code.downcase, book_slug: @book.slug), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+        <%= link_to "Chapters", bible_book_chapters_path(bible_code: @translation.code.downcase, book_slug: @book.slug), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
       </div>
     </li>
   </ol>
 </nav>
 
 <main>
-  <%= link_to  bible_book_path(bible_code: @bible.code.downcase, slug: @book.slug), class: "text-blue-600 hover:text-blue-800" do %>
+  <%= link_to  bible_book_path(bible_code: @translation.code.downcase, slug: @book.slug), class: "text-blue-600 hover:text-blue-800" do %>
     <h1 class="text-4xl font-semibold text-pretty sm:text-5xl"><%= @book.title %></h1>
   <% end %>
 
@@ -227,7 +227,7 @@
 
   <section class="my-6" id="copyright">
     <p class="text-center text-xs/6 text-gray-600">
-      <%= link_to @bible.rights_holder_name, @bible.rights_holder_url %>. <%= @bible.statement %>
+      <%= link_to @translation.rights_holder_name, @translation.rights_holder_url %>. <%= @translation.statement %>
     </p>
   </section>
 </main>

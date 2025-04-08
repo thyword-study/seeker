@@ -60,7 +60,7 @@ class Bible::Section < ApplicationRecord
   # @return [Boolean] true if any segment's USX style is a content style, false
   # otherwise.
   def expositable?
-    segments.where(usx_style: Segment::CONTENT_STYLES.map(&:to_s)).exists?
+    segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
   end
 
   # Generates a structured user prompt for generating a commentary.
@@ -80,9 +80,9 @@ class Bible::Section < ApplicationRecord
     # Generate mapping of footnotes in the passage so as to generate a footnote
     # section after the passage.
     footnotes_mapping = {}
-    footnotes = Footnote.where(bible: bible, book: book, chapter: chapter).order(created_at: :asc)
+    footnotes = Bible::Footnote.where(translation: translation, book: book, chapter: chapter).order(created_at: :asc)
     footnotes.each.with_index(1) do |footnote, footnote_number|
-      footnote_letter = Footnote.integer_to_letter(footnote_number)
+      footnote_letter = Bible::Footnote.integer_to_letter(footnote_number)
       footnotes_mapping[footnote.id] = { letter: footnote_letter }
     end
 
@@ -121,7 +121,7 @@ class Bible::Section < ApplicationRecord
     prompt << "<text>\n"
     prompt << "#{text.join("").strip}\n"
     prompt << "\n"
-    prompt << "#{book.title} #{chapter.number}:#{verse_numbers.join(",")} #{bible.code}\n"
+    prompt << "#{book.title} #{chapter.number}:#{verse_numbers.join(",")} #{translation.code}\n"
     prompt << "</text>"
 
     # Sometimes the passage has footnotes, and it's worth adding these to the

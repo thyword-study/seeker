@@ -4,7 +4,7 @@ module Commentary
   RSpec.describe BooksController, type: :request do
     describe 'GET #index' do
       it 'returns the correct response' do
-        FactoryBot.create(:bible_bsb)
+        FactoryBot.create(:translation_bsb)
 
         get commentary_books_path
 
@@ -17,8 +17,8 @@ module Commentary
 
     describe 'GET #show' do
       it 'returns the correct response' do
-        bible = FactoryBot.create(:bible_bsb)
-        book = FactoryBot.create(:book, bible: bible)
+        translation = FactoryBot.create(:translation_bsb)
+        book = FactoryBot.create(:translation_book, translation: translation)
 
         get commentary_book_path slug: book.slug
 

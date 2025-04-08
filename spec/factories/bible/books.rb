@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :book do
+  factory :translation_book, class: 'Bible::Book' do
     code { (0...3).map { ('a'..'z').to_a.sample }.join.upcase }
     number { Faker::Number.between(from: 1, to: 66) }
     slug { Faker::Internet.slug }

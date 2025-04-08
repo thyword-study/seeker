@@ -32,10 +32,10 @@ RSpec.describe ExpositionService do
   describe "#batch_file_content" do
     context "when the request is valid and successful" do
       it "returns the response" do
-        bible = FactoryBot.create(:bible_bsb)
-        book = FactoryBot.create(:book, bible: bible, title: "Genesis")
-        chapter = FactoryBot.create(:chapter, bible: bible, book: book, number: 1)
-        heading = FactoryBot.create(:heading, bible: bible, book: book, chapter: chapter)
+        translation = FactoryBot.create(:translation_bsb)
+        book = FactoryBot.create(:translation_book, translation: translation, title: "Genesis")
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+        heading = FactoryBot.create(:translation_heading, translation: translation, book: book, chapter: chapter)
         system_prompt = FactoryBot.create :exposition_system_prompt
         batch_request = FactoryBot.create(:exposition_batch_request, {
             name: "exposition-batch",
@@ -43,10 +43,10 @@ RSpec.describe ExpositionService do
           }
         )
 
-        section_1 = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 1)
+        section_1 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
         user_prompt_1 = FactoryBot.create :exposition_user_prompt, id: 1, batch_request: batch_request, system_prompt: system_prompt, section: section_1 # custom_id: 1
 
-        section_2 = FactoryBot.create(:section, bible: bible, book: book, chapter: chapter, heading: heading, position: 2)
+        section_2 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 2)
         user_prompt_2 = FactoryBot.create :exposition_user_prompt, id: 2, batch_request: batch_request, system_prompt: system_prompt, section: section_2 # custom_id: 2
 
         batch_request = FactoryBot.create(:exposition_batch_request, {

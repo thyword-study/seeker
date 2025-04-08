@@ -4,8 +4,8 @@ module Commentary
   RSpec.describe ChaptersController, type: :request do
     describe 'GET #index' do
       it 'returns the correct response' do
-        bible = FactoryBot.create(:bible_bsb)
-        book = FactoryBot.create(:book, bible: bible)
+        translation = FactoryBot.create(:translation_bsb)
+        book = FactoryBot.create(:translation_book, translation: translation)
 
         get commentary_book_chapters_path book_slug: book.slug
 
@@ -18,9 +18,9 @@ module Commentary
 
     describe 'GET #show' do
       it 'returns the correct response' do
-        bible = FactoryBot.create(:bible_bsb)
-        book = FactoryBot.create(:book, bible: bible)
-        chapter = FactoryBot.create(:chapter, bible: bible, book: book, number: 1)
+        translation = FactoryBot.create(:translation_bsb)
+        book = FactoryBot.create(:translation_book, translation: translation)
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
 
         get commentary_book_chapter_path book_slug: book.slug, number: chapter.number
 

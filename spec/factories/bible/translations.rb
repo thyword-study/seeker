@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :bible do
+  factory :translation, class: 'Bible::Translation' do
     code { (0...3).map { ('a'..'z').to_a.sample }.join.upcase }
     name { Faker::Lorem.word.titlecase }
     rights_holder_name { Faker::Company.name }
@@ -7,7 +7,7 @@ FactoryBot.define do
     statement { Faker::Lorem.sentence }
   end
 
-  factory :bible_bsb, parent: :bible do
+  factory :translation_bsb, parent: :translation do
     code { "BSB" }
     name { "Berean Standard Bible" }
   end
