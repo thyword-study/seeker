@@ -1,6 +1,6 @@
-class CreateBibles < ActiveRecord::Migration[8.0]
+class CreateBibleTranslations < ActiveRecord::Migration[8.0]
   def change
-    create_table :bibles do |t|
+    create_table :bible_translations do |t|
       t.string :name, null: false
       t.string :code, null: false, limit: 3
       t.text :statement, null: false
@@ -10,6 +10,6 @@ class CreateBibles < ActiveRecord::Migration[8.0]
       t.timestamps
     end
 
-    add_index :bibles, :code, unique: true
+    add_index :bible_translations, :code, unique: true
   end
 end
