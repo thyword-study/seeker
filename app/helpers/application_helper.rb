@@ -12,9 +12,9 @@ module ApplicationHelper
       verse_number = parsed_target[:verses][0]
       verse_number = verse_number[0] if verse_number.kind_of?(Array)
 
-      bible_book_chapter_path(bible_code: translation.code.downcase, book_slug: book.slug, number: chapter_number, anchor: "v#{verse_number}")
+      translation_book_chapter_path(translation_code: translation.code.downcase, book_slug: book.slug, number: chapter_number, anchor: "v#{verse_number}")
     else
-      bible_book_chapter_path(bible_code: translation.code.downcase, book_slug: book.slug, number: chapter_number)
+      translation_book_chapter_path(translation_code: translation.code.downcase, book_slug: book.slug, number: chapter_number)
     end
   end
 end

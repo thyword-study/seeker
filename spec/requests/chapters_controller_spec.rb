@@ -6,7 +6,7 @@ RSpec.describe ChaptersController, type: :request do
       translation = FactoryBot.create(:translation)
       book = FactoryBot.create(:translation_book, translation: translation)
 
-      get bible_book_chapters_path bible_code: translation.code.downcase, book_slug: book.slug
+      get translation_book_chapters_path translation_code: translation.code.downcase, book_slug: book.slug
 
       aggregate_failures do
         expect(response).to have_http_status(:ok)
@@ -21,7 +21,7 @@ RSpec.describe ChaptersController, type: :request do
       book = FactoryBot.create(:translation_book, translation: translation)
       chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
 
-      get bible_book_chapter_path bible_code: translation.code.downcase, book_slug: book.slug, number: chapter.number
+      get translation_book_chapter_path translation_code: translation.code.downcase, book_slug: book.slug, number: chapter.number
 
       aggregate_failures do
         expect(response).to have_http_status(:ok)

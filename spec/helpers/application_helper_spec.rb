@@ -8,15 +8,15 @@ RSpec.describe ApplicationHelper, type: :helper do
     end
 
     it 'returns the correct path for a single verse reference' do
-      expect(helper.reference_path(target: 'GEN 1:1')).to eq("/bibles/bsb/books/genesis/chapters/1#v1")
+      expect(helper.reference_path(target: 'GEN 1:1')).to eq("/translations/bsb/books/genesis/chapters/1#v1")
     end
 
     it 'returns the correct path for a chapter reference' do
-      expect(helper.reference_path(target: 'GEN 1')).to eq("/bibles/bsb/books/genesis/chapters/1")
+      expect(helper.reference_path(target: 'GEN 1')).to eq("/translations/bsb/books/genesis/chapters/1")
     end
 
     it 'returns the correct path for a range of verses' do
-      expect(helper.reference_path(target: 'GEN 1:1-5')).to eq("/bibles/bsb/books/genesis/chapters/1#v1")
+      expect(helper.reference_path(target: 'GEN 1:1-5')).to eq("/translations/bsb/books/genesis/chapters/1#v1")
     end
   end
 end

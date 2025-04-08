@@ -1,6 +1,6 @@
 class ChaptersController < ApplicationController
   def index
-    translation_code = params[:bible_code].to_s.strip.upcase
+    translation_code = params[:translation_code].to_s.strip.upcase
     book_slug = params[:book_slug].to_s.strip
 
     @translation = Bible::Translation.find_by! code: translation_code
@@ -9,7 +9,7 @@ class ChaptersController < ApplicationController
   end
 
   def show
-    translation_code = params[:bible_code].to_s.strip.upcase
+    translation_code = params[:translation_code].to_s.strip.upcase
     book_slug = params[:book_slug].to_s.strip
     chapter_number = params[:number].to_s.strip
 

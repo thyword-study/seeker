@@ -5,7 +5,7 @@ RSpec.describe BooksController, type: :request do
     it 'returns the correct response' do
       translation = FactoryBot.create(:translation)
 
-      get bible_books_path bible_code: translation.code.downcase
+      get translation_books_path translation_code: translation.code.downcase
 
       aggregate_failures do
         expect(response).to have_http_status(:ok)
@@ -19,7 +19,7 @@ RSpec.describe BooksController, type: :request do
       translation = FactoryBot.create(:translation)
       book = FactoryBot.create(:translation_book, translation: translation)
 
-      get bible_book_path bible_code: translation.code.downcase, slug: book.slug
+      get translation_book_path translation_code: translation.code.downcase, slug: book.slug
 
       aggregate_failures do
         expect(response).to have_http_status(:temporary_redirect)
