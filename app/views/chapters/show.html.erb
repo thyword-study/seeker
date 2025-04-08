@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "#{@book.title} #{@chapter.number} | #{@bible.code} | #{Settings.app.name}" %>
+  <%= "Read #{@book.title} #{@chapter.number} | #{@bible.code} | #{Settings.app.name}" %>
 <% end %>
 
 <nav class="mb-8 flex">
@@ -19,7 +19,7 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
           <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
-        <%= link_to @bible.code, bible_books_path(bible_code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+        <%= link_to @bible.code, bible_path(code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
       </div>
     </li>
     <li>
@@ -27,7 +27,15 @@
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
           <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
         </svg>
-        <%= link_to "Chapters", bible_book_chapters_url(bible_code: @bible.code.downcase, book_slug: @book.slug), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+        <%= link_to "Books", bible_books_path(bible_code: @bible.code.downcase), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
+      </div>
+    </li>
+    <li>
+      <div class="flex items-center">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="size-6 shrink-0 text-gray-400">
+          <path fill-rule="evenodd" d="M16.28 11.47a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 0 1-1.06-1.06L14.69 12 7.72 5.03a.75.75 0 0 1 1.06-1.06l7.5 7.5Z" clip-rule="evenodd" />
+        </svg>
+        <%= link_to "Chapters", bible_book_chapters_path(bible_code: @bible.code.downcase, book_slug: @book.slug), class: "ml-4 text-sm font-medium text-gray-500 hover:text-gray-700" %>
       </div>
     </li>
   </ol>
@@ -43,7 +51,7 @@
 
     <% @sections.each do |section| %>
       <%= tag.div id: "section-#{section.id}" do %>
-        <% section.segments.each do |segment| %>
+        <% section.segments.order(usx_position: :asc).each do |segment| %>
           <%# "[#{segment.usx_style}, #{segment.verses.ids}]" unless segment.usx_style == "b" %>
 
           <% case segment.usx_style -%>

@@ -1,0 +1,134 @@
+<% section.segments.order(usx_position: :asc).each do |segment| %>    
+  <%# "[#{segment.usx_style}, #{segment.verses.ids}]" unless segment.usx_style == "b" %>
+
+  <% case segment.usx_style -%>
+  <% when "b" %>
+    <%# Poetry - Stanza Break (Blank Line) %>
+
+  <% when "d" %>
+    <%# Label - Descriptive Title - Hebrew Subtitle %>
+    <%= tag.div class: "mb-3 text-center italic" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "li1" %>
+    <%# List Entry - Level 1 %>
+    <%= tag.p class: "pl-12 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "li2" %>
+    <%# List Entry - Level 2 %>
+    <%= tag.p class: "pl-21 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "m" %>
+    <%# Paragraph - Margin - No First Line Indent %>
+    <%= tag.p class: "pl-3 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "mr" %>
+    <%# Heading - Major Section Range References %>
+    <%= tag.div class: "mt-3 mb-3 italic font-semibold" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <% next if ["(", ")"].include? fragment.content %>
+
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "ms" %>
+    <%# Heading - Major Section Level 1 %>
+    <% heading_title = segment.fragments.order(position: :asc)[0].content %>
+    <%= tag.h3 heading_title, class: "mt-6 mb-3 text-xl font-semibold text-pretty text-gray-900 uppercase", id: heading_title.parameterize %>
+
+  <% when "pc" %>
+    <%# Paragraph - Centered (for Inscription) %>
+    <%= tag.p class: "text-center uppercase" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "pmo" %>
+    <%# Paragraph - Embedded Text Opening %>
+    <%= tag.p class: "pl-9 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "q1" %>
+    <%# Poetry - Indent Level 1 %>
+    <%= tag.p class: "pl-12 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "q2" %>
+    <%# Poetry - Indent Level 2 %>
+    <%= tag.p class: "pl-21 -indent-3" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "qa" %>
+    <%# Poetry - Acrostic Heading/Marker %>
+    <% heading_title = segment.fragments.order(position: :asc)[0].content %>
+    <%= tag.div class: "mt-6 mb-3" do %>
+      <div class="relative">
+        <div class="absolute inset-0 flex items-center" aria-hidden="true">
+          <div class="w-full border-t border-gray-300"></div>
+        </div>
+        <div class="relative flex justify-start">
+          <span class="bg-white pr-3 text-base font-semibold text-gray-900"><%= heading_title %></span>
+        </div>
+      </div>  
+    <% end %>
+
+  <% when "qr" %>
+    <%# Poetry - Right Aligned %>
+    <%= tag.p class: "text-right italic" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "r" %>
+    <%# Heading - Parallel References %>
+    <%= tag.div class: "mt-3 mb-3 italic font-semibold" do %>
+      <% segment.fragments.order(position: :asc).each do |fragment| %>
+        <% next if ["(", ")"].include? fragment.content %>
+
+        <%= render partial: "fragment", locals: { fragment: fragment }  %>
+      <% end %>
+    <% end %>
+
+  <% when "s1" %>
+    <%# Heading - Section Level 1 %>
+    <% heading_title = segment.fragments.order(position: :asc)[0].content %>
+    <%= tag.h3 heading_title, class: "mt-6 mb-3 text-xl font-semibold text-pretty text-gray-900", id: heading_title.parameterize %>
+
+  <% when "s2" %>
+    <%# Heading - Section Level 2 %>
+    <% heading_title = segment.fragments.order(position: :asc)[0].content %>
+    <%= tag.h4 heading_title, class: "mt-6 mb-3 text-base font-semibold text-pretty text-gray-900", id: heading_title.parameterize %>
+
+  <% else %>
+    <%# ??? %>
+    <span>[<%= segment.usx_style %>] <%= segment%> - <%= segment.fragments.order(position: :asc).size %></span>
+
+  <% end -%>
+<% end %>

@@ -8,7 +8,7 @@ RSpec.describe PagesController, type: :request do
       get root_path
 
       aggregate_failures do
-        expect(response).to have_http_status(:temporary_redirect)
+        expect(response).to have_http_status(:ok)
         expect(response.content_type).to eq 'text/html; charset=utf-8'
       end
     end
