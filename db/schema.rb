@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -175,6 +175,125 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
     t.index ["translation_id"], name: "index_bible_verses_on_translation_id"
   end
 
+  create_table "exposition_alternative_interpretations", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.string "title", null: false
+    t.text "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_alternative_interpretations_on_content_id"
+  end
+
+  create_table "exposition_analyses", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.text "part", null: false
+    t.text "note", null: false
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_analyses_on_content_id"
+  end
+
+  create_table "exposition_batch_requests", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "status", default: "requested", null: false
+    t.json "data"
+    t.string "input_file_id"
+    t.string "batch_id"
+    t.string "error_file_id"
+    t.string "output_file_id"
+    t.datetime "input_file_uploaded_at"
+    t.datetime "in_progress_at"
+    t.datetime "cancelling_at"
+    t.datetime "expires_at"
+    t.datetime "finalizing_at"
+    t.datetime "completed_at"
+    t.datetime "failed_at"
+    t.datetime "cancelled_at"
+    t.datetime "expired_at"
+    t.integer "requested_total_count"
+    t.integer "requested_completed_count"
+    t.integer "requested_failed_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exposition_contents", force: :cascade do |t|
+    t.bigint "section_id", null: false
+    t.text "summary", null: false
+    t.text "context", null: false
+    t.text "highlights", default: [], null: false, array: true
+    t.text "reflections", default: [], null: false, array: true
+    t.string "interpretation_type", null: false
+    t.string "people", default: [], null: false, array: true
+    t.string "places", default: [], null: false, array: true
+    t.string "tags", default: [], null: false, array: true
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_prompt_id", null: false
+    t.index ["highlights"], name: "index_exposition_contents_on_highlights", using: :gin
+    t.index ["people"], name: "index_exposition_contents_on_people", using: :gin
+    t.index ["places"], name: "index_exposition_contents_on_places", using: :gin
+    t.index ["reflections"], name: "index_exposition_contents_on_reflections", using: :gin
+    t.index ["section_id"], name: "index_exposition_contents_on_section_id"
+    t.index ["tags"], name: "index_exposition_contents_on_tags", using: :gin
+    t.index ["user_prompt_id"], name: "index_exposition_contents_on_user_prompt_id"
+  end
+
+  create_table "exposition_cross_references", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.string "reference", null: false
+    t.text "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_cross_references_on_content_id"
+  end
+
+  create_table "exposition_insights", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.string "kind", null: false
+    t.text "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_insights_on_content_id"
+  end
+
+  create_table "exposition_key_themes", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.string "theme", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_key_themes_on_content_id"
+  end
+
+  create_table "exposition_personal_applications", force: :cascade do |t|
+    t.bigint "content_id", null: false
+    t.string "title", null: false
+    t.text "note", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["content_id"], name: "index_exposition_personal_applications_on_content_id"
+  end
+
+  create_table "exposition_system_prompts", force: :cascade do |t|
+    t.text "text", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "exposition_user_prompts", force: :cascade do |t|
+    t.bigint "system_prompt_id"
+    t.bigint "section_id", null: false
+    t.text "text", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "batch_request_id", null: false
+    t.index ["batch_request_id"], name: "index_exposition_user_prompts_on_batch_request_id"
+    t.index ["section_id"], name: "index_exposition_user_prompts_on_section_id"
+    t.index ["system_prompt_id"], name: "index_exposition_user_prompts_on_system_prompt_id"
+  end
+
   add_foreign_key "bible_books", "bible_translations", column: "translation_id", on_delete: :restrict
   add_foreign_key "bible_chapters", "bible_books", column: "book_id", on_delete: :restrict
   add_foreign_key "bible_chapters", "bible_translations", column: "translation_id", on_delete: :restrict
@@ -210,4 +329,15 @@ ActiveRecord::Schema[8.0].define(version: 2025_03_24_211829) do
   add_foreign_key "bible_verses", "bible_books", column: "book_id", on_delete: :restrict
   add_foreign_key "bible_verses", "bible_chapters", column: "chapter_id", on_delete: :restrict
   add_foreign_key "bible_verses", "bible_translations", column: "translation_id", on_delete: :restrict
+  add_foreign_key "exposition_alternative_interpretations", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_analyses", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_contents", "bible_sections", column: "section_id", on_delete: :restrict
+  add_foreign_key "exposition_contents", "exposition_user_prompts", column: "user_prompt_id", on_delete: :restrict
+  add_foreign_key "exposition_cross_references", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_insights", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_key_themes", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_personal_applications", "exposition_contents", column: "content_id", on_delete: :cascade
+  add_foreign_key "exposition_user_prompts", "bible_sections", column: "section_id", on_delete: :restrict
+  add_foreign_key "exposition_user_prompts", "exposition_batch_requests", column: "batch_request_id", on_delete: :restrict
+  add_foreign_key "exposition_user_prompts", "exposition_system_prompts", column: "system_prompt_id", on_delete: :restrict
 end
