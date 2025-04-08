@@ -1,11 +1,11 @@
 require 'rails_helper'
 
-RSpec.describe BiblesController, type: :request do
+RSpec.describe TranslationsController, type: :request do
   describe 'GET #show' do
     it 'returns the correct response' do
       translation = FactoryBot.create(:translation)
 
-      get bible_path code: translation.code.downcase
+      get translation_path code: translation.code.downcase
 
       aggregate_failures do
         expect(response).to have_http_status(:temporary_redirect)
