@@ -1,49 +1,49 @@
 # ## Schema Information
 #
-# Table name: `segments`
+# Table name: `bible_segments`
 #
 # ### Columns
 #
-# Name                | Type               | Attributes
-# ------------------- | ------------------ | ---------------------------
-# **`id`**            | `bigint`           | `not null, primary key`
-# **`usx_position`**  | `integer`          | `not null`
-# **`usx_style`**     | `string`           | `not null`
-# **`created_at`**    | `datetime`         | `not null`
-# **`updated_at`**    | `datetime`         | `not null`
-# **`bible_id`**      | `bigint`           | `not null`
-# **`book_id`**       | `bigint`           | `not null`
-# **`chapter_id`**    | `bigint`           | `not null`
-# **`heading_id`**    | `bigint`           | `not null`
+# Name                  | Type               | Attributes
+# --------------------- | ------------------ | ---------------------------
+# **`id`**              | `bigint`           | `not null, primary key`
+# **`usx_position`**    | `integer`          | `not null`
+# **`usx_style`**       | `string`           | `not null`
+# **`created_at`**      | `datetime`         | `not null`
+# **`updated_at`**      | `datetime`         | `not null`
+# **`book_id`**         | `bigint`           | `not null`
+# **`chapter_id`**      | `bigint`           | `not null`
+# **`heading_id`**      | `bigint`           | `not null`
+# **`translation_id`**  | `bigint`           | `not null`
 #
 # ### Indexes
 #
-# * `index_segments_on_bible_id`:
-#     * **`bible_id`**
-# * `index_segments_on_book_id`:
+# * `index_bible_segments_on_book_id`:
 #     * **`book_id`**
-# * `index_segments_on_chapter_id`:
+# * `index_bible_segments_on_chapter_id`:
 #     * **`chapter_id`**
-# * `index_segments_on_heading_id`:
+# * `index_bible_segments_on_heading_id`:
 #     * **`heading_id`**
+# * `index_bible_segments_on_translation_id`:
+#     * **`translation_id`**
 #
 # ### Foreign Keys
 #
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`bible_id => bibles.id`**
+#     * **`book_id => bible_books.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`book_id => books.id`**
+#     * **`chapter_id => bible_chapters.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`chapter_id => chapters.id`**
+#     * **`heading_id => bible_headings.id`**
 # * `fk_rails_...` (_ON DELETE => restrict_):
-#     * **`heading_id => headings.id`**
+#     * **`translation_id => bible_translations.id`**
 #
-class Segment < ApplicationRecord
+class Bible::Segment < ApplicationRecord
   # Associations
-  belongs_to :bible
   belongs_to :book
   belongs_to :chapter
   belongs_to :heading
+  belongs_to :translation
   has_many :fragments, dependent: :restrict_with_error
   has_many :section_segment_associations, dependent: :destroy
   has_many :sections, through: :section_segment_associations
@@ -51,10 +51,10 @@ class Segment < ApplicationRecord
   has_many :verses, through: :segment_verse_associations
 
   # Validations
-  validates :bible, presence: true
   validates :book, presence: true
   validates :chapter, presence: true
   validates :heading, presence: true
+  validates :translation, presence: true
   validates :usx_position, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :usx_style, presence: true
 
