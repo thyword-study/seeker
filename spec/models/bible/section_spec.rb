@@ -204,7 +204,7 @@ RSpec.describe Bible::Section, type: :model do
     end
   end
 
-  describe '.batch_request' do
+  describe '.create_batch_request' do
     it 'returns a batch request' do
       system_prompt = FactoryBot.create :exposition_system_prompt, text: <<~HEREDOC.strip
         You are an AI providing commentary on texts from the Bible.
@@ -224,7 +224,7 @@ RSpec.describe Bible::Section, type: :model do
       section_2.segments << segment_2
 
       sections = Bible::Section.where(translation: translation, book: book)
-      batch_request = Bible::Section.batch_request("exposition", sections, system_prompt)
+      batch_request = Bible::Section.create_batch_request("exposition", sections, system_prompt)
 
       aggregate_failures do
         expect(batch_request.name).to eq "exposition"

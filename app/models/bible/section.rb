@@ -165,13 +165,13 @@ class Bible::Section < ApplicationRecord
   # those that are expositable. For each valid section, it generates a user
   # prompt and constructs an HTTP request payload formatted for batch processing
   # by the ExpositionService. The method then creates a batch request record
-  # with the generated data.
+  # with the generated data and updates it with the batch payload.
   #
   # @param [String] name The name of the batch request.
   # @param [ActiveRecord::Relation] sections The sections to process, ordered by position.
   # @param [Exposition::SystemPrompt] system_prompt The system prompt to associate with the user prompts.
   # @return [Exposition::BatchRequest] The created batch request record containing the request data.
-  def self.batch_request(name, sections, system_prompt)
+  def self.create_batch_request(name, sections, system_prompt)
     ActiveRecord::Base.transaction do
       batch_request = Exposition::BatchRequest.create!(
         name: name,
