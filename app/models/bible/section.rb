@@ -201,7 +201,7 @@ class Bible::Section < ApplicationRecord
         }
       end
 
-      batch_request.update! data: batch_data.to_json
+      batch_request.update! data: batch_data
       batch_request
     end
   end

@@ -225,16 +225,15 @@ RSpec.describe Bible::Section, type: :model do
 
       sections = Bible::Section.where(translation: translation, book: book)
       batch_request = Bible::Section.batch_request("exposition", sections, system_prompt)
-      batch_request_data = JSON.parse(batch_request.data)
 
       aggregate_failures do
         expect(batch_request.name).to eq "exposition"
         expect(batch_request.status).to eq "requested"
 
-        expect(batch_request_data[0]["custom_id"]).to eq "1"
-        expect(batch_request_data[0]["method"]).to eq "POST"
-        expect(batch_request_data[0]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
-        expect(batch_request_data[0]["body"]["input"]).to eq <<~HEREDOC.strip
+        expect(batch_request.data[0]["custom_id"]).to eq "1"
+        expect(batch_request.data[0]["method"]).to eq "POST"
+        expect(batch_request.data[0]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
+        expect(batch_request.data[0]["body"]["input"]).to eq <<~HEREDOC.strip
           <instructions>
           1. Generate a commentary and work exclusively with the following text excerpt from the Berean Standard Bible (BSB).
           2. When quoting or referring to the text, use the exact wording provided in the text excerpt.
@@ -246,20 +245,20 @@ RSpec.describe Bible::Section, type: :model do
           Genesis 1:1 BSB
           </text>
         HEREDOC
-        expect(batch_request_data[0]["body"]["instructions"]).to eq "You are an AI providing commentary on texts from the Bible."
-        expect(batch_request_data[0]["body"]["max_output_tokens"]).to eq ExpositionService::MAX_OUTPUT_TOKENS
-        expect(batch_request_data[0]["body"]["model"]).to eq ExpositionService::MODEL
-        expect(batch_request_data[0]["body"]["text"]["format"]).to eq JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)
-        expect(batch_request_data[0]["body"]["stream"]).to be false
-        expect(batch_request_data[0]["body"]["store"]).to be false
-        expect(batch_request_data[0]["body"]["temperature"]).to eq ExpositionService::TEMPERATURE
-        expect(batch_request_data[0]["body"]["top_p"]).to eq ExpositionService::TOP_P
+        expect(batch_request.data[0]["body"]["instructions"]).to eq "You are an AI providing commentary on texts from the Bible."
+        expect(batch_request.data[0]["body"]["max_output_tokens"]).to eq ExpositionService::MAX_OUTPUT_TOKENS
+        expect(batch_request.data[0]["body"]["model"]).to eq ExpositionService::MODEL
+        expect(batch_request.data[0]["body"]["text"]["format"]).to eq JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)
+        expect(batch_request.data[0]["body"]["stream"]).to be false
+        expect(batch_request.data[0]["body"]["store"]).to be false
+        expect(batch_request.data[0]["body"]["temperature"]).to eq ExpositionService::TEMPERATURE
+        expect(batch_request.data[0]["body"]["top_p"]).to eq ExpositionService::TOP_P
 
         # section-2
-        expect(batch_request_data[1]["custom_id"]).to eq "2"
-        expect(batch_request_data[1]["method"]).to eq "POST"
-        expect(batch_request_data[1]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
-        expect(batch_request_data[1]["body"]["input"]).to eq <<~HEREDOC.strip
+        expect(batch_request.data[1]["custom_id"]).to eq "2"
+        expect(batch_request.data[1]["method"]).to eq "POST"
+        expect(batch_request.data[1]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
+        expect(batch_request.data[1]["body"]["input"]).to eq <<~HEREDOC.strip
           <instructions>
           1. Generate a commentary and work exclusively with the following text excerpt from the Berean Standard Bible (BSB).
           2. When quoting or referring to the text, use the exact wording provided in the text excerpt.
@@ -271,14 +270,14 @@ RSpec.describe Bible::Section, type: :model do
           Genesis 1:13 BSB
           </text>
         HEREDOC
-        expect(batch_request_data[1]["body"]["instructions"]).to eq "You are an AI providing commentary on texts from the Bible."
-        expect(batch_request_data[1]["body"]["max_output_tokens"]).to eq ExpositionService::MAX_OUTPUT_TOKENS
-        expect(batch_request_data[1]["body"]["model"]).to eq ExpositionService::MODEL
-        expect(batch_request_data[1]["body"]["text"]["format"]).to eq JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)
-        expect(batch_request_data[1]["body"]["stream"]).to be false
-        expect(batch_request_data[1]["body"]["store"]).to be false
-        expect(batch_request_data[1]["body"]["temperature"]).to eq ExpositionService::TEMPERATURE
-        expect(batch_request_data[1]["body"]["top_p"]).to eq ExpositionService::TOP_P
+        expect(batch_request.data[1]["body"]["instructions"]).to eq "You are an AI providing commentary on texts from the Bible."
+        expect(batch_request.data[1]["body"]["max_output_tokens"]).to eq ExpositionService::MAX_OUTPUT_TOKENS
+        expect(batch_request.data[1]["body"]["model"]).to eq ExpositionService::MODEL
+        expect(batch_request.data[1]["body"]["text"]["format"]).to eq JSON.parse(Exposition::STRUCTURED_OUTPUT_JSON_SCHEMA)
+        expect(batch_request.data[1]["body"]["stream"]).to be false
+        expect(batch_request.data[1]["body"]["store"]).to be false
+        expect(batch_request.data[1]["body"]["temperature"]).to eq ExpositionService::TEMPERATURE
+        expect(batch_request.data[1]["body"]["top_p"]).to eq ExpositionService::TOP_P
       end
     end
   end
