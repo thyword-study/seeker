@@ -58,10 +58,16 @@
             </div>
           </div>
 
-          <div class="py-5 sm:p-6">
-            <div class="text-center">
-              <p class="mt-1 text-sm text-gray-500">Commentary not available</p>
-            </div>
+          <div class="mb-8 py-5 sm:p-6">
+            <% if section.exposition_content.present? %>
+              <div class="prose max-w-none">
+                <%= markdown_to_html section.exposition_content.summary %>
+              </div>
+            <% else %>
+              <div class="text-center">
+                <p class="mt-1 text-sm text-gray-500">Commentary not yet available</p>
+              </div>
+            <% end %>
           </div>
         <% else %>
           <%= render partial: "section", locals: { section: section }  %>
