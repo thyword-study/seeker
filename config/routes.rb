@@ -21,18 +21,14 @@ Rails.application.routes.draw do
   # Bible (Reading)
   resources :translations, param: :code, only: [ :show ], constraints: { code: /[a-z]+/ } do
     resources :books, param: :slug, only: [ :index, :show ] do
-      resources :chapters, param: :number, only: [ :index, :show ] do
-        resources :verses, param: :numbers, only: [ :index, :show ]
-      end
+      resources :chapters, param: :number, only: [ :index, :show ]
     end
   end
 
   # Bible (Commentary)
   namespace :commentary do
     resources :books, param: :slug, only: [ :index, :show ] do
-      resources :chapters, param: :number, only: [ :index, :show ] do
-        resources :verses, param: :numbers, only: [ :index, :show ]
-      end
+      resources :chapters, param: :number, only: [ :index, :show ]
     end
   end
 
