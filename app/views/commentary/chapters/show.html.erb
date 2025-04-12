@@ -58,10 +58,24 @@
             </div>
           </div>
 
-          <div class="mb-8 py-5 sm:p-6">
+          <div class="mb-12 py-5 sm:p-6">
             <% if section.exposition_content.present? %>
               <div class="prose max-w-none">
                 <%= markdown_to_html section.exposition_content.summary %>
+              </div>
+
+              <div class="mt-6 relative">
+                <div class="absolute inset-0 flex items-center" aria-hidden="true">
+                  <div class="w-full border-t border-gray-300"></div>
+                </div>
+                <div class="relative flex justify-center">
+                  <%= link_to commentary_book_chapter_section_path(book_slug: @book.slug, chapter_number: @chapter.number, id: section.id), class: "inline-flex items-center gap-x-1.5 rounded-full bg-white px-3 py-1.5 text-sm font-semibold text-gray-900 ring-1 shadow-xs ring-gray-300 ring-inset hover:bg-gray-50" do %>
+                    <svg class="-mr-0.5 -ml-1 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+                      <path d="M10.75 4.75a.75.75 0 0 0-1.5 0v4.5h-4.5a.75.75 0 0 0 0 1.5h4.5v4.5a.75.75 0 0 0 1.5 0v-4.5h4.5a.75.75 0 0 0 0-1.5h-4.5v-4.5Z" />
+                    </svg>
+                    Learn More
+                  <% end %>
+                </div>
               </div>
             <% else %>
               <div class="text-center">
