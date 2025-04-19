@@ -23,27 +23,27 @@ default: &default
 
 development:
   <<: *default
-  database: scribe_development
+  database: seeker_development
 
 test:
   <<: *default
-  database: scribe_test
+  database: seeker_test
 
 production:
   primary: &primary_production
     <<: *default
-    database: scribe_production
-    username: scribe
+    database: seeker_production
+    username: seeker
     password: <%= ENV["DB_PASSWORD"] %>
   cache:
     <<: *primary_production
-    database: scribe_production_cache
+    database: seeker_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: scribe_production_queue
+    database: seeker_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: scribe_production_cable
+    database: seeker_production_cable
     migrations_paths: db/cable_migrate
