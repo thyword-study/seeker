@@ -22,8 +22,13 @@ default: &default
   port: <%= ENV['DB_PORT'] || '5432' %>
 
 development:
-  <<: *default
-  database: seeker_development
+  primary: &primary_development
+    <<: *default
+    database: seeker_development
+  queue:
+    <<: *primary_development
+    database: seeker_development_queue
+    migrations_paths: db/queue_migrate
 
 test:
   <<: *default
