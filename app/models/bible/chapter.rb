@@ -48,6 +48,14 @@ class Bible::Chapter < ApplicationRecord
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Returns the full title of the chapter, which includes the book's title and
+  # the chapter number.
+  #
+  # @return [String] the full title of the chapter
+  def full_title
+    "#{book.title} #{number}"
+  end
+
   # Returns the title of the chapter in the format "Chapter <number>".
   #
   # @return [String] the formatted chapter title

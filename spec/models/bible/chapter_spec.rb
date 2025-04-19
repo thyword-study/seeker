@@ -15,4 +15,12 @@ RSpec.describe Bible::Chapter, type: :model do
       expect(chapter.full_title).to eq('Genesis 1')
     end
   end
+
+  describe '#title' do
+    it 'returns the chapter title' do
+      chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+
+      expect(chapter.title).to eq('Chapter 1')
+    end
+  end
 end
