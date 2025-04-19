@@ -8,7 +8,7 @@ The below dependencies are required:
 
 * PostgreSQL
 * Redis
-* Ruby 3.4.1
+* Ruby 3.4.3
 
 ### Application
 
