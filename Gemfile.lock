@@ -95,8 +95,6 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    cssbundling-rails (1.4.3)
-      railties (>= 6.0.0)
     database_cleaner-active_record (2.2.0)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
@@ -412,7 +410,6 @@ DEPENDENCIES
   bootsnap
   brakeman
   config (~> 5.5, >= 5.5.2)
-  cssbundling-rails
   database_cleaner-active_record (~> 2.1)
   debug
   factory_bot_rails (~> 6.2)
