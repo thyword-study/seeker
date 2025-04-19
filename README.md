@@ -1,5 +1,7 @@
 # Seeker
 
+[![test](https://github.com/thyword-study/seeker/actions/workflows/test.yml/badge.svg)](https://github.com/thyword-study/seeker/actions/workflows/test.yml) [![release](https://github.com/thyword-study/seeker/actions/workflows/release.yml/badge.svg?event=release)](https://github.com/thyword-study/seeker/actions/workflows/release.yml)
+
 ## Dependencies
 
 ### System
