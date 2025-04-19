@@ -1,4 +1,4 @@
-name: test
+name: Test
 
 on:
   pull_request:
@@ -64,9 +64,9 @@ jobs:
       postgres:
         image: postgres:17.4-alpine
         env:
-          POSTGRES_DB: scribe_test
+          POSTGRES_DB: seeker_test
           POSTGRES_PASSWORD: sekret
-          POSTGRES_USER: scribe
+          POSTGRES_USER: seeker
         ports:
           - 5432:5432
         options: >-
@@ -85,7 +85,7 @@ jobs:
           --health-retries=3
     env:
       DB_PASSWORD: sekret
-      DB_USERNAME: scribe
+      DB_USERNAME: seeker
       RAILS_ENV: test
     steps:
       - name: Checkout

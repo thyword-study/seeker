@@ -1,4 +1,6 @@
-# Scribe
+# Seeker
+
+[![test](https://github.com/thyword-study/seeker/actions/workflows/test.yml/badge.svg)](https://github.com/thyword-study/seeker/actions/workflows/test.yml) [![release](https://github.com/thyword-study/seeker/actions/workflows/release.yml/badge.svg?event=release)](https://github.com/thyword-study/seeker/actions/workflows/release.yml)
 
 ## Dependencies
 
@@ -53,9 +55,9 @@ for more details.
 Assuming you have a root user (with no password) ... first create the tables in
 the database by running `rails db:create`. This will create 2 databases:
 
-* `scribe_development` - used when running the app in development mode (ideal
+* `seeker_development` - used when running the app in development mode (ideal
   for testing locally).
-* `scribe_test` - used by the app when running the test suites.
+* `seeker_test` - used by the app when running the test suites.
 
 Then run the migrations by running `rails db:schema:load db:migrate` to create
 the database structure i.e. columns, indices in the table for you. You may also
