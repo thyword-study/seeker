@@ -63,6 +63,26 @@ class Bible::Section < ApplicationRecord
     segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
   end
 
+  # Returns the formatted title of the Bible section.
+  #
+  # The title is constructed using the book title, chapter number, and a formatted
+  # list of verse numbers.
+  #
+  # @return [String] the formatted title of the section in the format
+  #   "Book Title Chapter:FormattedVerseNumbers".
+  def title
+    unformatted_verse_numbers = segments.order(usx_position: :asc).map do |segment|
+      segment.verses.order(number: :asc).map do |verse|
+        verse.number
+      end
+    end.flatten.uniq.sort!
+
+    return "#{book.title} #{chapter.number}" if unformatted_verse_numbers.empty?
+
+    formatted_verse_numbers = Bible::Verse.format_verse_numbers unformatted_verse_numbers
+    "#{book.title} #{chapter.number}:#{formatted_verse_numbers}"
+  end
+
   # Generates a structured user prompt for generating a commentary.
   #
   # This method constructs a text excerpt from the Berean Standard Bible (BSB),
@@ -145,13 +165,13 @@ class Bible::Section < ApplicationRecord
   # those that are expositable. For each valid section, it generates a user
   # prompt and constructs an HTTP request payload formatted for batch processing
   # by the ExpositionService. The method then creates a batch request record
-  # with the generated data.
+  # with the generated data and updates it with the batch payload.
   #
   # @param [String] name The name of the batch request.
   # @param [ActiveRecord::Relation] sections The sections to process, ordered by position.
   # @param [Exposition::SystemPrompt] system_prompt The system prompt to associate with the user prompts.
   # @return [Exposition::BatchRequest] The created batch request record containing the request data.
-  def self.batch_request(name, sections, system_prompt)
+  def self.create_batch_request(name, sections, system_prompt)
     ActiveRecord::Base.transaction do
       batch_request = Exposition::BatchRequest.create!(
         name: name,
@@ -181,7 +201,7 @@ class Bible::Section < ApplicationRecord
         }
       end
 
-      batch_request.update! data: batch_data.to_json
+      batch_request.update! data: batch_data
       batch_request
     end
   end

@@ -46,6 +46,10 @@ gem "annotaterb", "~> 4.14"
 # framework.
 gem "config", "~> 5.5", ">= 5.5.2"
 
+# Kramdown is yet-another-markdown-parser but fast, pure Ruby, using a strict
+# syntax definition and supporting several common extensions.
+gem "kramdown", "~> 2.5", ">= 2.5.1"
+
 # Use the OpenAI API with Ruby!
 gem "ruby-openai", "~> 8.1"
 

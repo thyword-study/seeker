@@ -52,4 +52,41 @@ class Bible::Verse < ApplicationRecord
   validates :chapter, presence: true
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
+
+  # Formats an array of verse numbers into a compact string representation.
+  #
+  # Consecutive numbers are grouped into ranges (e.g., "1-10"), while
+  # non-consecutive numbers are separated by commas (e.g., "1,4-6,9,10").
+  #
+  # @param numbers [Array<Integer>] An array of verse numbers to format.
+  # @return [String] A formatted string representing the verse numbers.
+  #
+  # @example
+  #   Bible::Verse.format_verse_numbers([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+  #   # => "1-10"
+  #
+  #   Bible::Verse.format_verse_numbers([1, 4, 5, 6, 9, 10])
+  #   # => "1,4-6,9,10"
+  #
+  #   Bible::Verse.format_verse_numbers([1, 2, 3, 8, 9, 10])
+  #   # => "1-3,8-10"
+  #
+  #   Bible::Verse.format_verse_numbers([1, 3, 5, 6])
+  #   # => "1,3,5,6"
+  #
+  #   Bible::Verse.format_verse_numbers([1, 1])
+  #   # => "1"
+  def self.format_verse_numbers(numbers)
+    chunks = numbers.chunk_while do |previous_number, next_number|
+      next_number == previous_number + 1
+    end
+
+    chunks.map do |chunk|
+      if chunk.size > 2
+        "#{chunk.first}-#{chunk.last}"
+      else
+        chunk
+      end
+    end.flatten.uniq.join(",")
+  end
 end

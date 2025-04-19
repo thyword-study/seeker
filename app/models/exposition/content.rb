@@ -66,5 +66,5 @@ class Exposition::Content < ApplicationRecord
   validates :user_prompt, presence: true
 
   # Enums
-  enum :interpretation_type, { majority: "majority", minority:  "minority" }
+  enum :interpretation_type, { blended: "blended", majority: "majority", minority:  "minority" }
 end

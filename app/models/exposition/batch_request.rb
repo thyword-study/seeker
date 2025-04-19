@@ -36,4 +36,15 @@ class Exposition::BatchRequest < ApplicationRecord
   # Validations
   validates :name, presence: true
   validates :status, presence: true
+  validate :data_must_be_array_of_hashes
+
+  private
+
+  def data_must_be_array_of_hashes
+    return if data.blank?
+
+    unless data.is_a?(Array) && data.all? { |item| item.is_a?(Hash) }
+      errors.add(:data, "must be an array of hashes")
+    end
+  end
 end

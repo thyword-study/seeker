@@ -221,7 +221,7 @@ class ExpositionService
   def upload_batch_file(batch_request)
     begin
       jsonl_data = batch_request.data.map { |rd| rd.to_json }.join("\n")
-      jsonl_file = Tempfile.new([ batch_request.name.parameterize, ".jsonl" ])
+      jsonl_file = Tempfile.new([ "#{batch_request.name.parameterize}-", ".jsonl" ])
       jsonl_file.write(jsonl_data)
       jsonl_file.rewind
 
