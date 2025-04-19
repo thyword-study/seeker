@@ -3,23 +3,21 @@ name: release
 on:
   push:
     tags:
-      - '*'
+      - '*.*.*'
 
 jobs:
   github-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Create Release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Version ${{ github.ref }}
-          draft: false
-          prerelease: false
+          name: Version ${{ github.ref_name }}
+          generate_release_notes: true
 
   docker-gcr-release:
     runs-on: ubuntu-latest
