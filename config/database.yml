@@ -34,7 +34,7 @@ production:
     <<: *default
     database: scribe_production
     username: scribe
-    password: <%= ENV["SCRIBE_DATABASE_PASSWORD"] %>
+    password: <%= ENV["DB_PASSWORD"] %>
   cache:
     <<: *primary_production
     database: scribe_production_cache
