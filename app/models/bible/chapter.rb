@@ -48,6 +48,13 @@ class Bible::Chapter < ApplicationRecord
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Returns the title of the chapter in the format "Chapter <number>".
+  #
+  # @return [String] the formatted chapter title
+  def title
+    "Chapter #{number}"
+  end
+
   # Groups the segments of the chapter into sections.
   #
   # This method organizes the chapter's segments into logical sections using
