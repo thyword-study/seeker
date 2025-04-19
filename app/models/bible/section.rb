@@ -63,6 +63,26 @@ class Bible::Section < ApplicationRecord
     segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
   end
 
+  # Returns the formatted title of the Bible section.
+  #
+  # The title is constructed using the book title, chapter number, and a formatted
+  # list of verse numbers.
+  #
+  # @return [String] the formatted title of the section in the format
+  #   "Book Title Chapter:FormattedVerseNumbers".
+  def title
+    unformatted_verse_numbers = segments.order(usx_position: :asc).map do |segment|
+      segment.verses.order(number: :asc).map do |verse|
+        verse.number
+      end
+    end.flatten.uniq.sort!
+
+    return "#{book.title} #{chapter.number}" if unformatted_verse_numbers.empty?
+
+    formatted_verse_numbers = Bible::Verse.format_verse_numbers unformatted_verse_numbers
+    "#{book.title} #{chapter.number}:#{formatted_verse_numbers}"
+  end
+
   # Generates a structured user prompt for generating a commentary.
   #
   # This method constructs a text excerpt from the Berean Standard Bible (BSB),
