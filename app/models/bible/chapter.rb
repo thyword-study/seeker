@@ -48,6 +48,31 @@ class Bible::Chapter < ApplicationRecord
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Creates an exposition batch request for the chapter.
+  #
+  # This method facilitates the exposition process for the chapter by:
+  # - Generating a name for the exposition using the chapter's full title.
+  # - Fetching the chapter's sections associated with the current translation and book.
+  # - Utilizing the provided system prompt to guide the exposition process.
+  # - Creating a batch request for the exposition of the chapter's sections.
+  # - Enqueuing a background job to process the batch request asynchronously.
+  #
+  # @param system_prompt [String] The system prompt to guide the exposition process.
+  # @return [Exposit::BatchRequest, nil] The created batch request record, or `nil` if creation fails.
+  def exposit(system_prompt)
+    name = "#{full_title} Exposition"
+    chapter_sections = sections.where(translation: translation, book: book)
+    batch_request = Bible::Section.create_batch_request(name, chapter_sections, system_prompt)
+
+    if batch_request
+      Exposit::ProcessBatchRequestJob.perform_later batch_request.id
+
+      batch_request
+    else
+      nil
+    end
+  end
+
   # Returns the full title of the chapter, which includes the book's title and
   # the chapter number.
   #

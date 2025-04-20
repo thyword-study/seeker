@@ -43,5 +43,6 @@ module Seeker
     logger           = ActiveSupport::Logger.new(STDOUT)
     logger.formatter = config.log_formatter
     config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.log_level = :warn if Rails.env.test?
   end
 end

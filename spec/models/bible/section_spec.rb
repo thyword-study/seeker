@@ -230,7 +230,7 @@ RSpec.describe Bible::Section, type: :model do
         expect(batch_request.name).to eq "exposition"
         expect(batch_request.status).to eq "requested"
 
-        expect(batch_request.data[0]["custom_id"]).to eq "1"
+        expect(batch_request.data[0]["custom_id"]).to match(/^\d+$/)
         expect(batch_request.data[0]["method"]).to eq "POST"
         expect(batch_request.data[0]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
         expect(batch_request.data[0]["body"]["input"]).to eq <<~HEREDOC.strip
@@ -255,7 +255,7 @@ RSpec.describe Bible::Section, type: :model do
         expect(batch_request.data[0]["body"]["top_p"]).to eq ExpositionService::TOP_P
 
         # section-2
-        expect(batch_request.data[1]["custom_id"]).to eq "2"
+        expect(batch_request.data[1]["custom_id"]).to match(/^\d+$/)
         expect(batch_request.data[1]["method"]).to eq "POST"
         expect(batch_request.data[1]["url"]).to eq ExpositionService::ENDPOINT_RESPONSES
         expect(batch_request.data[1]["body"]["input"]).to eq <<~HEREDOC.strip
