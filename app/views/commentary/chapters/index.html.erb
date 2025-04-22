@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Study #{@book.title} | #{@translation.code}" %>
+  <%= "Study #{@book.title} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">

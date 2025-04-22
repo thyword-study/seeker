@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Read #{@book.title} #{@chapter.number} | #{@translation.code}" %>
+  <%= "Read #{@book.title} #{@chapter.number} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
 <nav class="mb-8 flex">
