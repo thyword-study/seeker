@@ -1,13 +1,14 @@
 {
-  "name": "Seeker",
+  "name": "Thy Word",
   "icons": [
     {
-      "src": "/icon.png",
+      "src": "<%= asset_path('web-app-manifest-192x192.png') %>",
       "type": "image/png",
-      "sizes": "512x512"
+      "sizes": "192x192",
+      "purpose": "maskable"
     },
     {
-      "src": "/icon.png",
+      "src": "<%= asset_path('web-app-manifest-512x512.png') %>",
       "type": "image/png",
       "sizes": "512x512",
       "purpose": "maskable"
@@ -16,7 +17,7 @@
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "Seeker.",
-  "theme_color": "red",
-  "background_color": "red"
+  "description": "<%= h(Settings.app.introduction) %>",
+  "theme_color": "#ffffff",
+  "background_color": "#ffffff"
 }
