@@ -1,5 +1,9 @@
 <% content_for :title do %>
-  <%= "Study #{@book.title} | #{@translation.code}" %>
+  <%= "Study #{@book.title} | #{@translation.code} | #{Settings.app.name.external}" %>
+<% end %>
+
+<% content_for :description do %>
+  <%= "Select a chapter of #{@book.title} to study. Unpack historical context, theological truths, and practical applications for daily Christian living." %>
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">

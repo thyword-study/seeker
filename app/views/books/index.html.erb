@@ -1,5 +1,9 @@
 <% content_for :title do %>
-  <%= "Read Books | #{@translation.code}" %>
+  <%= "Read Books | #{@translation.code} | #{Settings.app.name.external}" %>
+<% end %>
+
+<% content_for :description do %>
+  Browse all 66 Bible books in a clean, reader-focused layout. Access God's inspired Word with clarity, reverence, and faithful simplicity.
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">
