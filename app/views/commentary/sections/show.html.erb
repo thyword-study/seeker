@@ -1,5 +1,5 @@
 <% content_for :title do %>
-  <%= "Study #{@book.title} #{@chapter.number} S##{@section.id} | #{@translation.code} | #{Settings.app.name.external}" %>
+  <%= "Study #{@chapter.full_title} S##{@section.id} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
 <% content_for :description do %>
