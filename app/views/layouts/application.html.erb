@@ -14,8 +14,7 @@
     <%= tag.link rel: "icon", sizes: "96x96", type: "image/png", href: asset_path('favicon-96x96.png') %>
     <%= tag.link rel: "shortcut icon", type: "image/x-icon", href: asset_path('favicon.ico') %>
     <%= tag.link rel: "icon", type: "image/svg+xml", href: asset_path('favicon.svg') %>
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
