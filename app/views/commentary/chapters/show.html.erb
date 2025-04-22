@@ -2,6 +2,10 @@
   <%= "Study #{@book.title} #{@chapter.number} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
+<% content_for :description do %>
+  <%= "Study#{@chapter.full_title} with rich expositional commentary, cross-references, and personal reflection prompts - clear, engaging, and edifying." %>
+<% end %>
+
 <nav class="mb-8 flex">
   <ol role="list" class="flex items-center space-x-4">
     <li>

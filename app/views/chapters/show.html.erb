@@ -2,6 +2,10 @@
   <%= "Read #{@book.title} #{@chapter.number} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
+<% content_for :description do %>
+  <%= "Read #{@chapter.full_title} in a distraction-free view, faithful to Scripture, crystal-clear text, and Christ-centered reading." %>
+<% end %>
+
 <nav class="mb-8 flex">
   <ol role="list" class="flex items-center space-x-4">
     <li>

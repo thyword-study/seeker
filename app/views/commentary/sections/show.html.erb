@@ -2,6 +2,10 @@
   <%= "Study #{@book.title} #{@chapter.number} S##{@section.id} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
+<% content_for :description do %>
+  <%= "Delve into #{@chapter.full_title} S##{@section.id} for focused expositional insights, devotional prompts, and actionable application in your faith journey." %>
+<% end %>
+
 <nav class="mb-8 flex">
   <ol role="list" class="flex items-center space-x-4">
     <li>

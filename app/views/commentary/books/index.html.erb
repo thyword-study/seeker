@@ -2,6 +2,10 @@
   <%= "Study Books | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
+<% content_for :description do %>
+  Explore all Bible books with contextual insights, balanced doctrine, and Christ-centered reflections. Deepen your understanding of God's Word.
+<% end %>
+
 <nav class="mb-4 flex justify-center items-center">
   <%= link_to root_path, class: "text-gray-400 hover:text-gray-500 flex flex-col items-center" do %>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">

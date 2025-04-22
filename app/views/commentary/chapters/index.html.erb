@@ -2,6 +2,10 @@
   <%= "Study #{@book.title} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
+<% content_for :description do %>
+  <%= "Select a chapter of #{@book.title} to study. Unpack historical context, theological truths, and practical applications for daily Christian living." %>
+<% end %>
+
 <nav class="mb-4 flex justify-center items-center">
   <%= link_to commentary_books_path, class: "text-gray-400 hover:text-gray-500 flex flex-col items-center" do %>
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
