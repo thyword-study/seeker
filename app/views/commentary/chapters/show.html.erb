@@ -1,5 +1,9 @@
 <% content_for :title do %>
-  <%= "Study #{@book.title} #{@chapter.number} | #{@translation.code}" %>
+  <%= "Study #{@chapter.full_title} | #{@translation.code} | #{Settings.app.name.external}" %>
+<% end %>
+
+<% content_for :description do %>
+  <%= "Study#{@chapter.full_title} with rich expositional commentary, cross-references, and personal reflection prompts - clear, engaging, and edifying." %>
 <% end %>
 
 <nav class="mb-8 flex">

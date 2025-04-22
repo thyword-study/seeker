@@ -1,6 +1,12 @@
 ---
 app:
-  name: Seeker
+  name:
+    external: Thy Word
+    internal: Seeker
+  introduction: >-
+    Explore the Bible with reverent, verse-by-verse reflections that make clear
+    the deeper truths about God and His work, connect to Christ's redemptive
+    story, and encourage personal meditation and growth.
 
 bible:
   defaults:

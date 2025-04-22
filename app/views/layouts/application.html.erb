@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Seeker" %></title>
+    <title><%= content_for(:title) || Settings.app.name.external %></title>
+    <meta name="description" content="<%= h(content_for(:description)) %>">
     <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-title" content="Thy Word" />
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
@@ -10,12 +12,11 @@
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
-
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <%= tag.link rel: "apple-touch-icon", sizes: "180x180", href: asset_path('apple-touch-icon.png') %>
+    <%= tag.link rel: "icon", sizes: "96x96", type: "image/png", href: asset_path('favicon-96x96.png') %>
+    <%= tag.link rel: "shortcut icon", type: "image/x-icon", href: asset_path('favicon.ico') %>
+    <%= tag.link rel: "icon", type: "image/svg+xml", href: asset_path('favicon.svg') %>
+    <%= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

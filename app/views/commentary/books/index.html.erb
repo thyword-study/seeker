@@ -1,5 +1,9 @@
 <% content_for :title do %>
-  <%= "Study Books | #{@translation.code}" %>
+  <%= "Study Books | #{@translation.code} | #{Settings.app.name.external}" %>
+<% end %>
+
+<% content_for :description do %>
+  Explore all Bible books with contextual insights, balanced doctrine, and Christ-centered reflections. Deepen your understanding of God's Word.
 <% end %>
 
 <nav class="mb-4 flex justify-center items-center">
