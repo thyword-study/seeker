@@ -7,7 +7,7 @@
 <% end %>
 
 <main>
-  <div class="relative isolate px-6 pt-24 lg:px-8">
+  <div class="relative isolate p-6 md:p-18 lg:p-24">
     <div class="mx-auto max-w-2xl">
       <div class="flex justify-center items-center">
         <%= image_tag "icon.png", alt: "Thy Word Icon", class: "w-36 h-auto" %>
@@ -37,12 +37,12 @@
         <p class="mt-4 text-xl font-medium text-pretty text-gray-500">
           Read the Bible seamlessly or go deeper with verse-by-verse commentary for clearer understanding
         </p>
-        <div class="mt-8 flex items-center justify-center gap-x-4">
-          <%= link_to  translation_path(code: @translation.code.downcase), class: "rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500" do %>  
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-y-4 sm:gap-x-4">
+          <%= link_to  translation_path(code: @translation.code.downcase), class: "w-full sm:w-auto rounded-md bg-blue-500 px-3.5 py-2.5 text-sm font-semibold text-white shadow-xs hover:bg-blue-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-500" do %>  
             <%= "Read the #{@translation.code} Bible" %>
           <% end %>
 
-          <%= link_to commentary_books_path, class: "rounded-md bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-600 shadow-xs hover:bg-indigo-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-50" do %>  
+          <%= link_to commentary_books_path, class: "w-full sm:w-auto rounded-md bg-blue-50 px-3.5 py-2.5 text-sm font-semibold text-blue-500 shadow-xs hover:bg-indigo-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-50" do %>  
             Study with Commentary
           <% end %>
         </div>
