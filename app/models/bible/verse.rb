@@ -53,6 +53,19 @@ class Bible::Verse < ApplicationRecord
   validates :number, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Returns the number of the next verse in the chapter, or `nil` if the current
+  # verse is the last one in the chapter.
+  #
+  # @return [Integer, nil] The number of the next verse, or `nil` if there is no
+  #   next verse.
+  def next_number
+    if number == chapter.verses_count
+      nil
+    else
+      number + 1
+    end
+  end
+
   # Formats an array of verse numbers into a compact string representation.
   #
   # Consecutive numbers are grouped into ranges (e.g., "1-10"), while
