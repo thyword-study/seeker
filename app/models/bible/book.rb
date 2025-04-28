@@ -7,6 +7,7 @@
 # Name                  | Type               | Attributes
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
+# **`chapters_count`**  | `integer`          | `default(0), not null`
 # **`code`**            | `string(3)`        | `not null`
 # **`number`**          | `integer`          | `not null`
 # **`slug`**            | `string`           | `not null`

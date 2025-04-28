@@ -34,7 +34,7 @@
 #
 class Bible::Chapter < ApplicationRecord
   # Associations
-  belongs_to :book
+  belongs_to :book, counter_cache: true
   belongs_to :translation
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error
