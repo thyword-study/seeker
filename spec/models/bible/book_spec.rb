@@ -22,4 +22,24 @@ RSpec.describe Bible::Book, type: :model do
       end
     end
   end
+
+  describe '#previous_number' do
+    context 'when the book is the first book in the translation' do
+      it 'returns nil' do
+        book = FactoryBot.create(:translation_book, translation: translation, number: 1)
+        FactoryBot.create(:translation_book, translation: translation, number: 2)
+
+        expect(book.previous_number).to be_nil
+      end
+    end
+
+    context 'when the book is not the first book in the translation' do
+      it 'returns the previous book number' do
+        FactoryBot.create(:translation_book, translation: translation, number: 1)
+        book = FactoryBot.create(:translation_book, translation: translation, number: 2)
+
+        expect(book.previous_number).to eq(1)
+      end
+    end
+  end
 end
