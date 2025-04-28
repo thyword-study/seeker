@@ -32,7 +32,7 @@
 #
 class Bible::Book < ApplicationRecord
   # Associations
-  belongs_to :translation
+  belongs_to :translation, counter_cache: true
   has_many :chapters, dependent: :restrict_with_error
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error

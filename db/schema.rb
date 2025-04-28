@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_28_132850) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_135501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -161,6 +161,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_28_132850) do
     t.string "rights_holder_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "books_count", default: 0, null: false
     t.index ["code"], name: "index_bible_translations_on_code", unique: true
   end
 
