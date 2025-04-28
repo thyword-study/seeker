@@ -7,6 +7,7 @@
 # Name                  | Type               | Attributes
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
+# **`chapters_count`**  | `integer`          | `default(0), not null`
 # **`code`**            | `string(3)`        | `not null`
 # **`number`**          | `integer`          | `not null`
 # **`slug`**            | `string`           | `not null`
@@ -31,7 +32,7 @@
 #
 class Bible::Book < ApplicationRecord
   # Associations
-  belongs_to :translation
+  belongs_to :translation, counter_cache: true
   has_many :chapters, dependent: :restrict_with_error
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error

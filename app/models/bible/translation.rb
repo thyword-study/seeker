@@ -7,6 +7,7 @@
 # Name                      | Type               | Attributes
 # ------------------------- | ------------------ | ---------------------------
 # **`id`**                  | `bigint`           | `not null, primary key`
+# **`books_count`**         | `integer`          | `default(0), not null`
 # **`code`**                | `string(3)`        | `not null`
 # **`name`**                | `string`           | `not null`
 # **`rights_holder_name`**  | `string`           | `not null`

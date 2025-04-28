@@ -40,7 +40,7 @@
 class Bible::Verse < ApplicationRecord
   # Associations
   belongs_to :book
-  belongs_to :chapter
+  belongs_to :chapter, counter_cache: true
   belongs_to :translation
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error

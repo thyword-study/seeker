@@ -8,6 +8,7 @@
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
 # **`number`**          | `integer`          | `not null`
+# **`verses_count`**    | `integer`          | `default(0), not null`
 # **`created_at`**      | `datetime`         | `not null`
 # **`updated_at`**      | `datetime`         | `not null`
 # **`book_id`**         | `bigint`           | `not null`
@@ -33,7 +34,7 @@
 #
 class Bible::Chapter < ApplicationRecord
   # Associations
-  belongs_to :book
+  belongs_to :book, counter_cache: true
   belongs_to :translation
   has_many :footnotes, dependent: :restrict_with_error
   has_many :fragments, dependent: :restrict_with_error

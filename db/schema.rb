@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_28_135501) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -23,6 +23,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
     t.string "testament", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "chapters_count", default: 0, null: false
     t.index ["translation_id", "code"], name: "index_bible_books_on_translation_id_and_code", unique: true
     t.index ["translation_id"], name: "index_bible_books_on_translation_id"
   end
@@ -33,6 +34,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
     t.integer "number", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "verses_count", default: 0, null: false
     t.index ["book_id"], name: "index_bible_chapters_on_book_id"
     t.index ["translation_id", "book_id", "number"], name: "index_bible_chapters_on_translation_id_and_book_id_and_number", unique: true
     t.index ["translation_id"], name: "index_bible_chapters_on_translation_id"
@@ -159,6 +161,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_07_183625) do
     t.string "rights_holder_url", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "books_count", default: 0, null: false
     t.index ["code"], name: "index_bible_translations_on_code", unique: true
   end
 
