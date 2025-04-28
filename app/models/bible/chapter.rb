@@ -95,6 +95,19 @@ class Bible::Chapter < ApplicationRecord
     end
   end
 
+  # Returns the number of the previous chapter in the book, or `nil` if the
+  # current chapter is the first one in the book.
+  #
+  # @return [Integer, nil] The number of the previous chapter, or `nil` if there
+  #   is no previous chapter.
+  def previous_number
+    if number == 1
+      nil
+    else
+      number - 1
+    end
+  end
+
   # Returns the title of the chapter in the format "Chapter <number>".
   #
   # @return [String] the formatted chapter title
