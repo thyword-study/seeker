@@ -25,6 +25,26 @@ RSpec.describe Bible::Verse, type: :model do
     end
   end
 
+  describe '#previous_number' do
+    context 'when the verse is the first verse in the chapter' do
+      it 'returns nil' do
+        verse = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
+        FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 2)
+
+        expect(verse.previous_number).to be_nil
+      end
+    end
+
+    context 'when the verse is not the first verse in the chapter' do
+      it 'returns the previous verse number' do
+        FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
+        verse = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 2)
+
+        expect(verse.previous_number).to eq(1)
+      end
+    end
+  end
+
   describe '.format_verse_numbers' do
     it 'returns correctly formatted verse numbers' do
       aggregate_failures do

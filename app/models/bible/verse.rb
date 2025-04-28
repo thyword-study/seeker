@@ -66,6 +66,19 @@ class Bible::Verse < ApplicationRecord
     end
   end
 
+  # Returns the number of the previous verse in the chapter, or `nil` if the
+  # current verse is the first one in the chapter.
+  #
+  # @return [Integer, nil] The number of the previous verse, or `nil` if there
+  #   is no previous verse.
+  def previous_number
+    if number == 1
+      nil
+    else
+      number - 1
+    end
+  end
+
   # Formats an array of verse numbers into a compact string representation.
   #
   # Consecutive numbers are grouped into ranges (e.g., "1-10"), while
