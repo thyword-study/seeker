@@ -77,7 +77,7 @@ group :development, :test do
   gem "faker", "~> 3.5", ">= 3.5.1"
 
   # rspec-rails integrates the Rails testing helpers into RSpec.
-  gem "rspec-rails", "~> 7.1", ">= 7.1.1"
+  gem "rspec-rails", "~> 8.0"
 
   # Omakase Ruby styling [https://github.com/rails/rubocop-rails-omakase/]
   gem "rubocop-rails-omakase", require: false
