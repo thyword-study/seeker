@@ -57,4 +57,30 @@ class Bible::Book < ApplicationRecord
   # Scopes
   scope :old_testament, -> { where(testament: "OT") }
   scope :new_testament, -> { where(testament: "NT") }
+
+  # Returns the number of the next book in the translation, or `nil` if the
+  # current book is the last one in the translation.
+  #
+  # @return [Integer, nil] The number of the next book, or `nil` if there is no
+  #   next book.
+  def next_number
+    if number == translation.books_count
+      nil
+    else
+      number + 1
+    end
+  end
+
+  # Returns the number of the previous book in the translation, or `nil` if the
+  # current book is the first one in the translation.
+  #
+  # @return [Integer, nil] The number of the previous book, or `nil` if there is
+  #   no previous book.
+  def previous_number
+    if number == 1
+      nil
+    else
+      number - 1
+    end
+  end
 end

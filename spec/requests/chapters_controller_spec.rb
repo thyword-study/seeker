@@ -18,7 +18,7 @@ RSpec.describe ChaptersController, type: :request do
   describe 'GET #show' do
     it 'returns the correct response' do
       translation = FactoryBot.create(:translation)
-      book = FactoryBot.create(:translation_book, translation: translation)
+      book = FactoryBot.create(:translation_book, translation: translation, number: 1)
       chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
 
       get translation_book_chapter_path translation_code: translation.code.downcase, book_slug: book.slug, number: chapter.number

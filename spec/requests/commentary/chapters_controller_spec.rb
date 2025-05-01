@@ -19,7 +19,7 @@ module Commentary
     describe 'GET #show' do
       it 'returns the correct response' do
         translation = FactoryBot.create(:translation_bsb)
-        book = FactoryBot.create(:translation_book, translation: translation)
+        book = FactoryBot.create(:translation_book, translation: translation, number: 1)
         chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
 
         get commentary_book_chapter_path book_slug: book.slug, number: chapter.number

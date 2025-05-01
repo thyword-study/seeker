@@ -196,7 +196,7 @@
   <% if @footnotes.any? %>
   <div class="relative">
     <div class="absolute inset-0 flex items-center" aria-hidden="true">
-      <div class="w-full border-t border-gray-300"></div>
+      <div class="w-full border-t border-gray-200"></div>
     </div>
 
     <div class="relative flex justify-center">
@@ -226,6 +226,78 @@
     </ul>
   </section>
   <% end %>
+
+  <nav class="my-6 flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+    <% if @chapter.previous_number %>
+      <div class="-mt-px flex w-0 flex-1">
+        <%= link_to translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: @book.slug, number: @chapter.previous_number), class: "inline-flex items-center border-t-2 border-transparent pt-6 pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+          <svg class="mr-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" clip-rule="evenodd" />
+          </svg>
+          <%= "Previous Chapter" %>
+        <% end %>
+      </div>
+    <% elsif @book.previous_number %>
+      <% previous_book = Bible::Book.find_by!(translation: @translation, number: @book.previous_number) %>
+      <div class="-mt-px flex w-0 flex-1">
+        <%= link_to translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: previous_book.slug, number: previous_book.chapters_count), class: "inline-flex items-center border-t-2 border-transparent pt-6 pr-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>  
+          <svg class="mr-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" clip-rule="evenodd" />
+          </svg>
+          <%= "Previous Book" %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="-mt-px flex w-0 flex-1"></div>
+    <% end %>
+
+    <div class="hidden md:-mt-px md:flex">
+      <% pagination_window = 3 %>
+
+      <% pagination_lower_bound = @chapter.number - pagination_window %>
+      <% pagination_lower_bound = 1 if pagination_lower_bound.negative? || pagination_lower_bound.zero? %>
+
+      <% pagination_upper_bound = @chapter.number + pagination_window %>
+      <% pagination_upper_bound = @book.chapters_count if pagination_upper_bound > @book.chapters_count %>
+
+      <% pagination_lower_bound = pagination_upper_bound - (pagination_window * 2) if pagination_upper_bound > 6 && pagination_lower_bound > 1 %>
+      <% pagination_upper_bound = pagination_lower_bound + (pagination_window * 2) if pagination_lower_bound < 6 && pagination_upper_bound < @book.chapters_count %>
+
+      <% pagination_pages = [pagination_lower_bound, pagination_upper_bound].compact.uniq %>
+      <% pagination_pages = (pagination_pages.min..pagination_pages.max).to_a %>
+
+      <% for pagination_page in pagination_pages %>
+        <% if pagination_page == @chapter.number %>
+          <%= link_to @chapter.number, translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: @book.slug, number: @chapter.number), class: "inline-flex items-center border-t-2 border-indigo-500 px-4 pt-6 text-sm font-medium text-indigo-600" %>
+        <% else %>
+          <%= link_to pagination_page, translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: @book.slug, number: pagination_page), class: "inline-flex items-center border-t-2 border-transparent px-4 pt-6 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <% if @chapter.next_number %>
+      <div class="-mt-px flex w-0 flex-1 justify-end">
+        <%= link_to translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: @book.slug, number: @chapter.next_number), class: "inline-flex items-center border-t-2 border-transparent pt-6 pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>  
+          <%= "Next Chapter" %>
+          <svg class="ml-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
+      </div>
+    <% elsif @book.next_number %>
+      <% next_book = Bible::Book.find_by!(translation: @translation, number: @book.next_number) %>
+      <div class="-mt-px flex w-0 flex-1 justify-end">
+        <%= link_to translation_book_chapter_path(translation_code: @translation.code.downcase, book_slug: next_book.slug, number: 1), class: "inline-flex items-center border-t-2 border-transparent pt-6 pl-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700" do %>
+          <%= "Next Book" %>
+          <svg class="ml-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="-mt-px flex w-0 flex-1 justify-end"></div>
+    <% end %>
+  </nav>
 
   <hr class="my-6 border-gray-300">
 

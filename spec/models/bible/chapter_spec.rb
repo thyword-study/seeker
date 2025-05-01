@@ -40,6 +40,46 @@ RSpec.describe Bible::Chapter, type: :model do
     end
   end
 
+  describe '#next_number' do
+    context 'when the chapter is the last chapter in the book' do
+      it 'returns nil' do
+        FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 2)
+
+        expect(chapter.next_number).to be_nil
+      end
+    end
+
+    context 'when the chapter is not the last chapter in the book' do
+      it 'returns the next chapter number' do
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+        FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 2)
+
+        expect(chapter.next_number).to eq(2)
+      end
+    end
+  end
+
+  describe '#previous_number' do
+    context 'when the chapter is the first chapter in the book' do
+      it 'returns nil' do
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+        FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 2)
+
+        expect(chapter.previous_number).to be_nil
+      end
+    end
+
+    context 'when the chapter is not the first chapter in the book' do
+      it 'returns the previous chapter number' do
+        FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
+        chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 2)
+
+        expect(chapter.previous_number).to eq(1)
+      end
+    end
+  end
+
   describe '#title' do
     it 'returns the chapter title' do
       chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
