@@ -7,32 +7,26 @@ RSpec.describe Bible::Section, type: :model do
   let(:heading) { FactoryBot.create(:translation_heading, translation: translation, book: book, chapter: chapter) }
 
   describe "#expositable?" do
-    context "when there are no segments with a content style" do
+    context "when there is a verse_spec" do
+      it "returns true" do
+        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1, verse_spec: "1")
+
+        expect(section.expositable?).to be true
+      end
+    end
+
+    context "when there is no verse_spec" do
       it "returns false" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
 
         expect(section.expositable?).to be false
       end
     end
-
-    context "when at least one segment has a content style" do
-      it "returns true" do
-        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 'h')
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 's1')
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 's2')
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 'm')
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 'pc')
-        section.segments << FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_style: 'pmo')
-
-        expect(section.expositable?).to be true
-      end
-    end
   end
 
-  describe "#title" do
+  describe "#generate_verse_spec" do
     context "when the section has a single verse" do
-      it "returns the correct title with the verse number" do
+      it "returns the correct verse_spec with the verse number" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
         segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
         verse = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
@@ -40,12 +34,12 @@ RSpec.describe Bible::Section, type: :model do
         section.segments << segment
         segment.verses << verse
 
-        expect(section.title).to eq "Genesis 1:1"
+        expect(section.generate_verse_spec).to eq "1"
       end
     end
 
     context "when the section has multiple consecutive verses" do
-      it "returns the correct title with a range of verse numbers" do
+      it "returns the correct verse_spec with a range of verse numbers" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
         segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
         verse_1 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
@@ -56,12 +50,12 @@ RSpec.describe Bible::Section, type: :model do
         segment.verses << verse_1
         segment.verses << verse_2
 
-        expect(section.title).to eq "Genesis 1:1,2"
+        expect(section.generate_verse_spec).to eq "1,2"
       end
     end
 
     context "when the section has non-consecutive verses" do
-      it "returns the correct title with comma-separated verse numbers" do
+      it "returns the correct verse_spec with comma-separated verse numbers" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
         segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
         verse_1 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
@@ -75,18 +69,36 @@ RSpec.describe Bible::Section, type: :model do
         segment.verses << verse_2
         segment.verses << verse_3
 
-        expect(section.title).to eq "Genesis 1:1-3"
+        expect(section.generate_verse_spec).to eq "1-3"
       end
     end
 
     context "when the section has no verses" do
-      it "returns the book and chapter without verse numbers" do
+      it "returns nil" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
         segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
         FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, content: "In the beginning God created the heavens and the earth.", position: 1, verse: nil)
         section.segments << segment
 
-        expect(section.title).to eq "Genesis 1"
+        expect(section.generate_verse_spec).to be_nil
+      end
+    end
+  end
+
+  describe "#title" do
+    context "when the section has a verse_spec" do
+      it "returns the correct title with the verse number" do
+        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1, verse_spec: "1")
+
+        expect(section.title).to eq "Genesis 1:1"
+      end
+    end
+
+    context "when the section has no verse_spec" do
+      it "returns the book and chapter without verse numbers" do
+        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
+
+        expect(section.title).to be_nil
       end
     end
   end
@@ -210,14 +222,14 @@ RSpec.describe Bible::Section, type: :model do
         You are an AI providing commentary on texts from the Bible.
       HEREDOC
       # section-1
-      section_1 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
+      section_1 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1, verse_spec: "1")
       segment_1 = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_position: 6, usx_style: 'm')
       verse_1 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
       FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment_1, verse: verse_1, content: "In the beginning God created the heavens and the earth.", position: 1, show_verse: true, kind: "text")
       section_1.segments << segment_1
 
       # section-2
-      section_2 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 2)
+      section_2 = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 2, verse_spec: "13")
       segment_2 = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_position: 6, usx_style: 'm')
       verse_2 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 13)
       FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment_2, verse: verse_2, content: "And there was evening, and there was morning—the third day.", position: 1, show_verse: true, kind: "text")

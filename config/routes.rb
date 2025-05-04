@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   namespace :commentary do
     resources :books, param: :slug, only: [ :index, :show ] do
       resources :chapters, param: :number, only: [ :index, :show ] do
-        resources :sections, only: [ :show ]
+        resources :sections, param: :verse_spec, only: [ :show ]
       end
     end
   end

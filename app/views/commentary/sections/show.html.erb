@@ -46,7 +46,7 @@
 </nav>
 
 <main>
-  <%= link_to  commentary_book_chapter_section_path(book_slug: @book.slug, chapter_number: @chapter.number, id: @section.id), class: "text-blue-600 hover:text-blue-800" do %>
+  <%= link_to  commentary_book_chapter_section_path(book_slug: @book.slug, chapter_number: @chapter.number, verse_spec: @section.verse_spec), class: "text-blue-600 hover:text-blue-800" do %>
     <h1 class="text-4xl font-semibold text-pretty sm:text-5xl"><%= @section.title %></h1>
   <% end %>
 

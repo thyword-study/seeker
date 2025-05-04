@@ -8,6 +8,7 @@
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
 # **`position`**        | `integer`          | `not null`
+# **`verse_spec`**      | `string`           |
 # **`created_at`**      | `datetime`         | `not null`
 # **`updated_at`**      | `datetime`         | `not null`
 # **`book_id`**         | `bigint`           | `not null`
@@ -55,32 +56,49 @@ class Bible::Section < ApplicationRecord
   validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Scopes
+  scope :expositable, -> { where.not(verse_spec: nil) }
+
   # Determines if a section is ready for exposition.
   #
-  # @return [Boolean] true if any segment's USX style is a content style, false
-  # otherwise.
+  # @return [Boolean] true if the section is expositable, false otherwise.
   def expositable?
-    segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
+    verse_spec.present?
+  end
+
+  # Generate the verse spec for the section based on the segments and their
+  # associated verses.
+  #
+  # A verse spec is a formatted string representation of verse numbers for the
+  # section. This method checks if any of the associated segments contain
+  # verses. If so, it collects all the verse numbers, orders them, removes
+  # duplicates, and formats them into a human-readable string.
+
+  # @return [String, nil] A formatted string of verse numbers if verses exist, or nil otherwise.
+  def generate_verse_spec
+    if segments.any? { |segment| segment.verses.exists? }
+      numbers = segments
+                   .order(usx_position: :asc)
+                   .flat_map { |segment| segment.verses.order(number: :asc).pluck(:number) }
+                   .uniq
+                   .sort
+      Bible::Verse.format_verse_numbers(numbers)
+    end
   end
 
   # Returns the formatted title of the Bible section.
   #
-  # The title is constructed using the book title, chapter number, and a formatted
-  # list of verse numbers.
+  # This method constructs the title using the book's title, the chapter number,
+  # and the verse specification. The verse specification is a formatted string
+  # representing the verse numbers associated with the section.
   #
-  # @return [String] the formatted title of the section in the format
-  #   "Book Title Chapter:FormattedVerseNumbers".
+  # @return [String, nil] The formatted title of the section in the format "Book
+  #   Title Chapter:FormattedVerseNumbers", or nil if the verse specification is
+  #   absent.
   def title
-    unformatted_verse_numbers = segments.order(usx_position: :asc).map do |segment|
-      segment.verses.order(number: :asc).map do |verse|
-        verse.number
-      end
-    end.flatten.uniq.sort!
+    return nil unless verse_spec
 
-    return "#{book.title} #{chapter.number}" if unformatted_verse_numbers.empty?
-
-    formatted_verse_numbers = Bible::Verse.format_verse_numbers unformatted_verse_numbers
-    "#{book.title} #{chapter.number}:#{formatted_verse_numbers}"
+    "#{book.title} #{chapter.number}:#{verse_spec}"
   end
 
   # Generates a structured user prompt for generating a commentary.
