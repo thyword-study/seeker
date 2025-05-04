@@ -56,6 +56,9 @@ class Bible::Section < ApplicationRecord
   validates :position, presence: true, numericality: { only_integer: true, greater_than: 0 }
   validates :translation, presence: true
 
+  # Scopes
+  scope :expositable, -> { where.not(verse_spec: nil) }
+
   # Determines if a section is ready for exposition.
   #
   # @return [Boolean] true if any segment's USX style is a content style, false
