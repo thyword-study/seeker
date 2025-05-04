@@ -145,8 +145,9 @@ metadata_content.xpath("/DBLMetadata/publications/publication/structure/content"
   chapters.each { |chapter| chapter.group_segments_in_sections!(regroup: false) }
 end
 
-# Reset counters for Bible translations, books, chapters, and verses.
+# Reset counters and set specifications for Bible translations, books, chapters, and verses.
 ResetBibleCountersJob.perform_now
+SetBibleSectionVerseSpecJob.perform_now
 
 # Restore previous logger
 Rails.logger = previous_logger if ENV["DEBUG"]
