@@ -1,9 +1,9 @@
 <% content_for :title do %>
-  <%= "Study #{@chapter.full_title} S##{@section.id} | #{@translation.code} | #{Settings.app.name.external}" %>
+  <%= "Study #{@section.title} | #{@translation.code} | #{Settings.app.name.external}" %>
 <% end %>
 
 <% content_for :description do %>
-  <%= "Get detailed context and meaning for #{@chapter.full_title} S##{@section.id} — presented clearly and concisely." %>
+  <%= truncate(strip_markdown(@exposition_content.summary), length: 200, separator: ' ') %>
 <% end %>
 
 <nav class="mb-8 flex">
@@ -52,7 +52,7 @@
 
   <h2 class="mt-8 mb-4 text-3xl font-semibold text-pretty text-gray-900">Passage</h2>
   <div>
-    <div class="mt-8 mb-4 overflow-hidden rounded-lg bg-gray-100 font-medium">
+    <div class="mt-8 mb-4 overflow-hidden rounded-lg bg-blue-50 font-medium">
       <div class="px-4 py-5 sm:p-6">
         <%= render partial: "section", locals: { section: @section }  %>
 
@@ -63,7 +63,7 @@
               <div class="w-full border-t border-gray-300"></div>
             </div>
             <div class="relative flex justify-start">
-              <span class="bg-gray-100 pr-2 text-sm text-gray-500">Footnotes</span>
+              <span class="bg-blue-50 pr-2 text-sm text-gray-500">Footnotes</span>
             </div>
           </div>
 
@@ -94,7 +94,7 @@
     </div>
 
     <div class="mt-8 mb-4 prose max-w-none">
-      <%= markdown_to_html @section.exposition_content.summary %>
+      <%= markdown_to_html @exposition_content.summary %>
     </div>
   </div>
 
@@ -102,16 +102,16 @@
   <div>
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Context</h3>
     <div>
-      <%= @section.exposition_content.context %>
+      <%= @exposition_content.context %>
     </div>
 
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Verse-by-Verse</h3>
     <div>
       <div class="space-y-6">
-        <% @section.exposition_content.analyses.order(position: :asc).each do |analysis| %>
+        <% @exposition_content.analyses.order(position: :asc).each do |analysis| %>
           <div>
-            <blockquote class="relative pl-8 border-l-4 border-gray-300">
-              <span class="absolute left-2 top-0 text-5xl leading-none text-gray-300 select-none">“</span>
+            <blockquote class="relative pl-8 border-l-4 border-blue-300">
+              <span class="absolute left-2 top-0 text-5xl leading-none text-blue-300 select-none">“</span>
               <p class="text-base/7 italic font-medium leading-relaxed text-gray-700"><%= analysis.part %></p>
             </blockquote>
             <div class="mt-2 text-base/7 text-gray-600"><%= analysis.note %></div>
@@ -123,7 +123,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Cross References</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.cross_references.each do |cross_reference| %>
+        <% @exposition_content.cross_references.each do |cross_reference| %>
           <li><b><%= cross_reference.reference %>:</b> <%= cross_reference.note %></li>
         <% end %>
       </ul>
@@ -132,7 +132,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Highlights</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.highlights.each do |highlight| %>
+        <% @exposition_content.highlights.each do |highlight| %>
           <li><%= highlight %></li>
         <% end %>
       </ul>
@@ -141,7 +141,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Insights (Christ-Centred)</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.insights.each do |insight| %>
+        <% @exposition_content.insights.each do |insight| %>
           <li><%= insight.note %></li>
         <% end %>
       </ul>
@@ -150,18 +150,18 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Key Themes</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.key_themes.each do |key_theme| %>
+        <% @exposition_content.key_themes.each do |key_theme| %>
           <li><b><%= key_theme.theme %>:</b> <%= key_theme.description %></li>
         <% end %>
       </ul>
     </div>
 
-    <% if @section.exposition_content.alternative_interpretations.any? %>
+    <% if @exposition_content.alternative_interpretations.any? %>
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Alternative Interpretations</h3>
     <div>
       <ul class="pl-5 list-disc">
-        <% @section.exposition_content.alternative_interpretations.each do |alternative_interpretation| %>
-          <li><%= alternative_interpretation %></li>
+        <% @exposition_content.alternative_interpretations.each do |alternative_interpretation| %>
+          <li><b><%= alternative_interpretation.title %>:</b> <%= alternative_interpretation.note %></li>
         <% end %>
       </ul>
     </div>
@@ -173,7 +173,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Personal Applications</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.personal_applications.each do |personal_application| %>
+        <% @exposition_content.personal_applications.each do |personal_application| %>
           <li><b><%= personal_application.title %>:</b> <%= personal_application.note %></li>
         <% end %>
       </ul>
@@ -182,14 +182,46 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Reflections</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.reflections.each do |reflection| %>
+        <% @exposition_content.reflections.each do |reflection| %>
           <li><%= reflection %></li>
         <% end %>
       </ul>
     </div>
   </div>
 
-  <hr class="mt-12 mb-6 border-gray-300">
+  <nav class="mt-18 mb-6 flex items-center justify-between border-t border-gray-200 px-4 sm:px-0">
+    <% if @previous_section && @previous_section.exposition_content %>
+      <div class="-mt-px flex w-0 flex-1">
+        <%= link_to commentary_book_chapter_section_path(book_slug: @previous_section.book.slug, chapter_number: @previous_section.chapter.number, verse_spec: @previous_section.verse_spec), class: "inline-flex items-center border-t-2 border-transparent pt-6 pr-1 text-sm font-medium text-blue-600 hover:border-blue-400 hover:text-blue-800" do %>
+          <svg class="mr-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M18 10a.75.75 0 0 1-.75.75H4.66l2.1 1.95a.75.75 0 1 1-1.02 1.1l-3.5-3.25a.75.75 0 0 1 0-1.1l3.5-3.25a.75.75 0 1 1 1.02 1.1l-2.1 1.95h12.59A.75.75 0 0 1 18 10Z" clip-rule="evenodd" />
+          </svg>
+          <%= @previous_section.title %>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="-mt-px flex w-0 flex-1"></div>
+    <% end %>
+
+    <div class="hidden md:-mt-px md:flex">
+      <%= link_to "Back to #{@chapter.full_title} Study", commentary_book_chapter_path(book_slug: @book.slug, number: @chapter.number), class: "inline-flex items-center border-t-2 border-transparent px-4 pt-6 text-sm font-medium text-blue-600 hover:border-blue-400 hover:text-blue-800" %>
+    </div>
+
+    <% if @next_section && @next_section.exposition_content %>
+      <div class="-mt-px flex w-0 flex-1 justify-end">
+        <%= link_to commentary_book_chapter_section_path(book_slug: @next_section.book.slug, chapter_number: @next_section.chapter.number, verse_spec: @next_section.verse_spec), class: "inline-flex items-center border-t-2 border-transparent pt-6 pl-1 text-sm font-medium text-blue-600 hover:border-blue-400 hover:text-blue-800" do %>  
+          <%= @next_section.title %>
+          <svg class="ml-3 size-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true" data-slot="icon">
+            <path fill-rule="evenodd" d="M2 10a.75.75 0 0 1 .75-.75h12.59l-2.1-1.95a.75.75 0 1 1 1.02-1.1l3.5 3.25a.75.75 0 0 1 0 1.1l-3.5 3.25a.75.75 0 1 1-1.02-1.1l2.1-1.95H2.75A.75.75 0 0 1 2 10Z" clip-rule="evenodd" />
+          </svg>
+        <% end %>
+      </div>
+    <% else %>
+      <div class="-mt-px flex w-0 flex-1 justify-end"></div>
+    <% end %>
+  </nav>
+
+  <hr class="my-6 border-gray-300">
 
   <section class="my-6" id="copyright">
     <p class="text-center text-xs/6 text-gray-600">
