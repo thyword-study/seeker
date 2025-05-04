@@ -110,8 +110,8 @@
       <div class="space-y-6">
         <% @section.exposition_content.analyses.order(position: :asc).each do |analysis| %>
           <div>
-            <blockquote class="relative pl-8 border-l-4 border-gray-300">
-              <span class="absolute left-2 top-0 text-5xl leading-none text-gray-300 select-none">“</span>
+            <blockquote class="relative pl-8 border-l-4 border-blue-300">
+              <span class="absolute left-2 top-0 text-5xl leading-none text-blue-300 select-none">“</span>
               <p class="text-base/7 italic font-medium leading-relaxed text-gray-700"><%= analysis.part %></p>
             </blockquote>
             <div class="mt-2 text-base/7 text-gray-600"><%= analysis.note %></div>
