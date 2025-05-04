@@ -161,7 +161,7 @@
     <div>
       <ul class="pl-5 list-disc">
         <% @section.exposition_content.alternative_interpretations.each do |alternative_interpretation| %>
-          <li><%= alternative_interpretation %></li>
+          <li><b><%= alternative_interpretation.title %>:</b> <%= alternative_interpretation.note %></li>
         <% end %>
       </ul>
     </div>
