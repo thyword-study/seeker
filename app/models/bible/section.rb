@@ -61,10 +61,9 @@ class Bible::Section < ApplicationRecord
 
   # Determines if a section is ready for exposition.
   #
-  # @return [Boolean] true if any segment's USX style is a content style, false
-  # otherwise.
+  # @return [Boolean] true if the section is expositable, false otherwise.
   def expositable?
-    segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
+    verse_spec.present?
   end
 
   # Generate the verse spec for the section based on the segments and their

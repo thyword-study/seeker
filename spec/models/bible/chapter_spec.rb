@@ -15,7 +15,7 @@ RSpec.describe Bible::Chapter, type: :model do
       HEREDOC
       chapter = FactoryBot.create(:translation_chapter, translation: translation, book: book, number: 1)
       heading = FactoryBot.create(:translation_heading, translation: translation, book: book, chapter: chapter)
-      section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
+      section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1, verse_spec: "1")
       segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading, usx_position: 6, usx_style: 'm')
       verse = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
       FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse, content: "In the beginning God created the heavens and the earth.", position: 1, show_verse: true, kind: "text")
