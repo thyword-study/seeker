@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :description do %>
-  <%= truncate(strip_markdown(@section.exposition_content.summary), length: 200, separator: ' ') %>
+  <%= truncate(strip_markdown(@exposition_content.summary), length: 200, separator: ' ') %>
 <% end %>
 
 <nav class="mb-8 flex">
@@ -94,7 +94,7 @@
     </div>
 
     <div class="mt-8 mb-4 prose max-w-none">
-      <%= markdown_to_html @section.exposition_content.summary %>
+      <%= markdown_to_html @exposition_content.summary %>
     </div>
   </div>
 
@@ -102,13 +102,13 @@
   <div>
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Context</h3>
     <div>
-      <%= @section.exposition_content.context %>
+      <%= @exposition_content.context %>
     </div>
 
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Verse-by-Verse</h3>
     <div>
       <div class="space-y-6">
-        <% @section.exposition_content.analyses.order(position: :asc).each do |analysis| %>
+        <% @exposition_content.analyses.order(position: :asc).each do |analysis| %>
           <div>
             <blockquote class="relative pl-8 border-l-4 border-blue-300">
               <span class="absolute left-2 top-0 text-5xl leading-none text-blue-300 select-none">“</span>
@@ -123,7 +123,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Cross References</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.cross_references.each do |cross_reference| %>
+        <% @exposition_content.cross_references.each do |cross_reference| %>
           <li><b><%= cross_reference.reference %>:</b> <%= cross_reference.note %></li>
         <% end %>
       </ul>
@@ -132,7 +132,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Highlights</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.highlights.each do |highlight| %>
+        <% @exposition_content.highlights.each do |highlight| %>
           <li><%= highlight %></li>
         <% end %>
       </ul>
@@ -141,7 +141,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Insights (Christ-Centred)</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.insights.each do |insight| %>
+        <% @exposition_content.insights.each do |insight| %>
           <li><%= insight.note %></li>
         <% end %>
       </ul>
@@ -150,17 +150,17 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Key Themes</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.key_themes.each do |key_theme| %>
+        <% @exposition_content.key_themes.each do |key_theme| %>
           <li><b><%= key_theme.theme %>:</b> <%= key_theme.description %></li>
         <% end %>
       </ul>
     </div>
 
-    <% if @section.exposition_content.alternative_interpretations.any? %>
+    <% if @exposition_content.alternative_interpretations.any? %>
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Alternative Interpretations</h3>
     <div>
       <ul class="pl-5 list-disc">
-        <% @section.exposition_content.alternative_interpretations.each do |alternative_interpretation| %>
+        <% @exposition_content.alternative_interpretations.each do |alternative_interpretation| %>
           <li><b><%= alternative_interpretation.title %>:</b> <%= alternative_interpretation.note %></li>
         <% end %>
       </ul>
@@ -173,7 +173,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Personal Applications</h3>
     <div>
       <ul class="pl-5 list-disc space-y-2">
-        <% @section.exposition_content.personal_applications.each do |personal_application| %>
+        <% @exposition_content.personal_applications.each do |personal_application| %>
           <li><b><%= personal_application.title %>:</b> <%= personal_application.note %></li>
         <% end %>
       </ul>
@@ -182,7 +182,7 @@
     <h3 class="mt-8 mb-4 text-xl font-semibold text-pretty text-gray-900">Reflections</h3>
     <div>
       <ul class="pl-5 list-disc space-y-1">
-        <% @section.exposition_content.reflections.each do |reflection| %>
+        <% @exposition_content.reflections.each do |reflection| %>
           <li><%= reflection %></li>
         <% end %>
       </ul>

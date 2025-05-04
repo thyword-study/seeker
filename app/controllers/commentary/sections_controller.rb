@@ -9,6 +9,7 @@ module Commentary
       @book = Bible::Book.find_by! translation: @translation, slug: book_slug
       @chapter = Bible::Chapter.find_by! translation: @translation, book: @book, number: chapter_number
       @section = Bible::Section.find_by!(translation: @translation, book: @book, chapter: @chapter, verse_spec: section_verse_spec)
+      @exposition_content = Exposition::Content.find_by!(section: @section)
       @verses = @section.segments.map { |segment| segment.verses }.compact.uniq
 
       @previous_section = Bible::Section.expositable.where(translation: @translation, book: @book).where("id < ?", @section.id).order(id: :desc).first
