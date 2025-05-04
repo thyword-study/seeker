@@ -11,6 +11,9 @@ module Commentary
       @section = Bible::Section.find_by!(translation: @translation, book: @book, chapter: @chapter, verse_spec: section_verse_spec)
       @verses = @section.segments.map { |segment| segment.verses }.compact.uniq
 
+      @previous_section = Bible::Section.expositable.where(translation: @translation, book: @book).where("id < ?", @section.id).order(id: :desc).first
+      @next_section = Bible::Section.expositable.where(translation: @translation, book: @book).where("id > ?", @section.id).order(id: :asc).first
+
       @footnotes_mapping = {}
       @footnotes = Bible::Footnote.where(translation: @translation, book: @book, chapter: @chapter, verse: @verses).order(created_at: :asc)
       @footnotes.each.with_index(1) do |footnote, footnote_number|
