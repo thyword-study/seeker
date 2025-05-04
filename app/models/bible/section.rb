@@ -64,6 +64,26 @@ class Bible::Section < ApplicationRecord
     segments.where(usx_style: Bible::Segment::CONTENT_STYLES.map(&:to_s)).exists?
   end
 
+  # Generate the verse spec for the section based on the segments and their
+  # associated verses.
+  #
+  # A verse spec is a formatted string representation of verse numbers for the
+  # section. This method checks if any of the associated segments contain
+  # verses. If so, it collects all the verse numbers, orders them, removes
+  # duplicates, and formats them into a human-readable string.
+
+  # @return [String, nil] A formatted string of verse numbers if verses exist, or nil otherwise.
+  def generate_verse_spec
+    if segments.any? { |segment| segment.verses.exists? }
+      numbers = segments
+                   .order(usx_position: :asc)
+                   .flat_map { |segment| segment.verses.order(number: :asc).pluck(:number) }
+                   .uniq
+                   .sort
+      Bible::Verse.format_verse_numbers(numbers)
+    end
+  end
+
   # Returns the formatted title of the Bible section.
   #
   # The title is constructed using the book title, chapter number, and a formatted
