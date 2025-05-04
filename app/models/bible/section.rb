@@ -8,6 +8,7 @@
 # --------------------- | ------------------ | ---------------------------
 # **`id`**              | `bigint`           | `not null, primary key`
 # **`position`**        | `integer`          | `not null`
+# **`verse_spec`**      | `string`           |
 # **`created_at`**      | `datetime`         | `not null`
 # **`updated_at`**      | `datetime`         | `not null`
 # **`book_id`**         | `bigint`           | `not null`
