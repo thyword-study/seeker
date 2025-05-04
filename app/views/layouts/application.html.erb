@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || Settings.app.name.external %></title>
+    <%= tag.title(content_for(:title) || Settings.app.name.external) %>
     <%= tag.meta name: "description", content: content_for(:description) %>
     <%= tag.meta name: "viewport", content: "width=device-width,initial-scale=1" %>
     <%= tag.meta name: "apple-mobile-web-app-title", content: "Thy Word" %>
