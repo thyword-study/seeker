@@ -46,4 +46,38 @@ RSpec.describe MarkdownHelper, type: :helper do
       end
     end
   end
+
+  describe "#strip_markdown" do
+    it "removes Markdown formatting and returns plain text" do
+      markdown_text = "# Hello *World*"
+      expected_text = "Hello World"
+      result = helper.strip_markdown(markdown_text)
+
+      expect(result).to eq(expected_text)
+    end
+
+    it "handles empty text" do
+      markdown_text = ""
+      expected_text = ""
+      result = helper.strip_markdown(markdown_text)
+
+      expect(result).to eq(expected_text)
+    end
+
+    it "removes HTML tags and returns plain text" do
+      markdown_text = "<strong>Bold</strong> and <em>Italic</em>"
+      expected_text = "Bold and Italic"
+      result = helper.strip_markdown(markdown_text)
+
+      expect(result).to eq(expected_text)
+    end
+
+    it "handles complex Markdown and returns plain text" do
+      markdown_text = "# Title\n\nThis is a **bold** statement with *italic* text."
+      expected_text = "Title\n\nThis is a bold statement with italic text."
+      result = helper.strip_markdown(markdown_text)
+
+      expect(result).to eq(expected_text)
+    end
+  end
 end
