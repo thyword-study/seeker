@@ -92,62 +92,19 @@ RSpec.describe Bible::Section, type: :model do
   end
 
   describe "#title" do
-    context "when the section has a single verse" do
+    context "when the section has a verse_spec" do
       it "returns the correct title with the verse number" do
-        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
-        segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
-        verse = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse, position: 1)
-        section.segments << segment
-        segment.verses << verse
+        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1, verse_spec: "1")
 
         expect(section.title).to eq "Genesis 1:1"
       end
     end
 
-    context "when the section has multiple consecutive verses" do
-      it "returns the correct title with a range of verse numbers" do
-        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
-        segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
-        verse_1 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
-        verse_2 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 2)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse_1, position: 1)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse_2, position: 2)
-        section.segments << segment
-        segment.verses << verse_1
-        segment.verses << verse_2
-
-        expect(section.title).to eq "Genesis 1:1,2"
-      end
-    end
-
-    context "when the section has non-consecutive verses" do
-      it "returns the correct title with comma-separated verse numbers" do
-        section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
-        segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
-        verse_1 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 1)
-        verse_2 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 2)
-        verse_3 = FactoryBot.create(:translation_verse, translation: translation, book: book, chapter: chapter, number: 3)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse_1, position: 1)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse_2, position: 2)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, verse: verse_3, position: 3)
-        section.segments << segment
-        segment.verses << verse_1
-        segment.verses << verse_2
-        segment.verses << verse_3
-
-        expect(section.title).to eq "Genesis 1:1-3"
-      end
-    end
-
-    context "when the section has no verses" do
+    context "when the section has no verse_spec" do
       it "returns the book and chapter without verse numbers" do
         section = FactoryBot.create(:translation_section, translation: translation, book: book, chapter: chapter, heading: heading, position: 1)
-        segment = FactoryBot.create(:translation_segment, translation: translation, book: book, chapter: chapter, heading: heading)
-        FactoryBot.create(:translation_fragment, translation: translation, book: book, chapter: chapter, heading: heading, segment: segment, content: "In the beginning God created the heavens and the earth.", position: 1, verse: nil)
-        section.segments << segment
 
-        expect(section.title).to eq "Genesis 1"
+        expect(section.title).to be_nil
       end
     end
   end

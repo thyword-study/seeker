@@ -86,22 +86,17 @@ class Bible::Section < ApplicationRecord
 
   # Returns the formatted title of the Bible section.
   #
-  # The title is constructed using the book title, chapter number, and a formatted
-  # list of verse numbers.
+  # This method constructs the title using the book's title, the chapter number,
+  # and the verse specification. The verse specification is a formatted string
+  # representing the verse numbers associated with the section.
   #
-  # @return [String] the formatted title of the section in the format
-  #   "Book Title Chapter:FormattedVerseNumbers".
+  # @return [String, nil] The formatted title of the section in the format "Book
+  #   Title Chapter:FormattedVerseNumbers", or nil if the verse specification is
+  #   absent.
   def title
-    unformatted_verse_numbers = segments.order(usx_position: :asc).map do |segment|
-      segment.verses.order(number: :asc).map do |verse|
-        verse.number
-      end
-    end.flatten.uniq.sort!
+    return nil unless verse_spec
 
-    return "#{book.title} #{chapter.number}" if unformatted_verse_numbers.empty?
-
-    formatted_verse_numbers = Bible::Verse.format_verse_numbers unformatted_verse_numbers
-    "#{book.title} #{chapter.number}:#{formatted_verse_numbers}"
+    "#{book.title} #{chapter.number}:#{verse_spec}"
   end
 
   # Generates a structured user prompt for generating a commentary.
