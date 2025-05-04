@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :description do %>
-  <%= "Get detailed context and meaning for #{@chapter.full_title} S##{@section.id} — presented clearly and concisely." %>
+  <%= truncate(strip_markdown(@section.exposition_content.summary), length: 200, separator: ' ') %>
 <% end %>
 
 <nav class="mb-8 flex">
