@@ -95,7 +95,7 @@ GEM
       bigdecimal
       rexml
     crass (1.0.6)
-    database_cleaner-active_record (2.2.0)
+    database_cleaner-active_record (2.2.1)
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
@@ -412,7 +412,7 @@ DEPENDENCIES
   bootsnap
   brakeman
   config (~> 5.5, >= 5.5.2)
-  database_cleaner-active_record (~> 2.1)
+  database_cleaner-active_record (~> 2.2)
   debug
   factory_bot_rails (~> 6.2)
   faker (~> 3.5, >= 3.5.1)
