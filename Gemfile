@@ -91,7 +91,7 @@ end
 group :test do
   # Strategies for cleaning databases using ActiveRecord. Can be used to ensure
   # a clean state for testing.
-  gem "database_cleaner-active_record", "~> 2.1"
+  gem "database_cleaner-active_record", "~> 2.2"
 
   # Ruby JSON Schema Validator.
   gem "json-schema", "~> 5.1", ">= 5.1.1"
