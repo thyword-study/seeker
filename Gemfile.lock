@@ -74,7 +74,7 @@ GEM
       uri (>= 0.13.1)
     addressable (2.8.7)
       public_suffix (>= 2.0.2, < 7.0)
-    annotaterb (4.14.0)
+    annotaterb (4.15.0)
     ast (2.4.2)
     base64 (0.2.0)
     bcrypt_pbkdf (1.1.1)
@@ -408,7 +408,7 @@ PLATFORMS
   x86_64-linux-musl
 
 DEPENDENCIES
-  annotaterb (~> 4.14)
+  annotaterb (~> 4.15)
   bootsnap
   brakeman
   config (~> 5.5, >= 5.5.2)
