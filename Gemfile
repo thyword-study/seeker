@@ -74,7 +74,7 @@ group :development, :test do
   gem "factory_bot_rails", "~> 6.2"
 
   # Easily generates fake data: names, addresses, phone numbers, etc.
-  gem "faker", "~> 3.5", ">= 3.5.1"
+  gem "faker", "~> 3.5"
 
   # rspec-rails integrates the Rails testing helpers into RSpec.
   gem "rspec-rails", "~> 8.0"
