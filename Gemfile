@@ -54,7 +54,7 @@ gem "kramdown", "~> 2.5", ">= 2.5.1"
 gem "ruby-openai", "~> 8.1"
 
 # Integrate Tailwind CSS with the asset pipeline in Rails.
-gem "tailwindcss-rails", "~> 4.2"
+gem "tailwindcss-rails", "~> 4.3"
 
 # A self-contained `tailwindcss` executable, wrapped up in a ruby gem. That's
 # it. Nothing else.
