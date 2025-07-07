@@ -71,7 +71,7 @@ group :development, :test do
   gem "brakeman", require: false
 
   # Provides integration between factory_bot and rails 5.0 or newer.
-  gem "factory_bot_rails", "~> 6.2"
+  gem "factory_bot_rails", "~> 6.5"
 
   # Easily generates fake data: names, addresses, phone numbers, etc.
   gem "faker", "~> 3.5"
