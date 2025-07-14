@@ -40,7 +40,7 @@ gem "thruster", require: false
 
 # Annotates Rails/ActiveRecord Models, routes, fixtures, and others based on the
 # database schema.
-gem "annotaterb", "~> 4.16"
+gem "annotaterb", "~> 4.17"
 
 # Easiest way to manage multi-environment settings in any ruby project or
 # framework.
