@@ -44,7 +44,7 @@ gem "annotaterb", "~> 4.17"
 
 # Easiest way to manage multi-environment settings in any ruby project or
 # framework.
-gem "config", "~> 5.5", ">= 5.5.2"
+gem "config", "~> 5.6"
 
 # Kramdown is yet-another-markdown-parser but fast, pure Ruby, using a strict
 # syntax definition and supporting several common extensions.
