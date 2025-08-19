@@ -51,7 +51,7 @@ gem "config", "~> 5.6"
 gem "kramdown", "~> 2.5", ">= 2.5.1"
 
 # Use the OpenAI API with Ruby!
-gem "ruby-openai", "~> 8.1"
+gem "ruby-openai", "~> 8.2"
 
 # Integrate Tailwind CSS with the asset pipeline in Rails.
 gem "tailwindcss-rails", "~> 4.3"
